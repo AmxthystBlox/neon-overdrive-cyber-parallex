@@ -215,6 +215,8 @@
     </div>
     <div class="hud-container">
         <div class="hud" id="levelDisplay">LEVEL 01</div>
+        <div style="font-size: 12px; color: #444;">[S] SHOP</div>
+        <div class="hud" id="scoreDisplay">SCORE: 0000</div>
         <div style="display: flex; gap: 15px; align-items: center;">
             <div style="font-size: 12px; color: #444;">[S] SHOP</div>
             <div id="modHint" style="font-size: 12px; color: #664400; display: none;">[L] LEVELS | FLY: HOLD JUMP</div>
@@ -244,6 +246,20 @@
             <div class="settings-row">
                 <span class="settings-label">Speedrun Timer</span>
                 <div class="settings-checkbox checked" id="timerCheckbox">&#10003;</div>
+            </div>
+            <div class="settings-row">
+                <span class="settings-label">Music Volume</span>
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <input type="range" id="musicSlider" class="settings-slider" min="0" max="100" value="50">
+                    <span class="settings-value" id="musicValue">50%</span>
+                </div>
+            </div>
+            <div class="settings-row">
+                <span class="settings-label">SFX Volume</span>
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <input type="range" id="sfxSlider" class="settings-slider" min="0" max="100" value="70">
+                    <span class="settings-value" id="sfxValue">70%</span>
+                </div>
             </div>
             <button id="settingsResetBtn">Reset Progress</button>
             <button id="settingsCloseBtn">Close</button>
@@ -301,6 +317,190 @@
         let showSpeedrunTimer = true;
         let screenShakeX = 0;
         let screenShakeY = 0;
+        let musicVolume = 0.5;
+        let sfxVolume = 0.7;
+        // === AUDIO ENGINE (Web Audio API) ===
+        let audioCtx = null;
+        let masterGain = null;
+        let musicGain = null;
+        let sfxGain = null;
+        let currentMusicNodes = [];
+        let currentMusicType = null; // 'normal' or 'boss'
+        let musicInterval = null;
+        function initAudio() {
+            if (audioCtx) return;
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            masterGain = audioCtx.createGain();
+            masterGain.connect(audioCtx.destination);
+            musicGain = audioCtx.createGain();
+            musicGain.gain.value = musicVolume;
+            musicGain.connect(masterGain);
+            sfxGain = audioCtx.createGain();
+            sfxGain.gain.value = sfxVolume;
+            sfxGain.connect(masterGain);
+        }
+        function playNote(freq, duration, type, gainVal, dest, delay) {
+            if (!audioCtx) return;
+            let t = audioCtx.currentTime + (delay || 0);
+            let osc = audioCtx.createOscillator();
+            let g = audioCtx.createGain();
+            osc.type = type || 'sine';
+            osc.frequency.setValueAtTime(freq, t);
+            g.gain.setValueAtTime(gainVal || 0.15, t);
+            g.gain.exponentialRampToValueAtTime(0.001, t + duration);
+            osc.connect(g);
+            g.connect(dest || sfxGain);
+            osc.start(t);
+            osc.stop(t + duration);
+        }
+        function playNoise(duration, gainVal, dest, delay) {
+            if (!audioCtx) return;
+            let t = audioCtx.currentTime + (delay || 0);
+            let bufSize = audioCtx.sampleRate * duration;
+            let buf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
+            let data = buf.getChannelData(0);
+            for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+            let src = audioCtx.createBufferSource();
+            src.buffer = buf;
+            let g = audioCtx.createGain();
+            g.gain.setValueAtTime(gainVal || 0.1, t);
+            g.gain.exponentialRampToValueAtTime(0.001, t + duration);
+            src.connect(g);
+            g.connect(dest || sfxGain);
+            src.start(t);
+        }
+        // --- Sound Effects ---
+        function playSfxBuy() {
+            playNote(880, 0.1, 'sine', 0.12, sfxGain, 0);
+            playNote(1100, 0.1, 'sine', 0.1, sfxGain, 0.07);
+            playNote(1320, 0.15, 'sine', 0.12, sfxGain, 0.14);
+            playNote(1760, 0.2, 'triangle', 0.08, sfxGain, 0.2);
+        }
+        function playSfxDeath() {
+            playNoise(0.3, 0.2, sfxGain, 0);
+            playNote(200, 0.3, 'sawtooth', 0.15, sfxGain, 0);
+            playNote(100, 0.4, 'square', 0.1, sfxGain, 0.1);
+            playNote(50, 0.5, 'sawtooth', 0.08, sfxGain, 0.2);
+        }
+        function playSfxJump() {
+            if (!audioCtx) return;
+            let osc = audioCtx.createOscillator();
+            let g = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.1);
+            g.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+            osc.connect(g);
+            g.connect(sfxGain);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.12);
+        }
+        function playSfxBossHit() {
+            playNoise(0.15, 0.15, sfxGain, 0);
+            playNote(150, 0.2, 'square', 0.12, sfxGain, 0);
+            playNote(250, 0.15, 'sawtooth', 0.1, sfxGain, 0.05);
+        }
+        function playSfxLevelComplete() {
+            playNote(523, 0.12, 'sine', 0.1, sfxGain, 0);
+            playNote(659, 0.12, 'sine', 0.1, sfxGain, 0.1);
+            playNote(784, 0.12, 'sine', 0.1, sfxGain, 0.2);
+            playNote(1047, 0.3, 'triangle', 0.12, sfxGain, 0.3);
+        }
+        // --- Music Engine ---
+        function stopMusic() {
+            if (musicInterval) { clearInterval(musicInterval); musicInterval = null; }
+            currentMusicNodes.forEach(n => { try { n.stop(); } catch(e){} });
+            currentMusicNodes = [];
+            currentMusicType = null;
+        }
+        function startNormalMusic() {
+            if (currentMusicType === 'normal') return;
+            stopMusic();
+            currentMusicType = 'normal';
+            let bpm = 110;
+            let beatLen = 60 / bpm;
+            // Chill synthwave arpeggio pattern
+            let notes = [
+                [261.6, 329.6, 392.0, 329.6], // C E G E
+                [220.0, 277.2, 329.6, 277.2], // A C# E C#
+                [246.9, 311.1, 370.0, 311.1], // B D# F# D#
+                [196.0, 246.9, 293.7, 246.9]  // G B D B
+            ];
+            let bar = 0;
+            let step = 0;
+            function playStep() {
+                if (!audioCtx || currentMusicType !== 'normal') return;
+                let pattern = notes[bar % notes.length];
+                let freq = pattern[step % pattern.length];
+                // Arpeggio note
+                playNote(freq, beatLen * 0.8, 'triangle', 0.06, musicGain, 0);
+                // Subtle bass on beat 0
+                if (step === 0) {
+                    playNote(freq / 2, beatLen * 3.5, 'sine', 0.05, musicGain, 0);
+                }
+                // Soft pad chord on beat 0
+                if (step === 0) {
+                    playNote(freq, beatLen * 3.8, 'sine', 0.025, musicGain, 0);
+                    playNote(freq * 1.26, beatLen * 3.8, 'sine', 0.02, musicGain, 0);
+                    playNote(freq * 1.5, beatLen * 3.8, 'sine', 0.015, musicGain, 0);
+                }
+                step++;
+                if (step >= 4) { step = 0; bar++; }
+            }
+            playStep();
+            musicInterval = setInterval(playStep, beatLen * 1000);
+        }
+        function startBossMusic() {
+            if (currentMusicType === 'boss') return;
+            stopMusic();
+            currentMusicType = 'boss';
+            let bpm = 160;
+            let beatLen = 60 / bpm;
+            // Aggressive bass pattern
+            let bassNotes = [
+                [82.4, 82.4, 98.0, 82.4, 110.0, 82.4, 73.4, 82.4],  // E2 based
+                [73.4, 73.4, 87.3, 73.4, 98.0, 73.4, 65.4, 73.4],   // D2 based
+            ];
+            let bar = 0;
+            let step = 0;
+            function playStep() {
+                if (!audioCtx || currentMusicType !== 'boss') return;
+                let pattern = bassNotes[bar % bassNotes.length];
+                let freq = pattern[step % pattern.length];
+                // Heavy bass
+                playNote(freq, beatLen * 0.6, 'sawtooth', 0.08, musicGain, 0);
+                // Distorted lead on certain beats
+                if (step % 2 === 0) {
+                    playNote(freq * 4, beatLen * 0.3, 'square', 0.04, musicGain, 0);
+                }
+                // Kick-like thump on beats 0 and 4
+                if (step === 0 || step === 4) {
+                    playNote(55, 0.15, 'sine', 0.12, musicGain, 0);
+                    playNoise(0.05, 0.06, musicGain, 0);
+                }
+                // Snare-like noise on beats 2 and 6
+                if (step === 2 || step === 6) {
+                    playNoise(0.08, 0.08, musicGain, 0);
+                    playNote(200, 0.08, 'triangle', 0.06, musicGain, 0);
+                }
+                // Hi-hat noise every beat
+                playNoise(0.03, 0.03, musicGain, 0);
+                step++;
+                if (step >= 8) { step = 0; bar++; }
+            }
+            playStep();
+            musicInterval = setInterval(playStep, beatLen * 1000);
+        }
+        function updateMusicForLevel() {
+            if (!audioCtx) return;
+            let lvl = levels[currentLevel];
+            if (lvl && lvl.isBoss) {
+                startBossMusic();
+            } else {
+                startNormalMusic();
+            }
+        }
         // Speedrun stopwatch
         let stopwatchStarted = false;
         let stopwatchStartTime = 0;
@@ -384,11 +584,13 @@
             if (player.unlocked.includes(color)) {
                 player.color = color;
                 updateShopUI();
+                playSfxBuy();
             } else if (score >= cost) {
                 score -= cost;
                 player.unlocked.push(color);
                 player.color = color;
                 updateShopUI();
+                playSfxBuy();
                 document.getElementById('scoreDisplay').innerText = `SCORE: ${score.toString().padStart(4, '0')}`;
             }
         }
@@ -396,11 +598,13 @@
             if (player.unlockedUnits.includes(shape)) {
                 player.shape = shape;
                 updateShopUI();
+                playSfxBuy();
             } else if (score >= cost) {
                 score -= cost;
                 player.unlockedUnits.push(shape);
                 player.shape = shape;
                 updateShopUI();
+                playSfxBuy();
                 document.getElementById('scoreDisplay').innerText = `SCORE: ${score.toString().padStart(4, '0')}`;
             }
         }
@@ -465,6 +669,7 @@
             }
         }
         function createExplosion(x, y, color, count) {
+            for (let i = 0; i < count; i++) particles.push(new Particle(x, y, color));
             let adjustedCount = Math.round(count * particleIntensity);
             for (let i = 0; i < adjustedCount; i++) particles.push(new Particle(x, y, color));
         }
@@ -1137,6 +1342,7 @@
             }
             createExplosion(player.x + player.width/2, player.y + player.height/2, player.color, 25);
             triggerScreenShake(12);
+            playSfxDeath();
         }
         function loadLevel(index) {
             if (index >= levels.length) {
@@ -1189,8 +1395,10 @@
             }
             document.getElementById('levelDisplay').innerText = lvl.isBoss ? 'BOSS FIGHT' : `LEVEL ${(index + 1).toString().padStart(2, '0')}`;
             document.getElementById('scoreDisplay').innerText = `SCORE: ${score.toString().padStart(4, '0')}`;
+            updateMusicForLevel();
         }
         function update() {
+            if (shopOpen) return;
             if (shopOpen || settingsOpen) return;
             // Decay screen shake
             screenShakeX *= 0.8;
@@ -1234,6 +1442,7 @@
             }
             
             // 3. Jump Logic (Only if grounded or in coyote time)
+            if ((keys['ArrowUp'] || keys['w'] || keys[' ']) && (player.grounded || hangTime < 6)) {
             if (isMod && (keys['ArrowUp'] || keys['w'] || keys[' '])) {
                 // Mod fly mode: hold jump to fly upward
                 player.velY = -6;
@@ -1244,6 +1453,7 @@
                 player.grounded = false; 
                 hangTime = 10;
                 createExplosion(player.x + player.width/2, player.y + player.height, player.color, 8);
+                playSfxJump();
             }
             // 4. Physics: Apply Friction & Gravity
             player.velX *= friction;
@@ -1274,6 +1484,7 @@
                     // Queen bobs more erratically
                     boss.y = boss.baseY + Math.sin(boss.bobTimer * 1.5) * 25 + Math.sin(boss.bobTimer * 3.7) * 8;
                     queenGlitchTimer++;
+                    // Queen fires bursts of 2 projectiles with Y-tracking
                     // Queen fires bursts of 1 projectile with Y-tracking
                     bossFireTimer++;
                     let fireRate = 100 - ((boss.maxHp - boss.hp) * 7);
@@ -1298,6 +1509,7 @@
                         }
                     } else if (bossFireTimer >= fireRate) {
                         bossFireTimer = 0;
+                        queenBurstCount = 2;
                         queenBurstCount = 1;
                         queenBurstTimer = 0;
                     }
@@ -1393,6 +1605,7 @@
                                 boss.hp--;
                                 bossFlashTimer = 15;
                                 triggerScreenShake(8);
+                                playSfxBossHit();
                                 createExplosion(boss.x + boss.w/2, boss.y + boss.h/2, '#ff0055', 20);
                                 if (boss.hp <= 0) {
                                     bossDeathTimer = 90;
@@ -1415,6 +1628,7 @@
                             boss.hp--;
                             bossFlashTimer = 20;
                             triggerScreenShake(10);
+                            playSfxBossHit();
                             createExplosion(boss.x + boss.w/2, boss.y + boss.h/2, '#bc13fe', 25);
                             createExplosion(boss.x + boss.w/2, boss.y + boss.h/2, '#e040fb', 15);
                             if (boss.hp <= 0) {
@@ -1426,6 +1640,7 @@
                     }
                     
                     else if (obj.type === 'goal') { currentLevel++; loadLevel(currentLevel); return; }
+                    else if (obj.type === 'goal') { playSfxLevelComplete(); currentLevel++; loadLevel(currentLevel); return; }
                     else if (obj.type === 'boss_goal') {
                         if (bossDefeated) { currentLevel++; loadLevel(currentLevel); return; }
                     }
@@ -1855,6 +2070,7 @@
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             drawBackground();
             ctx.save();
+            ctx.translate(-camera.x, -camera.y);
             ctx.translate(-camera.x + screenShakeX, -camera.y + screenShakeY);
             trails.forEach(t => {
                 drawShape(t.x, t.y, player.width, t.shape, player.color, t.rot, t.alpha);
@@ -1963,6 +2179,7 @@
         window.addEventListener('keydown', e => {
             if (!gameStarted) return;
             keys[e.key] = true;
+            if (e.key === 's' || e.key === 'S') toggleShop();
             if (e.key === 'Escape') toggleSettings();
             if (e.key === 's' || e.key === 'S') { if (!settingsOpen) toggleShop(); }
             if ((e.key === 'l' || e.key === 'L') && isMod) toggleLevelSelector();
@@ -2013,10 +2230,13 @@
                 e.preventDefault();
             }, { passive: false });
         })();
+        loadLevel(currentLevel);
+        gameLoop();
         // Username system
         function startGame() {
             const input = document.getElementById('usernameInput').value.trim();
             if (!input) return;
+            initAudio();
             playerUsername = input;
             isMod = (playerUsername === 'AmxthystBloxMOD');
             document.getElementById('usernameOverlay').style.display = 'none';
@@ -2096,6 +2316,16 @@
         });
         document.getElementById('settingsCloseBtn').addEventListener('click', function() {
             toggleSettings();
+        });
+        document.getElementById('musicSlider').addEventListener('input', function() {
+            musicVolume = this.value / 100;
+            document.getElementById('musicValue').innerText = this.value + '%';
+            if (musicGain) musicGain.gain.value = musicVolume;
+        });
+        document.getElementById('sfxSlider').addEventListener('input', function() {
+            sfxVolume = this.value / 100;
+            document.getElementById('sfxValue').innerText = this.value + '%';
+            if (sfxGain) sfxGain.gain.value = sfxVolume;
         });
     </script>
 </body>
