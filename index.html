@@ -9,7 +9,7 @@
         canvas { background: #0a0a0f; border: 2px solid #1a1a25; border-radius: 12px; box-shadow: 0 0 50px rgba(0,210,255,0.15); }
         .hud-container { width: 800px; display: flex; justify-content: space-between; margin-bottom: 10px; align-items: center; }
         .hud { font-size: 24px; font-weight: bold; letter-spacing: 2px; color: #00d2ff; text-shadow: 0 0 10px rgba(0,210,255,0.5); }
-        
+
         /* Shop Overlay */
         #shopUI {
             position: absolute; background: rgba(5, 5, 8, 0.95); border: 2px solid #00d2ff;
@@ -21,6 +21,7 @@
         .unlocked { border-color: #00ff88; color: #00ff88; }
         .equipped { border-color: #00ff88; background: rgba(0, 255, 136, 0.1); color: #00ff88; }
         .section-label { font-size: 10px; color: #555; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; }
+
         /* Username Entry Screen */
         #usernameOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -49,6 +50,7 @@
             transition: 0.2s; text-transform: uppercase;
         }
         #usernameSubmit:hover { background: rgba(0,255,136,0.1); box-shadow: 0 0 15px rgba(0,255,136,0.3); }
+
         /* Level Selector (mod menu) */
         #levelSelector {
             position: absolute; background: rgba(5, 5, 8, 0.95); border: 2px solid #ffcc00;
@@ -63,6 +65,7 @@
             text-align: left; transition: 0.2s; border-radius: 4px;
         }
         .level-btn:hover { background: rgba(255, 204, 0, 0.1); border-color: #ffcc00; }
+
         /* Settings Menu */
         #settingsUI {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -190,6 +193,7 @@
         .mobile-right-group {
             gap: 14px;
         }
+
         /* Responsive scaling for mobile */
         @media (max-width: 820px) {
             .hud-container { width: 95vw; }
@@ -206,6 +210,7 @@
     </style>
 </head>
 <body>
+
     <!-- Username Entry Screen -->
     <div id="usernameOverlay">
         <h1>NEON OVERDRIVE</h1>
@@ -213,10 +218,9 @@
         <input type="text" id="usernameInput" placeholder="USERNAME" maxlength="20" autocomplete="off">
         <button id="usernameSubmit">JACK IN</button>
     </div>
+
     <div class="hud-container">
         <div class="hud" id="levelDisplay">LEVEL 01</div>
-        <div style="font-size: 12px; color: #444;">[S] SHOP</div>
-        <div class="hud" id="scoreDisplay">SCORE: 0000</div>
         <div style="display: flex; gap: 15px; align-items: center;">
             <div style="font-size: 12px; color: #444;">[S] SHOP</div>
             <div id="modHint" style="font-size: 12px; color: #664400; display: none;">[L] LEVELS | FLY: HOLD JUMP</div>
@@ -226,8 +230,10 @@
             <div id="usernameDisplay" style="font-size: 11px; color: #00d2ff; letter-spacing: 1px; opacity: 0.7;"></div>
         </div>
     </div>
+
     <!-- Level Selector (mod menu) -->
     <div id="levelSelector"></div>
+
     <!-- Settings Menu -->
     <div id="settingsUI">
         <div id="settingsPanel">
@@ -247,39 +253,29 @@
                 <span class="settings-label">Speedrun Timer</span>
                 <div class="settings-checkbox checked" id="timerCheckbox">&#10003;</div>
             </div>
-            <div class="settings-row">
-                <span class="settings-label">Music Volume</span>
-                <div style="display:flex;align-items:center;gap:8px;">
-                    <input type="range" id="musicSlider" class="settings-slider" min="0" max="100" value="50">
-                    <span class="settings-value" id="musicValue">50%</span>
-                </div>
-            </div>
-            <div class="settings-row">
-                <span class="settings-label">SFX Volume</span>
-                <div style="display:flex;align-items:center;gap:8px;">
-                    <input type="range" id="sfxSlider" class="settings-slider" min="0" max="100" value="70">
-                    <span class="settings-value" id="sfxValue">70%</span>
-                </div>
-            </div>
             <button id="settingsResetBtn">Reset Progress</button>
             <button id="settingsCloseBtn">Close</button>
         </div>
     </div>
     <div id="shopUI">
         <h3 style="margin: 0 0 10px 0; color: #00d2ff; text-align: center;">NEON SHOP</h3>
-        
+
         <div class="section-label">Core Colors</div>
         <div class="shop-item unlocked equipped" id="shop-cyan" onclick="buyColor('#00d2ff', 0, 'shop-cyan')"><span>CYAN</span> <span class="status">FREE</span></div>
         <div class="shop-item" id="shop-lime" onclick="buyColor('#00ff88', 300, 'shop-lime')"><span>LIME</span> <span class="status">300 PTS</span></div>
         <div class="shop-item" id="shop-void" onclick="buyColor('#bc13fe', 700, 'shop-void')"><span>VOID</span> <span class="status">700 PTS</span></div>
         <div class="shop-item" id="shop-gold" onclick="buyColor('#ffcc00', 1300, 'shop-gold')"><span>GOLD</span> <span class="status">1300 PTS</span></div>
+
         <div class="section-label">Unit Chassis</div>
         <div class="shop-item unlocked equipped" id="unit-cube" onclick="buyUnit('cube', 0, 'unit-cube')"><span>CUBE-X</span> <span class="status">FREE</span></div>
         <div class="shop-item" id="unit-tri" onclick="buyUnit('tri', 1000, 'unit-tri')"><span>INTERCEPTOR</span> <span class="status">1000 PTS</span></div>
         <div class="shop-item" id="unit-circle" onclick="buyUnit('circle', 2000, 'unit-circle')"><span>ORBITER</span> <span class="status">2000 PTS</span></div>
+
         <button onclick="toggleShop()" style="margin-top: 10px; background: #ff3333; border: none; color: white; padding: 5px; cursor: pointer;">CLOSE</button>
     </div>
+
     <canvas id="gameCanvas"></canvas>
+
     <!-- Mobile Touch Controls -->
     <div id="mobileControls">
         <div class="mobile-left-group">
@@ -291,11 +287,13 @@
             <div class="mobile-btn mobile-btn-jump" id="btnJump">JUMP</div>
         </div>
     </div>
+
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         canvas.width = 800;
         canvas.height = 400;
+
         let currentLevel = 0;
         let score = 0;
         let playerUsername = '';
@@ -311,202 +309,20 @@
         let shopOpen = false;
         let settingsOpen = false;
         let trails = [];
+
         // Settings state
         let particleIntensity = 1.0;
         let screenShakeEnabled = true;
         let showSpeedrunTimer = true;
         let screenShakeX = 0;
         let screenShakeY = 0;
-        let musicVolume = 0.5;
-        let sfxVolume = 0.7;
-        // === AUDIO ENGINE (Web Audio API) ===
-        let audioCtx = null;
-        let masterGain = null;
-        let musicGain = null;
-        let sfxGain = null;
-        let currentMusicNodes = [];
-        let currentMusicType = null; // 'normal' or 'boss'
-        let musicInterval = null;
-        function initAudio() {
-            if (audioCtx) return;
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            masterGain = audioCtx.createGain();
-            masterGain.connect(audioCtx.destination);
-            musicGain = audioCtx.createGain();
-            musicGain.gain.value = musicVolume;
-            musicGain.connect(masterGain);
-            sfxGain = audioCtx.createGain();
-            sfxGain.gain.value = sfxVolume;
-            sfxGain.connect(masterGain);
-        }
-        function playNote(freq, duration, type, gainVal, dest, delay) {
-            if (!audioCtx) return;
-            let t = audioCtx.currentTime + (delay || 0);
-            let osc = audioCtx.createOscillator();
-            let g = audioCtx.createGain();
-            osc.type = type || 'sine';
-            osc.frequency.setValueAtTime(freq, t);
-            g.gain.setValueAtTime(gainVal || 0.15, t);
-            g.gain.exponentialRampToValueAtTime(0.001, t + duration);
-            osc.connect(g);
-            g.connect(dest || sfxGain);
-            osc.start(t);
-            osc.stop(t + duration);
-        }
-        function playNoise(duration, gainVal, dest, delay) {
-            if (!audioCtx) return;
-            let t = audioCtx.currentTime + (delay || 0);
-            let bufSize = audioCtx.sampleRate * duration;
-            let buf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
-            let data = buf.getChannelData(0);
-            for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
-            let src = audioCtx.createBufferSource();
-            src.buffer = buf;
-            let g = audioCtx.createGain();
-            g.gain.setValueAtTime(gainVal || 0.1, t);
-            g.gain.exponentialRampToValueAtTime(0.001, t + duration);
-            src.connect(g);
-            g.connect(dest || sfxGain);
-            src.start(t);
-        }
-        // --- Sound Effects ---
-        function playSfxBuy() {
-            playNote(880, 0.1, 'sine', 0.12, sfxGain, 0);
-            playNote(1100, 0.1, 'sine', 0.1, sfxGain, 0.07);
-            playNote(1320, 0.15, 'sine', 0.12, sfxGain, 0.14);
-            playNote(1760, 0.2, 'triangle', 0.08, sfxGain, 0.2);
-        }
-        function playSfxDeath() {
-            playNoise(0.3, 0.2, sfxGain, 0);
-            playNote(200, 0.3, 'sawtooth', 0.15, sfxGain, 0);
-            playNote(100, 0.4, 'square', 0.1, sfxGain, 0.1);
-            playNote(50, 0.5, 'sawtooth', 0.08, sfxGain, 0.2);
-        }
-        function playSfxJump() {
-            if (!audioCtx) return;
-            let osc = audioCtx.createOscillator();
-            let g = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(300, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.1);
-            g.gain.setValueAtTime(0.08, audioCtx.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
-            osc.connect(g);
-            g.connect(sfxGain);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.12);
-        }
-        function playSfxBossHit() {
-            playNoise(0.15, 0.15, sfxGain, 0);
-            playNote(150, 0.2, 'square', 0.12, sfxGain, 0);
-            playNote(250, 0.15, 'sawtooth', 0.1, sfxGain, 0.05);
-        }
-        function playSfxLevelComplete() {
-            playNote(523, 0.12, 'sine', 0.1, sfxGain, 0);
-            playNote(659, 0.12, 'sine', 0.1, sfxGain, 0.1);
-            playNote(784, 0.12, 'sine', 0.1, sfxGain, 0.2);
-            playNote(1047, 0.3, 'triangle', 0.12, sfxGain, 0.3);
-        }
-        // --- Music Engine ---
-        function stopMusic() {
-            if (musicInterval) { clearInterval(musicInterval); musicInterval = null; }
-            currentMusicNodes.forEach(n => { try { n.stop(); } catch(e){} });
-            currentMusicNodes = [];
-            currentMusicType = null;
-        }
-        function startNormalMusic() {
-            if (currentMusicType === 'normal') return;
-            stopMusic();
-            currentMusicType = 'normal';
-            let bpm = 110;
-            let beatLen = 60 / bpm;
-            // Chill synthwave arpeggio pattern
-            let notes = [
-                [261.6, 329.6, 392.0, 329.6], // C E G E
-                [220.0, 277.2, 329.6, 277.2], // A C# E C#
-                [246.9, 311.1, 370.0, 311.1], // B D# F# D#
-                [196.0, 246.9, 293.7, 246.9]  // G B D B
-            ];
-            let bar = 0;
-            let step = 0;
-            function playStep() {
-                if (!audioCtx || currentMusicType !== 'normal') return;
-                let pattern = notes[bar % notes.length];
-                let freq = pattern[step % pattern.length];
-                // Arpeggio note
-                playNote(freq, beatLen * 0.8, 'triangle', 0.06, musicGain, 0);
-                // Subtle bass on beat 0
-                if (step === 0) {
-                    playNote(freq / 2, beatLen * 3.5, 'sine', 0.05, musicGain, 0);
-                }
-                // Soft pad chord on beat 0
-                if (step === 0) {
-                    playNote(freq, beatLen * 3.8, 'sine', 0.025, musicGain, 0);
-                    playNote(freq * 1.26, beatLen * 3.8, 'sine', 0.02, musicGain, 0);
-                    playNote(freq * 1.5, beatLen * 3.8, 'sine', 0.015, musicGain, 0);
-                }
-                step++;
-                if (step >= 4) { step = 0; bar++; }
-            }
-            playStep();
-            musicInterval = setInterval(playStep, beatLen * 1000);
-        }
-        function startBossMusic() {
-            if (currentMusicType === 'boss') return;
-            stopMusic();
-            currentMusicType = 'boss';
-            let bpm = 160;
-            let beatLen = 60 / bpm;
-            // Aggressive bass pattern
-            let bassNotes = [
-                [82.4, 82.4, 98.0, 82.4, 110.0, 82.4, 73.4, 82.4],  // E2 based
-                [73.4, 73.4, 87.3, 73.4, 98.0, 73.4, 65.4, 73.4],   // D2 based
-            ];
-            let bar = 0;
-            let step = 0;
-            function playStep() {
-                if (!audioCtx || currentMusicType !== 'boss') return;
-                let pattern = bassNotes[bar % bassNotes.length];
-                let freq = pattern[step % pattern.length];
-                // Heavy bass
-                playNote(freq, beatLen * 0.6, 'sawtooth', 0.08, musicGain, 0);
-                // Distorted lead on certain beats
-                if (step % 2 === 0) {
-                    playNote(freq * 4, beatLen * 0.3, 'square', 0.04, musicGain, 0);
-                }
-                // Kick-like thump on beats 0 and 4
-                if (step === 0 || step === 4) {
-                    playNote(55, 0.15, 'sine', 0.12, musicGain, 0);
-                    playNoise(0.05, 0.06, musicGain, 0);
-                }
-                // Snare-like noise on beats 2 and 6
-                if (step === 2 || step === 6) {
-                    playNoise(0.08, 0.08, musicGain, 0);
-                    playNote(200, 0.08, 'triangle', 0.06, musicGain, 0);
-                }
-                // Hi-hat noise every beat
-                playNoise(0.03, 0.03, musicGain, 0);
-                step++;
-                if (step >= 8) { step = 0; bar++; }
-            }
-            playStep();
-            musicInterval = setInterval(playStep, beatLen * 1000);
-        }
-        function updateMusicForLevel() {
-            if (!audioCtx) return;
-            let lvl = levels[currentLevel];
-            if (lvl && lvl.isBoss) {
-                startBossMusic();
-            } else {
-                startNormalMusic();
-            }
-        }
         // Speedrun stopwatch
         let stopwatchStarted = false;
         let stopwatchStartTime = 0;
         let stopwatchElapsed = 0;
         let stopwatchFinal = 0;
         let gameFinished = false;
+
         // Boss state
         let boss = null;
         let bossProjectiles = [];
@@ -519,6 +335,7 @@
         let queenBurstCount = 0;
         let queenBurstTimer = 0;
         let queenGlitchTimer = 0;
+
         const hexes = [];
         for(let i=0; i<15; i++) {
             hexes.push({
@@ -528,6 +345,7 @@
                 speed: Math.random() * 0.5 + 0.2
             });
         }
+
         const player = {
             x: 50, y: 300, oldY: 300,
             width: 22, height: 22,
@@ -540,7 +358,9 @@
             unlocked: ['#00d2ff'],
             unlockedUnits: ['cube']
         };
+
         const camera = { x: 0, y: 0 };
+
         function formatTime(ms) {
             let totalCentis = Math.floor(ms / 10);
             let centis = totalCentis % 100;
@@ -550,11 +370,13 @@
             let secStr = min > 0 ? sec.toString().padStart(2, '0') : sec.toString();
             return (min > 0 ? (min + ':') : '') + secStr + '.' + centis.toString().padStart(2, '0');
         }
+
         function drawStopwatch() {
             if (!showSpeedrunTimer) return;
             let ms = 0;
             if (gameFinished) ms = stopwatchFinal;
             else if (stopwatchStarted) ms = performance.now() - stopwatchStartTime;
+
             ctx.save();
             ctx.font = 'bold 14px Segoe UI';
             ctx.textAlign = 'right';
@@ -565,6 +387,7 @@
             ctx.shadowBlur = 0;
             ctx.restore();
         }
+
         function triggerScreenShake(intensity) {
             if (!screenShakeEnabled) return;
             screenShakeX = (Math.random() - 0.5) * intensity;
@@ -575,6 +398,7 @@
             shopOpen = !shopOpen;
             document.getElementById('shopUI').style.display = shopOpen ? 'flex' : 'none';
         }
+
         function toggleSettings() {
             if (shopOpen) { shopOpen = false; document.getElementById('shopUI').style.display = 'none'; }
             settingsOpen = !settingsOpen;
@@ -584,30 +408,28 @@
             if (player.unlocked.includes(color)) {
                 player.color = color;
                 updateShopUI();
-                playSfxBuy();
             } else if (score >= cost) {
                 score -= cost;
                 player.unlocked.push(color);
                 player.color = color;
                 updateShopUI();
-                playSfxBuy();
                 document.getElementById('scoreDisplay').innerText = `SCORE: ${score.toString().padStart(4, '0')}`;
             }
         }
+
         function buyUnit(shape, cost, id) {
             if (player.unlockedUnits.includes(shape)) {
                 player.shape = shape;
                 updateShopUI();
-                playSfxBuy();
             } else if (score >= cost) {
                 score -= cost;
                 player.unlockedUnits.push(shape);
                 player.shape = shape;
                 updateShopUI();
-                playSfxBuy();
                 document.getElementById('scoreDisplay').innerText = `SCORE: ${score.toString().padStart(4, '0')}`;
             }
         }
+
         function updateShopUI() {
             const colorItems = [
                 {id: 'shop-cyan', code: '#00d2ff'},
@@ -628,6 +450,7 @@
                     status.innerText = "OWNED";
                 }
             });
+
             const unitItems = [
                 {id: 'unit-cube', type: 'cube'},
                 {id: 'unit-tri', type: 'tri'},
@@ -646,6 +469,7 @@
                 }
             });
         }
+
         class Particle {
             constructor(x, y, color) {
                 this.x = x; this.y = y;
@@ -668,11 +492,13 @@
                 ctx.restore();
             }
         }
+
         function createExplosion(x, y, color, count) {
             for (let i = 0; i < count; i++) particles.push(new Particle(x, y, color));
             let adjustedCount = Math.round(count * particleIntensity);
             for (let i = 0; i < adjustedCount; i++) particles.push(new Particle(x, y, color));
         }
+
         const levels = [
             // LEVEL 1: Intro - flat ground, one enemy, reach the goal
             { width: 1600, startX: 50, startY: 300, objects: [
@@ -816,6 +642,7 @@
                 { x: 0, y: 380, w: 250, h: 20, type: 'platform' },
                 // Lava sea across the entire level
                 { x: 250, y: 380, w: 3700, h: 20, type: 'lava' },
+
                 // === PARKOUR SECTION 1: Climb to first core ===
                 { x: 300, y: 320, w: 100, h: 20, type: 'platform' },
                 { x: 470, y: 260, w: 80, h: 20, type: 'platform' },
@@ -824,6 +651,7 @@
                 { x: 640, y: 150, w: 40, h: 40, type: 'enemy', range: 40, speed: 5, currentX: 640, startX: 640, dir: 1, isDead: false },
                 // CORE 1 - at the top of the first climb
                 { x: 630, y: 150, w: 60, h: 20, type: 'weakpoint', isUsed: false },
+
                 // === PARKOUR SECTION 2: Cross to second core ===
                 { x: 790, y: 260, w: 80, h: 20, type: 'platform' },
                 { x: 950, y: 320, w: 80, h: 20, type: 'platform' },
@@ -834,6 +662,7 @@
                 { x: 1280, y: 150, w: 40, h: 40, type: 'enemy', range: 40, speed: 6, currentX: 1280, startX: 1280, dir: 1, isDead: false },
                 // CORE 2
                 { x: 1270, y: 150, w: 60, h: 20, type: 'weakpoint', isUsed: false },
+
                 // === PARKOUR SECTION 3: Extreme vertical climb ===
                 { x: 1430, y: 280, w: 70, h: 20, type: 'platform' },
                 { x: 1570, y: 220, w: 70, h: 20, type: 'platform' },
@@ -843,6 +672,7 @@
                 { x: 1890, y: 50, w: 40, h: 40, type: 'enemy', range: 30, speed: 10, currentX: 1890, startX: 1890, dir: 1, isDead: false },
                 // CORE 3 - highest point
                 { x: 1890, y: 50, w: 60, h: 20, type: 'weakpoint', isUsed: false },
+
                 // === PARKOUR SECTION 4: Descending gauntlet ===
                 { x: 2060, y: 160, w: 70, h: 20, type: 'platform' },
                 { x: 2210, y: 240, w: 70, h: 20, type: 'platform' },
@@ -855,6 +685,7 @@
                 { x: 2710, y: 130, w: 40, h: 40, type: 'enemy', range: 35, speed: 7, currentX: 2710, startX: 2710, dir: 1, isDead: false },
                 // CORE 4
                 { x: 2700, y: 130, w: 60, h: 20, type: 'weakpoint', isUsed: false },
+
                 // === PARKOUR SECTION 5: Final approach to the boss ===
                 { x: 2870, y: 250, w: 70, h: 20, type: 'platform' },
                 { x: 3030, y: 180, w: 70, h: 20, type: 'platform' },
@@ -868,6 +699,7 @@
                 { x: 3690, y: 140, w: 40, h: 40, type: 'enemy', range: 35, speed: 13, currentX: 3690, startX: 3690, dir: 1, isDead: false },
                 // CORE 5 - right near the boss
                 { x: 3680, y: 140, w: 60, h: 20, type: 'weakpoint', isUsed: false },
+
                 // Boss platform and goal (goal only works after boss defeated)
                 { x: 3950, y: 380, w: 250, h: 20, type: 'platform' },
                 { x: 4100, y: 300, w: 40, h: 40, type: 'boss_goal' }
@@ -1247,6 +1079,7 @@
                 { x: 0, y: 380, w: 200, h: 20, type: 'platform' },
                 // Lava sea across the entire level
                 { x: 200, y: 390, w: 4800, h: 10, type: 'lava' },
+
                 // === SECTION 1: The Glitch Gauntlet ===
                 { x: 270, y: 320, w: 50, h: 20, type: 'platform' },
                 { x: 380, y: 250, w: 45, h: 20, type: 'platform' },
@@ -1255,6 +1088,7 @@
                 { x: 600, y: 120, w: 50, h: 20, type: 'platform' },
                 // GLITCH ORB 1 - top of first climb
                 { x: 610, y: 95, w: 30, h: 25, type: 'glitch_orb', isUsed: false },
+
                 // === SECTION 2: Descent into Chaos ===
                 { x: 720, y: 180, w: 45, h: 20, type: 'platform' },
                 { x: 740, y: 140, w: 40, h: 40, type: 'enemy', range: 8, speed: 14, currentX: 740, startX: 740, dir: -1, isDead: false },
@@ -1265,6 +1099,7 @@
                 { x: 1170, y: 180, w: 45, h: 20, type: 'platform' },
                 // GLITCH ORB 2
                 { x: 1180, y: 155, w: 30, h: 25, type: 'glitch_orb', isUsed: false },
+
                 // === SECTION 3: The Razor's Edge ===
                 { x: 1280, y: 130, w: 40, h: 20, type: 'platform' },
                 { x: 1300, y: 90, w: 40, h: 40, type: 'enemy', range: 5, speed: 15, currentX: 1300, startX: 1300, dir: -1, isDead: false },
@@ -1275,6 +1110,7 @@
                 { x: 1720, y: 130, w: 45, h: 20, type: 'platform' },
                 // GLITCH ORB 3 - at the peak
                 { x: 1510, y: 25, w: 30, h: 25, type: 'glitch_orb', isUsed: false },
+
                 // === SECTION 4: Freefall Corridor ===
                 { x: 1830, y: 200, w: 45, h: 20, type: 'platform' },
                 { x: 1850, y: 160, w: 40, h: 40, type: 'enemy', range: 8, speed: 15, currentX: 1850, startX: 1850, dir: -1, isDead: false },
@@ -1285,6 +1121,7 @@
                 { x: 2270, y: 200, w: 45, h: 20, type: 'platform' },
                 // GLITCH ORB 4
                 { x: 2280, y: 175, w: 30, h: 25, type: 'glitch_orb', isUsed: false },
+
                 // === SECTION 5: The Nightmare Spire ===
                 { x: 2380, y: 150, w: 40, h: 20, type: 'platform' },
                 { x: 2400, y: 110, w: 40, h: 40, type: 'enemy', range: 5, speed: 16, currentX: 2400, startX: 2400, dir: -1, isDead: false },
@@ -1294,6 +1131,7 @@
                 { x: 2710, y: 40, w: 40, h: 20, type: 'platform' },
                 // GLITCH ORB 5 - highest point in the level
                 { x: 2720, y: 15, w: 30, h: 25, type: 'glitch_orb', isUsed: false },
+
                 // === SECTION 6: The Descent of Madness ===
                 { x: 2820, y: 100, w: 40, h: 20, type: 'platform' },
                 { x: 2930, y: 170, w: 40, h: 20, type: 'platform' },
@@ -1305,6 +1143,7 @@
                 { x: 3370, y: 180, w: 40, h: 20, type: 'platform' },
                 // GLITCH ORB 6
                 { x: 3380, y: 155, w: 30, h: 25, type: 'glitch_orb', isUsed: false },
+
                 // === SECTION 7: Final Approach - The Queen's Domain ===
                 { x: 3480, y: 130, w: 40, h: 20, type: 'platform' },
                 { x: 3500, y: 90, w: 40, h: 40, type: 'enemy', range: 5, speed: 16, currentX: 3500, startX: 3500, dir: -1, isDead: false },
@@ -1322,6 +1161,7 @@
                 { x: 4470, y: 120, w: 45, h: 20, type: 'platform' },
                 // GLITCH ORB 7 - right before the boss
                 { x: 4480, y: 95, w: 30, h: 25, type: 'glitch_orb', isUsed: false },
+
                 // Boss platform and exit
                 { x: 4600, y: 180, w: 60, h: 20, type: 'platform' },
                 { x: 4700, y: 250, w: 60, h: 20, type: 'platform' },
@@ -1329,9 +1169,11 @@
                 { x: 5100, y: 300, w: 40, h: 40, type: 'boss_goal' }
             ]}
         ];
+
         function triggerDeath() {
             if (deathTimer > 0) return;
             deathTimer = 60; player.visible = false;
+
             // Reset speedrun timer only if you die on Level 1
             if (currentLevel === 0) {
                 stopwatchStarted = false;
@@ -1340,10 +1182,11 @@
                 stopwatchFinal = 0;
                 gameFinished = false;
             }
+
             createExplosion(player.x + player.width/2, player.y + player.height/2, player.color, 25);
             triggerScreenShake(12);
-            playSfxDeath();
         }
+
         function loadLevel(index) {
             if (index >= levels.length) {
                 let timeText = '';
@@ -1354,6 +1197,7 @@
                 }
                 alert("MISSION COMPLETE: FINAL SCORE " + score + timeText);
                 currentLevel = 0; index = 0; score = 0;
+
                 // Reset for next run
                 stopwatchStarted = false;
                 stopwatchStartTime = 0;
@@ -1370,6 +1214,7 @@
                 if (obj.type === 'weakpoint') obj.isUsed = false;
                 if (obj.type === 'glitch_orb') obj.isUsed = false;
             });
+
             // Boss initialization
             if (lvl.isBoss && lvl.bossData) {
                 bossType = lvl.bossType || 'terminator';
@@ -1393,10 +1238,11 @@
                 bossProjectiles = [];
                 bossDefeated = false;
             }
+
             document.getElementById('levelDisplay').innerText = lvl.isBoss ? 'BOSS FIGHT' : `LEVEL ${(index + 1).toString().padStart(2, '0')}`;
             document.getElementById('scoreDisplay').innerText = `SCORE: ${score.toString().padStart(4, '0')}`;
-            updateMusicForLevel();
         }
+
         function update() {
             if (shopOpen) return;
             if (shopOpen || settingsOpen) return;
@@ -1410,6 +1256,7 @@
                 particles.forEach((p, i) => { p.update(); if (p.alpha <= 0) particles.splice(i, 1); });
                 return;
             }
+
             // Boss death cinematic
             if (bossDeathTimer > 0) {
                 bossDeathTimer--;
@@ -1429,20 +1276,22 @@
                 particles.forEach((p, i) => { p.update(); if (p.alpha <= 0) particles.splice(i, 1); });
                 return;
             }
+
             // 1. Store state from previous frame
             player.oldY = player.y;
             player.wasGrounded = player.grounded;
+
             // 2. Horizontal Input
             if (keys['ArrowRight'] || keys['d']) { if (player.velX < player.speed) player.velX += 1.0; }
             if (keys['ArrowLeft'] || keys['a']) { if (player.velX > -player.speed) player.velX -= 1.0; }
+
             // Start stopwatch on first movement
             if (!stopwatchStarted && !gameFinished && (keys['ArrowRight'] || keys['d'] || keys['ArrowLeft'] || keys['a'] || keys['ArrowUp'] || keys['w'] || keys[' '])) {
                 stopwatchStarted = true;
                 stopwatchStartTime = performance.now();
             }
-            
+
             // 3. Jump Logic (Only if grounded or in coyote time)
-            if ((keys['ArrowUp'] || keys['w'] || keys[' ']) && (player.grounded || hangTime < 6)) {
             if (isMod && (keys['ArrowUp'] || keys['w'] || keys[' '])) {
                 // Mod fly mode: hold jump to fly upward
                 player.velY = -6;
@@ -1453,11 +1302,11 @@
                 player.grounded = false; 
                 hangTime = 10;
                 createExplosion(player.x + player.width/2, player.y + player.height, player.color, 8);
-                playSfxJump();
             }
+
             // 4. Physics: Apply Friction & Gravity
             player.velX *= friction;
-            
+
             if (!player.grounded) {
                 player.velY += gravity;
                 hangTime++;
@@ -1465,30 +1314,36 @@
                 player.velY = 0;
                 hangTime = 0;
             }
+
             player.grounded = false;
+
             // 5. Apply Movement
             const lvl = levels[currentLevel];
             player.x += player.velX;
             player.x = Math.max(0, Math.min(player.x, lvl.width - player.width));
             player.y += player.velY;
+
             // 6. Visual Trails
             if (Math.abs(player.velX) > 2) {
                 trails.push({ x: player.x, y: player.y, rot: player.rotation, alpha: 0.5, shape: player.shape });
             }
             trails.forEach((t, i) => { t.alpha -= 0.05; if (t.alpha <= 0) trails.splice(i, 1); });
+
             // === BOSS LOGIC ===
             if (boss && !bossDefeated && bossDeathTimer === 0) {
                 boss.bobTimer += 0.03;
                 bossPulse += 0.05;
+
                 if (bossType === 'queen') {
                     // Queen bobs more erratically
                     boss.y = boss.baseY + Math.sin(boss.bobTimer * 1.5) * 25 + Math.sin(boss.bobTimer * 3.7) * 8;
                     queenGlitchTimer++;
-                    // Queen fires bursts of 2 projectiles with Y-tracking
+
                     // Queen fires bursts of 1 projectile with Y-tracking
                     bossFireTimer++;
                     let fireRate = 100 - ((boss.maxHp - boss.hp) * 7);
                     if (fireRate < 45) fireRate = 45;
+
                     if (queenBurstCount > 0) {
                         queenBurstTimer++;
                         if (queenBurstTimer >= 8) {
@@ -1509,10 +1364,10 @@
                         }
                     } else if (bossFireTimer >= fireRate) {
                         bossFireTimer = 0;
-                        queenBurstCount = 2;
                         queenBurstCount = 1;
                         queenBurstTimer = 0;
                     }
+
                     // Queen also fires sine-wave projectiles periodically
                     if (queenGlitchTimer % (180 - (boss.maxHp - boss.hp) * 10) === 0 && queenGlitchTimer > 0) {
                         for (let w = 0; w < 1; w++) {
@@ -1533,6 +1388,7 @@
                 } else {
                     // Terminator: original behavior
                     boss.y = boss.baseY + Math.sin(boss.bobTimer) * 15;
+
                     // Boss fires projectiles - gets faster as HP drops
                     bossFireTimer++;
                     let fireRate = 90 - ((boss.maxHp - boss.hp) * 12);
@@ -1547,8 +1403,10 @@
                         });
                     }
                 }
+
                 if (bossFlashTimer > 0) bossFlashTimer--;
             }
+
             // Update boss projectiles
             for (let i = bossProjectiles.length - 1; i >= 0; i--) {
                 let proj = bossProjectiles[i];
@@ -1572,6 +1430,7 @@
                     return;
                 }
             }
+
             // 7. Collision Detection Loop
             for (let obj of lvl.objects) {
                 if (obj.type === 'enemy' && !obj.isDead) {
@@ -1579,12 +1438,12 @@
                     if (Math.abs(obj.currentX - obj.startX) > obj.range) obj.dir *= -1;
                     obj.x = obj.currentX;
                 }
-                
+
                 if (player.x < obj.x + obj.w - 4 && player.x + player.width > obj.x + 4 &&
                     player.y < obj.y + obj.h - 4 && player.y + player.height > obj.y + 4) {
-                    
+
                     if (obj.type === 'lava') { triggerDeath(); return; }
-                    
+
                     else if (obj.type === 'enemy' && !obj.isDead) {
                         if (player.velY > 0 && (player.oldY + player.height) <= obj.y + 10) {
                             obj.isDead = true; player.velY = -8; score += 100;
@@ -1592,6 +1451,7 @@
                             createExplosion(obj.x + obj.w/2, obj.y + obj.h/2, '#8e44ad', 15);
                         } else { triggerDeath(); return; }
                     }
+
                     else if (obj.type === 'weakpoint' && !obj.isUsed) {
                         // Stomp the damage core to hurt the boss
                         if (player.velY > 0 && (player.oldY + player.height) <= obj.y + 10) {
@@ -1605,7 +1465,6 @@
                                 boss.hp--;
                                 bossFlashTimer = 15;
                                 triggerScreenShake(8);
-                                playSfxBossHit();
                                 createExplosion(boss.x + boss.w/2, boss.y + boss.h/2, '#ff0055', 20);
                                 if (boss.hp <= 0) {
                                     bossDeathTimer = 90;
@@ -1615,6 +1474,7 @@
                             }
                         }
                     }
+
                     else if (obj.type === 'glitch_orb' && !obj.isUsed) {
                         // Glitch orbs are collected on ANY touch (not stomp)
                         obj.isUsed = true;
@@ -1628,7 +1488,6 @@
                             boss.hp--;
                             bossFlashTimer = 20;
                             triggerScreenShake(10);
-                            playSfxBossHit();
                             createExplosion(boss.x + boss.w/2, boss.y + boss.h/2, '#bc13fe', 25);
                             createExplosion(boss.x + boss.w/2, boss.y + boss.h/2, '#e040fb', 15);
                             if (boss.hp <= 0) {
@@ -1638,13 +1497,13 @@
                             }
                         }
                     }
-                    
+
                     else if (obj.type === 'goal') { currentLevel++; loadLevel(currentLevel); return; }
-                    else if (obj.type === 'goal') { playSfxLevelComplete(); currentLevel++; loadLevel(currentLevel); return; }
+
                     else if (obj.type === 'boss_goal') {
                         if (bossDefeated) { currentLevel++; loadLevel(currentLevel); return; }
                     }
-                    
+
                     else if (obj.type === 'platform') {
                         if (player.velY >= 0 && (player.oldY + player.height) <= obj.y + 6) {
                             player.grounded = true; 
@@ -1659,6 +1518,7 @@
                     }
                 }
             }
+
             // Player collision with boss body
             if (boss && !bossDefeated && bossDeathTimer === 0) {
                 if (player.x < boss.x + boss.w && player.x + player.width > boss.x &&
@@ -1667,6 +1527,7 @@
                     return;
                 }
             }
+
             // 8. Cleanup and Camera
             particles.forEach((p, i) => { p.update(); if (p.alpha <= 0) particles.splice(i, 1); });
             if (player.y > canvas.height + 100) triggerDeath();
@@ -1674,6 +1535,7 @@
             camera.x = player.x - canvas.width / 2;
             camera.x = Math.max(0, Math.min(camera.x, lvl.width - canvas.width));
         }
+
         function drawShape(x, y, size, shape, color, rot, alpha) {
             ctx.save();
             ctx.globalAlpha = alpha;
@@ -1681,7 +1543,7 @@
             ctx.rotate(rot);
             ctx.fillStyle = color;
             ctx.shadowBlur = 15; ctx.shadowColor = color;
-            
+
             if (shape === 'cube') {
                 ctx.fillRect(-size/2, -size/2, size, size);
             } else if (shape === 'tri') {
@@ -1698,31 +1560,38 @@
             }
             ctx.restore();
         }
+
         function drawBoss() {
             if (!boss || bossDefeated) return;
             if (bossType === 'queen') { drawGlitchQueen(); return; }
             drawTerminator();
         }
+
         function drawTerminator() {
             if (!boss || bossDefeated) return;
+
             ctx.save();
             let bx = boss.x;
             let by = boss.y;
+
             // Flash when hit
             if (bossFlashTimer > 0 && bossFlashTimer % 4 < 2) {
                 ctx.globalAlpha = 0.9;
             }
+
             // Boss body - dark crimson with pulsing glow
             let pulse = Math.sin(bossPulse) * 0.3 + 0.7;
             ctx.shadowBlur = 25 * pulse;
             ctx.shadowColor = '#ff0055';
             ctx.fillStyle = bossFlashTimer > 0 ? '#ffffff' : '#880022';
             ctx.fillRect(bx, by, boss.w, boss.h);
+
             // Inner core
             ctx.shadowBlur = 15;
             ctx.shadowColor = '#ff3333';
             ctx.fillStyle = bossFlashTimer > 0 ? '#ffcccc' : '#cc0033';
             ctx.fillRect(bx + 20, by + 30, boss.w - 40, boss.h - 60);
+
             // Pulsing energy lines
             ctx.strokeStyle = '#ff0055';
             ctx.lineWidth = 2;
@@ -1736,17 +1605,20 @@
                 }
                 ctx.stroke();
             }
+
             // Eyes
             ctx.shadowBlur = 20;
             ctx.shadowColor = '#ff0000';
             ctx.fillStyle = '#ff0055';
             ctx.fillRect(bx + 30, by + 50, 30, 15);
             ctx.fillRect(bx + 90, by + 50, 30, 15);
+
             // Pupils track player
             let pupilOffset = player.x < boss.x ? -3 : 3;
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(bx + 38 + pupilOffset, by + 53, 12, 8);
             ctx.fillRect(bx + 98 + pupilOffset, by + 53, 12, 8);
+
             // Mouth
             ctx.fillStyle = '#ff0033';
             ctx.fillRect(bx + 35, by + 100, boss.w - 70, 8);
@@ -1754,35 +1626,44 @@
             for (let t = 0; t < 5; t++) {
                 ctx.fillRect(bx + 40 + t * 15, by + 100, 8, 12);
             }
+
             // Border
             ctx.strokeStyle = '#ff0055';
             ctx.lineWidth = 3;
             ctx.shadowBlur = 20;
             ctx.strokeRect(bx + 2, by + 2, boss.w - 4, boss.h - 4);
+
             ctx.shadowBlur = 0;
             ctx.restore();
         }
+
         function drawGlitchQueen() {
             if (!boss || bossDefeated) return;
+
             ctx.save();
             let bx = boss.x;
             let by = boss.y;
+
             // Flash when hit
             if (bossFlashTimer > 0 && bossFlashTimer % 3 < 2) {
                 ctx.globalAlpha = 0.85;
             }
+
             let pulse = Math.sin(bossPulse) * 0.3 + 0.7;
             let glitchShift = Math.sin(bossPulse * 7) > 0.9 ? (Math.random() * 6 - 3) : 0;
+
             // Glitch queen body - deep purple with magenta glow
             ctx.shadowBlur = 30 * pulse;
             ctx.shadowColor = '#bc13fe';
             ctx.fillStyle = bossFlashTimer > 0 ? '#ffffff' : '#2a0040';
             ctx.fillRect(bx + glitchShift, by, boss.w, boss.h);
+
             // Inner robe
             ctx.shadowBlur = 15;
             ctx.shadowColor = '#e040fb';
             ctx.fillStyle = bossFlashTimer > 0 ? '#eeccff' : '#5a0080';
             ctx.fillRect(bx + 15 + glitchShift, by + 40, boss.w - 30, boss.h - 50);
+
             // Crown - 3 triangular spikes
             ctx.fillStyle = bossFlashTimer > 0 ? '#ffffff' : '#e040fb';
             ctx.shadowBlur = 20;
@@ -1805,6 +1686,7 @@
                 ctx.arc(bx + 40 + c * 35 + glitchShift, by - 8, 4, 0, Math.PI * 2);
                 ctx.fill();
             }
+
             // Glitch scanlines
             ctx.globalAlpha = 0.3;
             ctx.fillStyle = '#bc13fe';
@@ -1814,6 +1696,7 @@
                 }
             }
             ctx.globalAlpha = bossFlashTimer > 0 ? 0.85 : 1;
+
             // Eyes - almond-shaped, glowing purple
             ctx.shadowBlur = 20;
             ctx.shadowColor = '#e040fb';
@@ -1826,6 +1709,7 @@
             ctx.beginPath();
             ctx.ellipse(bx + 90 + glitchShift, by + 65, 18, 10, 0, 0, Math.PI * 2);
             ctx.fill();
+
             // Pupils track player - diamond shaped
             let pupilOffset = player.x < boss.x ? -4 : 4;
             ctx.fillStyle = '#ffffff';
@@ -1844,6 +1728,7 @@
                 ctx.closePath();
                 ctx.fill();
             }
+
             // Mouth - thin smirk
             ctx.strokeStyle = '#e040fb';
             ctx.lineWidth = 2;
@@ -1853,6 +1738,7 @@
             ctx.moveTo(bx + 35 + glitchShift, by + 105);
             ctx.quadraticCurveTo(bx + 65 + glitchShift, by + 115, bx + 95 + glitchShift, by + 103);
             ctx.stroke();
+
             // Floating glitch particles around queen
             ctx.fillStyle = '#bc13fe';
             ctx.shadowBlur = 5;
@@ -1863,6 +1749,7 @@
                 ctx.fillRect(gx - 3, gy - 3, 6, 6);
             }
             ctx.globalAlpha = 1;
+
             // Border with glitch effect
             ctx.strokeStyle = '#bc13fe';
             ctx.lineWidth = 2;
@@ -1876,9 +1763,11 @@
                 ctx.strokeRect(bx + 5 - glitchShift, by + 5, boss.w - 10, boss.h - 10);
                 ctx.globalAlpha = 1;
             }
+
             ctx.shadowBlur = 0;
             ctx.restore();
         }
+
         function drawGlitchOrb(obj) {
             if (obj.isUsed) return;
             let glow = Math.sin(bossPulse * 3) * 0.4 + 0.6;
@@ -1921,16 +1810,20 @@
             ctx.shadowBlur = 0;
             ctx.restore();
         }
+
         function drawBossHealthBar() {
             if (!boss || bossDefeated) return;
+
             ctx.save();
             let barW = 300;
             let barH = 18;
             let barX = (canvas.width - barW) / 2;
             let barY = 15;
+
             let isQueen = bossType === 'queen';
             let bossColor = isQueen ? '#bc13fe' : '#ff0055';
             let bossName = isQueen ? 'THE GLITCH QUEEN' : 'THE TERMINATOR';
+
             // Label
             ctx.fillStyle = bossColor;
             ctx.font = 'bold 14px Segoe UI';
@@ -1938,9 +1831,11 @@
             ctx.shadowBlur = 10;
             ctx.shadowColor = bossColor;
             ctx.fillText(bossName, canvas.width / 2, barY - 2);
+
             // Bar background
             ctx.fillStyle = isQueen ? '#110022' : '#220011';
             ctx.fillRect(barX, barY, barW, barH);
+
             // Health fill
             let hpRatio = boss.hp / boss.maxHp;
             let fillColor;
@@ -1953,18 +1848,22 @@
             ctx.shadowBlur = 8;
             ctx.shadowColor = fillColor;
             ctx.fillRect(barX + 2, barY + 2, (barW - 4) * hpRatio, barH - 4);
+
             // Border
             ctx.strokeStyle = bossColor;
             ctx.lineWidth = 2;
             ctx.shadowBlur = 5;
             ctx.strokeRect(barX, barY, barW, barH);
+
             // HP text
             ctx.fillStyle = '#ffffff';
             ctx.font = 'bold 11px Segoe UI';
             ctx.shadowBlur = 0;
             ctx.fillText(boss.hp + ' / ' + boss.maxHp, canvas.width / 2, barY + 14);
+
             ctx.restore();
         }
+
         function drawWeakpoint(obj) {
             if (obj.isUsed) return;
             let glow = Math.sin(bossPulse * 2) * 0.4 + 0.6;
@@ -1991,6 +1890,7 @@
             ctx.fill();
             ctx.restore();
         }
+
         function drawBossProjectile(proj) {
             ctx.save();
             if (proj.isQueen) {
@@ -2038,6 +1938,7 @@
             ctx.shadowBlur = 0;
             ctx.restore();
         }
+
         function drawBackground() {
             ctx.strokeStyle = '#151525';
             ctx.lineWidth = 1;
@@ -2050,6 +1951,7 @@
                 ctx.moveTo(0, y); ctx.lineTo(canvas.width, y);
             }
             ctx.stroke();
+
             ctx.strokeStyle = '#1a1a2e';
             hexes.forEach(h => {
                 let hX = (h.x - (camera.x * h.speed)) % (levels[currentLevel].width + 400);
@@ -2065,16 +1967,20 @@
                 ctx.stroke();
             });
         }
+
         function draw() {
             ctx.fillStyle = '#0a0a0f';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             drawBackground();
+
             ctx.save();
             ctx.translate(-camera.x, -camera.y);
+
             ctx.translate(-camera.x + screenShakeX, -camera.y + screenShakeY);
             trails.forEach(t => {
                 drawShape(t.x, t.y, player.width, t.shape, player.color, t.rot, t.alpha);
             });
+
             levels[currentLevel].objects.forEach(obj => {
                 if (obj.type === 'platform') {
                     ctx.fillStyle = '#1a1a25'; ctx.fillRect(obj.x, obj.y, obj.w, obj.h);
@@ -2126,18 +2032,25 @@
                     drawGlitchOrb(obj);
                 }
             });
+
             // Draw boss
             drawBoss();
+
             // Draw boss projectiles
             bossProjectiles.forEach(proj => drawBossProjectile(proj));
+
             particles.forEach(p => p.draw());
+
             if (player.visible) {
                 drawShape(player.x, player.y, player.width, player.shape, player.color, player.rotation, 1);
             }
+
             ctx.restore();
+
             // Boss HUD overlay
             drawBossHealthBar();
             drawStopwatch();
+
             // Boss death cinematic
             if (bossDeathTimer > 0) {
                 let isQueen = bossType === 'queen';
@@ -2151,6 +2064,7 @@
                 ctx.fillText(isQueen ? 'DETHRONED' : 'TERMINATED', canvas.width / 2, canvas.height / 2);
                 ctx.shadowBlur = 0;
             }
+
             // Boss defeated prompt
             if (bossDefeated && boss) {
                 ctx.fillStyle = '#00ff88';
@@ -2160,6 +2074,7 @@
                 ctx.fillText('BOSS DEFEATED - REACH THE EXIT!', canvas.width / 2, canvas.height / 2 - 30);
                 ctx.shadowBlur = 0;
             }
+
             if (deathTimer > 0) {
                 ctx.fillStyle = 'rgba(20, 0, 0, 0.6)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -2174,8 +2089,9 @@
                 ctx.fillText('REBOOTING...', canvas.width / 2, canvas.height / 2 + 45);
             }
         }
+
         function gameLoop() { update(); draw(); requestAnimationFrame(gameLoop); }
-        
+
         window.addEventListener('keydown', e => {
             if (!gameStarted) return;
             keys[e.key] = true;
@@ -2186,15 +2102,18 @@
             if([" ", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) e.preventDefault();
         });
         window.addEventListener('keyup', e => keys[e.key] = false);
+
         // Mobile touch controls
         (function initMobileControls() {
             const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
             if (isTouchDevice) {
                 document.getElementById('mobileControls').style.display = 'flex';
             }
+
             function bindBtn(id, keyName, isToggle) {
                 const el = document.getElementById(id);
                 if (!el) return;
+
                 function activate(e) {
                     e.preventDefault();
                     if (isToggle) {
@@ -2213,6 +2132,7 @@
                         el.classList.remove('active');
                     }
                 }
+
                 el.addEventListener('touchstart', activate, { passive: false });
                 el.addEventListener('touchend', deactivate, { passive: false });
                 el.addEventListener('touchcancel', deactivate, { passive: false });
@@ -2221,22 +2141,22 @@
                 el.addEventListener('mouseup', deactivate);
                 el.addEventListener('mouseleave', deactivate);
             }
+
             bindBtn('btnLeft', 'ArrowLeft', false);
             bindBtn('btnRight', 'ArrowRight', false);
             bindBtn('btnJump', 'ArrowUp', false);
             bindBtn('btnShop', null, true);
+
             // Prevent default touch behavior on the entire game area to avoid scrolling
             document.body.addEventListener('touchmove', function(e) {
                 e.preventDefault();
             }, { passive: false });
         })();
-        loadLevel(currentLevel);
-        gameLoop();
+
         // Username system
         function startGame() {
             const input = document.getElementById('usernameInput').value.trim();
             if (!input) return;
-            initAudio();
             playerUsername = input;
             isMod = (playerUsername === 'AmxthystBloxMOD');
             document.getElementById('usernameOverlay').style.display = 'none';
@@ -2248,6 +2168,7 @@
             loadLevel(currentLevel);
             gameLoop();
         }
+
         function buildLevelSelector() {
             const sel = document.getElementById('levelSelector');
             sel.innerHTML = '<h3>LEVEL SELECT</h3>';
@@ -2276,11 +2197,13 @@
             closeBtn.onclick = toggleLevelSelector;
             sel.appendChild(closeBtn);
         }
+
         function toggleLevelSelector() {
             if (!isMod) return;
             levelSelectorOpen = !levelSelectorOpen;
             document.getElementById('levelSelector').style.display = levelSelectorOpen ? 'flex' : 'none';
         }
+
         document.getElementById('usernameSubmit').addEventListener('click', startGame);
         document.getElementById('usernameInput').addEventListener('keydown', function(e) {
             if (e.key === 'Enter') startGame();
@@ -2316,16 +2239,6 @@
         });
         document.getElementById('settingsCloseBtn').addEventListener('click', function() {
             toggleSettings();
-        });
-        document.getElementById('musicSlider').addEventListener('input', function() {
-            musicVolume = this.value / 100;
-            document.getElementById('musicValue').innerText = this.value + '%';
-            if (musicGain) musicGain.gain.value = musicVolume;
-        });
-        document.getElementById('sfxSlider').addEventListener('input', function() {
-            sfxVolume = this.value / 100;
-            document.getElementById('sfxValue').innerText = this.value + '%';
-            if (sfxGain) sfxGain.gain.value = sfxVolume;
         });
     </script>
 </body>
