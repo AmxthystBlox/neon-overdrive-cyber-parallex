@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +10,7 @@
         canvas { background: #0a0a0f; border: 2px solid #1a1a25; border-radius: 12px; box-shadow: 0 0 50px rgba(0,210,255,0.15); }
         .hud-container { width: 800px; display: flex; justify-content: space-between; margin-bottom: 10px; align-items: center; }
         .hud { font-size: 24px; font-weight: bold; letter-spacing: 2px; color: #00d2ff; text-shadow: 0 0 10px rgba(0,210,255,0.5); }
-
+        
         /* Shop Overlay */
         #shopUI {
             position: absolute; background: rgba(5, 5, 8, 0.95); border: 2px solid #00d2ff;
@@ -66,69 +67,6 @@
         }
         .level-btn:hover { background: rgba(255, 204, 0, 0.1); border-color: #ffcc00; }
 
-        /* Settings Menu */
-        #settingsUI {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(5, 5, 8, 0.92); display: none; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 50;
-        }
-        #settingsPanel {
-            background: rgba(10, 10, 20, 0.98); border: 2px solid #00d2ff;
-            padding: 25px 30px; border-radius: 12px; width: 320px;
-            box-shadow: 0 0 40px rgba(0, 210, 255, 0.3);
-        }
-        #settingsPanel h2 {
-            margin: 0 0 20px 0; color: #00d2ff; text-align: center; font-size: 20px;
-            letter-spacing: 3px; text-shadow: 0 0 15px rgba(0,210,255,0.5);
-        }
-        .settings-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 0; border-bottom: 1px solid #1a1a25;
-        }
-        .settings-row:last-of-type { border-bottom: none; }
-        .settings-label { color: #aaa; font-size: 13px; letter-spacing: 1px; }
-        .settings-value { color: #00d2ff; font-size: 12px; min-width: 30px; text-align: right; }
-        .settings-slider {
-            -webkit-appearance: none; appearance: none; width: 120px; height: 6px;
-            background: #1a1a25; border-radius: 3px; outline: none;
-        }
-        .settings-slider::-webkit-slider-thumb {
-            -webkit-appearance: none; appearance: none; width: 16px; height: 16px;
-            background: #00d2ff; border-radius: 50%; cursor: pointer;
-            box-shadow: 0 0 8px rgba(0,210,255,0.5);
-        }
-        .settings-toggle {
-            width: 40px; height: 22px; background: #1a1a25; border-radius: 11px;
-            position: relative; cursor: pointer; border: 1px solid #333;
-            transition: 0.2s;
-        }
-        .settings-toggle.active { background: rgba(0, 210, 255, 0.3); border-color: #00d2ff; }
-        .settings-toggle::after {
-            content: ''; position: absolute; top: 2px; left: 2px;
-            width: 16px; height: 16px; background: #555; border-radius: 50%;
-            transition: 0.2s;
-        }
-        .settings-toggle.active::after { left: 20px; background: #00d2ff; }
-        .settings-checkbox {
-            width: 18px; height: 18px; background: #1a1a25; border: 1px solid #333;
-            border-radius: 4px; cursor: pointer; display: flex; align-items: center;
-            justify-content: center; transition: 0.2s; font-size: 12px; color: #00d2ff;
-        }
-        .settings-checkbox.checked { border-color: #00d2ff; background: rgba(0,210,255,0.15); }
-        #settingsResetBtn {
-            margin-top: 18px; width: 100%; background: transparent; border: 2px solid #ff3333;
-            color: #ff3333; font-size: 13px; padding: 8px; border-radius: 6px; cursor: pointer;
-            font-family: 'Segoe UI', sans-serif; letter-spacing: 2px; transition: 0.2s;
-            text-transform: uppercase;
-        }
-        #settingsResetBtn:hover { background: rgba(255, 51, 51, 0.15); box-shadow: 0 0 15px rgba(255,51,51,0.3); }
-        #settingsCloseBtn {
-            margin-top: 10px; width: 100%; background: transparent; border: 2px solid #00d2ff;
-            color: #00d2ff; font-size: 13px; padding: 8px; border-radius: 6px; cursor: pointer;
-            font-family: 'Segoe UI', sans-serif; letter-spacing: 2px; transition: 0.2s;
-            text-transform: uppercase;
-        }
-        #settingsCloseBtn:hover { background: rgba(0,210,255,0.1); box-shadow: 0 0 15px rgba(0,210,255,0.3); }
         /* Mobile Controls */
         #mobileControls {
             display: none;
@@ -234,32 +172,9 @@
     <!-- Level Selector (mod menu) -->
     <div id="levelSelector"></div>
 
-    <!-- Settings Menu -->
-    <div id="settingsUI">
-        <div id="settingsPanel">
-            <h2>SYSTEM SETTINGS</h2>
-            <div class="settings-row">
-                <span class="settings-label">Particle Intensity</span>
-                <div style="display:flex;align-items:center;gap:8px;">
-                    <input type="range" id="particleSlider" class="settings-slider" min="0" max="200" value="100">
-                    <span class="settings-value" id="particleValue">100%</span>
-                </div>
-            </div>
-            <div class="settings-row">
-                <span class="settings-label">Screen Shake</span>
-                <div class="settings-toggle active" id="shakeToggle"></div>
-            </div>
-            <div class="settings-row">
-                <span class="settings-label">Speedrun Timer</span>
-                <div class="settings-checkbox checked" id="timerCheckbox">&#10003;</div>
-            </div>
-            <button id="settingsResetBtn">Reset Progress</button>
-            <button id="settingsCloseBtn">Close</button>
-        </div>
-    </div>
     <div id="shopUI">
         <h3 style="margin: 0 0 10px 0; color: #00d2ff; text-align: center;">NEON SHOP</h3>
-
+        
         <div class="section-label">Core Colors</div>
         <div class="shop-item unlocked equipped" id="shop-cyan" onclick="buyColor('#00d2ff', 0, 'shop-cyan')"><span>CYAN</span> <span class="status">FREE</span></div>
         <div class="shop-item" id="shop-lime" onclick="buyColor('#00ff88', 300, 'shop-lime')"><span>LIME</span> <span class="status">300 PTS</span></div>
@@ -307,15 +222,8 @@
         let particles = [];
         let deathTimer = 0;
         let shopOpen = false;
-        let settingsOpen = false;
         let trails = [];
 
-        // Settings state
-        let particleIntensity = 1.0;
-        let screenShakeEnabled = true;
-        let showSpeedrunTimer = true;
-        let screenShakeX = 0;
-        let screenShakeY = 0;
         // Speedrun stopwatch
         let stopwatchStarted = false;
         let stopwatchStartTime = 0;
@@ -372,7 +280,6 @@
         }
 
         function drawStopwatch() {
-            if (!showSpeedrunTimer) return;
             let ms = 0;
             if (gameFinished) ms = stopwatchFinal;
             else if (stopwatchStarted) ms = performance.now() - stopwatchStartTime;
@@ -388,22 +295,11 @@
             ctx.restore();
         }
 
-        function triggerScreenShake(intensity) {
-            if (!screenShakeEnabled) return;
-            screenShakeX = (Math.random() - 0.5) * intensity;
-            screenShakeY = (Math.random() - 0.5) * intensity;
-        }
         function toggleShop() {
-            if (settingsOpen) { toggleSettings(); }
             shopOpen = !shopOpen;
             document.getElementById('shopUI').style.display = shopOpen ? 'flex' : 'none';
         }
 
-        function toggleSettings() {
-            if (shopOpen) { shopOpen = false; document.getElementById('shopUI').style.display = 'none'; }
-            settingsOpen = !settingsOpen;
-            document.getElementById('settingsUI').style.display = settingsOpen ? 'flex' : 'none';
-        }
         function buyColor(color, cost, id) {
             if (player.unlocked.includes(color)) {
                 player.color = color;
@@ -495,8 +391,6 @@
 
         function createExplosion(x, y, color, count) {
             for (let i = 0; i < count; i++) particles.push(new Particle(x, y, color));
-            let adjustedCount = Math.round(count * particleIntensity);
-            for (let i = 0; i < adjustedCount; i++) particles.push(new Particle(x, y, color));
         }
 
         const levels = [
@@ -1184,7 +1078,6 @@
             }
 
             createExplosion(player.x + player.width/2, player.y + player.height/2, player.color, 25);
-            triggerScreenShake(12);
         }
 
         function loadLevel(index) {
@@ -1245,12 +1138,6 @@
 
         function update() {
             if (shopOpen) return;
-            if (shopOpen || settingsOpen) return;
-            // Decay screen shake
-            screenShakeX *= 0.8;
-            screenShakeY *= 0.8;
-            if (Math.abs(screenShakeX) < 0.1) screenShakeX = 0;
-            if (Math.abs(screenShakeY) < 0.1) screenShakeY = 0;
             if (deathTimer > 0) {
                 deathTimer--; if (deathTimer === 0) loadLevel(currentLevel);
                 particles.forEach((p, i) => { p.update(); if (p.alpha <= 0) particles.splice(i, 1); });
@@ -1290,7 +1177,7 @@
                 stopwatchStarted = true;
                 stopwatchStartTime = performance.now();
             }
-
+            
             // 3. Jump Logic (Only if grounded or in coyote time)
             if (isMod && (keys['ArrowUp'] || keys['w'] || keys[' '])) {
                 // Mod fly mode: hold jump to fly upward
@@ -1306,7 +1193,7 @@
 
             // 4. Physics: Apply Friction & Gravity
             player.velX *= friction;
-
+            
             if (!player.grounded) {
                 player.velY += gravity;
                 hangTime++;
@@ -1438,12 +1325,12 @@
                     if (Math.abs(obj.currentX - obj.startX) > obj.range) obj.dir *= -1;
                     obj.x = obj.currentX;
                 }
-
+                
                 if (player.x < obj.x + obj.w - 4 && player.x + player.width > obj.x + 4 &&
                     player.y < obj.y + obj.h - 4 && player.y + player.height > obj.y + 4) {
-
+                    
                     if (obj.type === 'lava') { triggerDeath(); return; }
-
+                    
                     else if (obj.type === 'enemy' && !obj.isDead) {
                         if (player.velY > 0 && (player.oldY + player.height) <= obj.y + 10) {
                             obj.isDead = true; player.velY = -8; score += 100;
@@ -1464,12 +1351,10 @@
                             if (boss && boss.hp > 0) {
                                 boss.hp--;
                                 bossFlashTimer = 15;
-                                triggerScreenShake(8);
                                 createExplosion(boss.x + boss.w/2, boss.y + boss.h/2, '#ff0055', 20);
                                 if (boss.hp <= 0) {
                                     bossDeathTimer = 90;
                                     bossProjectiles = [];
-                                    triggerScreenShake(16);
                                 }
                             }
                         }
@@ -1487,23 +1372,21 @@
                         if (boss && boss.hp > 0) {
                             boss.hp--;
                             bossFlashTimer = 20;
-                            triggerScreenShake(10);
                             createExplosion(boss.x + boss.w/2, boss.y + boss.h/2, '#bc13fe', 25);
                             createExplosion(boss.x + boss.w/2, boss.y + boss.h/2, '#e040fb', 15);
                             if (boss.hp <= 0) {
                                 bossDeathTimer = 120;
                                 bossProjectiles = [];
-                                triggerScreenShake(20);
                             }
                         }
                     }
-
+                    
                     else if (obj.type === 'goal') { currentLevel++; loadLevel(currentLevel); return; }
 
                     else if (obj.type === 'boss_goal') {
                         if (bossDefeated) { currentLevel++; loadLevel(currentLevel); return; }
                     }
-
+                    
                     else if (obj.type === 'platform') {
                         if (player.velY >= 0 && (player.oldY + player.height) <= obj.y + 6) {
                             player.grounded = true; 
@@ -1543,7 +1426,7 @@
             ctx.rotate(rot);
             ctx.fillStyle = color;
             ctx.shadowBlur = 15; ctx.shadowColor = color;
-
+            
             if (shape === 'cube') {
                 ctx.fillRect(-size/2, -size/2, size, size);
             } else if (shape === 'tri') {
@@ -1976,7 +1859,6 @@
             ctx.save();
             ctx.translate(-camera.x, -camera.y);
 
-            ctx.translate(-camera.x + screenShakeX, -camera.y + screenShakeY);
             trails.forEach(t => {
                 drawShape(t.x, t.y, player.width, t.shape, player.color, t.rot, t.alpha);
             });
@@ -2091,13 +1973,11 @@
         }
 
         function gameLoop() { update(); draw(); requestAnimationFrame(gameLoop); }
-
+        
         window.addEventListener('keydown', e => {
             if (!gameStarted) return;
             keys[e.key] = true;
             if (e.key === 's' || e.key === 'S') toggleShop();
-            if (e.key === 'Escape') toggleSettings();
-            if (e.key === 's' || e.key === 'S') { if (!settingsOpen) toggleShop(); }
             if ((e.key === 'l' || e.key === 'L') && isMod) toggleLevelSelector();
             if([" ", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) e.preventDefault();
         });
@@ -2207,38 +2087,6 @@
         document.getElementById('usernameSubmit').addEventListener('click', startGame);
         document.getElementById('usernameInput').addEventListener('keydown', function(e) {
             if (e.key === 'Enter') startGame();
-        });
-        // Settings controls
-        document.getElementById('particleSlider').addEventListener('input', function() {
-            particleIntensity = this.value / 100;
-            document.getElementById('particleValue').innerText = this.value + '%';
-        });
-        document.getElementById('shakeToggle').addEventListener('click', function() {
-            screenShakeEnabled = !screenShakeEnabled;
-            this.classList.toggle('active', screenShakeEnabled);
-        });
-        document.getElementById('timerCheckbox').addEventListener('click', function() {
-            showSpeedrunTimer = !showSpeedrunTimer;
-            this.classList.toggle('checked', showSpeedrunTimer);
-            this.innerHTML = showSpeedrunTimer ? '&#10003;' : '';
-        });
-        document.getElementById('settingsResetBtn').addEventListener('click', function() {
-            if (!confirm('Reset all progress? Score and shop unlocks will be lost.')) return;
-            score = 0;
-            currentLevel = 0;
-            player.color = '#00d2ff';
-            player.shape = 'cube';
-            player.unlocked = ['#00d2ff'];
-            player.unlockedUnits = ['cube'];
-            updateShopUI();
-            document.getElementById('scoreDisplay').innerText = 'SCORE: 0000';
-            stopwatchStarted = false; stopwatchStartTime = 0; stopwatchElapsed = 0;
-            stopwatchFinal = 0; gameFinished = false;
-            loadLevel(currentLevel);
-            toggleSettings();
-        });
-        document.getElementById('settingsCloseBtn').addEventListener('click', function() {
-            toggleSettings();
         });
     </script>
 </body>
