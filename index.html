@@ -2312,7 +2312,19 @@
             }
         }
 
-        function gameLoop() { update(); draw(); requestAnimationFrame(gameLoop); }
+let fps = 75;
+let interval = 1000 / fps;
+let lastTime = 0;
+
+function gameLoop(time) {
+  if (time - lastTime >= interval) {
+    update();
+    draw();
+    lastTime = time;
+  }
+  requestAnimationFrame(gameLoop);
+}
+requestAnimationFrame(gameLoop);
         
         window.addEventListener('keydown', e => {
             if (!gameStarted) return;
