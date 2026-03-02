@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,10 +14,11 @@
         /* Shop Overlay */
         #shopUI {
             position: absolute; background: rgba(5, 5, 8, 0.95); border: 2px solid #00d2ff;
-            padding: 20px; border-radius: 10px; display: none; flex-direction: column; gap: 10px;
+            padding: 15px; border-radius: 10px; display: none; flex-direction: column; gap: 6px;
             box-shadow: 0 0 30px rgba(0, 210, 255, 0.3); z-index: 10; width: 280px;
+            max-height: 350px; overflow-y: auto;
         }
-        .shop-item { padding: 10px; border: 1px solid #1a1a25; cursor: pointer; display: flex; justify-content: space-between; transition: 0.2s; font-size: 14px; }
+        .shop-item { padding: 7px 10px; border: 1px solid #1a1a25; cursor: pointer; display: flex; justify-content: space-between; transition: 0.2s; font-size: 13px; }
         .shop-item:hover { background: rgba(0, 210, 255, 0.1); }
         .unlocked { border-color: #00ff88; color: #00ff88; }
         .equipped { border-color: #00ff88; background: rgba(0, 255, 136, 0.1); color: #00ff88; }
@@ -282,11 +284,17 @@
         <div class="shop-item" id="shop-lime" onclick="buyColor('#00ff88', 300, 'shop-lime')"><span>LIME</span> <span class="status">300 PTS</span></div>
         <div class="shop-item" id="shop-void" onclick="buyColor('#bc13fe', 700, 'shop-void')"><span>VOID</span> <span class="status">700 PTS</span></div>
         <div class="shop-item" id="shop-gold" onclick="buyColor('#ffcc00', 1300, 'shop-gold')"><span>GOLD</span> <span class="status">1300 PTS</span></div>
+        <div class="shop-item" id="shop-crimson" onclick="buyColor('#ff0055', 2000, 'shop-crimson')"><span>CRIMSON</span> <span class="status">2000 PTS</span></div>
+        <div class="shop-item" id="shop-ice" onclick="buyColor('#88eeff', 3500, 'shop-ice')"><span>ICE</span> <span class="status">3500 PTS</span></div>
+        <div class="shop-item" id="shop-plasma" onclick="buyColor('#ff6600', 5000, 'shop-plasma')"><span>PLASMA</span> <span class="status">5000 PTS</span></div>
 
         <div class="section-label">Unit Chassis</div>
         <div class="shop-item unlocked equipped" id="unit-cube" onclick="buyUnit('cube', 0, 'unit-cube')"><span>CUBE-X</span> <span class="status">FREE</span></div>
         <div class="shop-item" id="unit-tri" onclick="buyUnit('tri', 1000, 'unit-tri')"><span>INTERCEPTOR</span> <span class="status">1000 PTS</span></div>
         <div class="shop-item" id="unit-circle" onclick="buyUnit('circle', 2000, 'unit-circle')"><span>ORBITER</span> <span class="status">2000 PTS</span></div>
+        <div class="shop-item" id="unit-diamond" onclick="buyUnit('diamond', 3500, 'unit-diamond')"><span>PRISM</span> <span class="status">3500 PTS</span></div>
+        <div class="shop-item" id="unit-star" onclick="buyUnit('star', 5500, 'unit-star')"><span>NOVA</span> <span class="status">5500 PTS</span></div>
+        <div class="shop-item" id="unit-hex" onclick="buyUnit('hex', 8000, 'unit-hex')"><span>HEXCORE</span> <span class="status">8000 PTS</span></div>
 
         <button onclick="toggleShop()" style="margin-top: 10px; background: #ff3333; border: none; color: white; padding: 5px; cursor: pointer;">CLOSE</button>
     </div>
@@ -667,7 +675,10 @@
                 {id: 'shop-cyan', code: '#00d2ff'},
                 {id: 'shop-lime', code: '#00ff88'},
                 {id: 'shop-void', code: '#bc13fe'},
-                {id: 'shop-gold', code: '#ffcc00'}
+                {id: 'shop-gold', code: '#ffcc00'},
+                {id: 'shop-crimson', code: '#ff0055'},
+                {id: 'shop-ice', code: '#88eeff'},
+                {id: 'shop-plasma', code: '#ff6600'}
             ];
             colorItems.forEach(itemData => {
                 const item = document.getElementById(itemData.id);
@@ -686,7 +697,10 @@
             const unitItems = [
                 {id: 'unit-cube', type: 'cube'},
                 {id: 'unit-tri', type: 'tri'},
-                {id: 'unit-circle', type: 'circle'}
+                {id: 'unit-circle', type: 'circle'},
+                {id: 'unit-diamond', type: 'diamond'},
+                {id: 'unit-star', type: 'star'},
+                {id: 'unit-hex', type: 'hex'}
             ];
             unitItems.forEach(itemData => {
                 const item = document.getElementById(itemData.id);
@@ -1653,12 +1667,41 @@
             }
 
             // 7. Collision Detection Loop
+            // Save pre-collision velocity for stomp checks
+            let savedVelY = player.velY;
+
+            // Pass 1: Move enemies
             for (let obj of lvl.objects) {
                 if (obj.type === 'enemy' && !obj.isDead) {
                     obj.currentX += obj.speed * obj.dir;
                     if (Math.abs(obj.currentX - obj.startX) > obj.range) obj.dir *= -1;
                     obj.x = obj.currentX;
                 }
+            }
+
+            // Pass 2: Resolve platform collisions FIRST
+            // This prevents the player from clipping through platforms into lava below.
+            // Uses a velocity-aware landing threshold to handle high-speed falls.
+            for (let obj of lvl.objects) {
+                if (obj.type !== 'platform') continue;
+                if (player.x < obj.x + obj.w - 4 && player.x + player.width > obj.x + 4 &&
+                    player.y < obj.y + obj.h - 4 && player.y + player.height > obj.y + 4) {
+                    if (player.velY >= 0 && (player.oldY + player.height) <= obj.y + Math.max(6, savedVelY + 1)) {
+                        player.grounded = true; 
+                        player.velY = 0; 
+                        player.y = obj.y - player.height;
+                        if (!player.wasGrounded) createExplosion(player.x + player.width/2, player.y + player.height, player.color, 5);
+                    } else {
+                        if (player.velX > 0) player.x = obj.x - player.width;
+                        else if (player.velX < 0) player.x = obj.x + obj.w;
+                        player.velX = 0;
+                    }
+                }
+            }
+
+            // Pass 3: Check lava, enemies, goals, and other objects
+            for (let obj of lvl.objects) {
+                if (obj.type === 'platform') continue;
                 
                 if (player.x < obj.x + obj.w - 4 && player.x + player.width > obj.x + 4 &&
                     player.y < obj.y + obj.h - 4 && player.y + player.height > obj.y + 4) {
@@ -1666,7 +1709,7 @@
                     if (obj.type === 'lava') { triggerDeath(); return; }
                     
                     else if (obj.type === 'enemy' && !obj.isDead) {
-                        if (player.velY > 0 && (player.oldY + player.height) <= obj.y + 10) {
+                        if (savedVelY > 0 && (player.oldY + player.height) <= obj.y + 10) {
                             obj.isDead = true; player.velY = -8; score += 100;
                             document.getElementById('scoreDisplay').innerText = `SCORE: ${score.toString().padStart(4, '0')}`;
                             createExplosion(obj.x + obj.w/2, obj.y + obj.h/2, '#8e44ad', 15);
@@ -1675,7 +1718,7 @@
 
                     else if (obj.type === 'weakpoint' && !obj.isUsed) {
                         // Stomp the damage core to hurt the boss
-                        if (player.velY > 0 && (player.oldY + player.height) <= obj.y + 10) {
+                        if (savedVelY > 0 && (player.oldY + player.height) <= obj.y + 10) {
                             obj.isUsed = true;
                             player.velY = -10;
                             score += 200;
@@ -1726,19 +1769,6 @@
                     else if (obj.type === 'boss_goal') {
                         if (bossDefeated) { currentLevel++; loadLevel(currentLevel); return; }
                     }
-                    
-                    else if (obj.type === 'platform') {
-                        if (player.velY >= 0 && (player.oldY + player.height) <= obj.y + 6) {
-                            player.grounded = true; 
-                            player.velY = 0; 
-                            player.y = obj.y - player.height;
-                            if (!player.wasGrounded) createExplosion(player.x + player.width/2, player.y + player.height, player.color, 5);
-                        } else {
-                            if (player.velX > 0) player.x = obj.x - player.width;
-                            else if (player.velX < 0) player.x = obj.x + obj.w;
-                            player.velX = 0;
-                        }
-                    }
                 }
             }
 
@@ -1779,6 +1809,34 @@
             } else if (shape === 'circle') {
                 ctx.beginPath();
                 ctx.arc(0, 0, size/2, 0, Math.PI * 2);
+                ctx.fill();
+            } else if (shape === 'diamond') {
+                ctx.beginPath();
+                ctx.moveTo(0, -size/2);
+                ctx.lineTo(size/2, 0);
+                ctx.lineTo(0, size/2);
+                ctx.lineTo(-size/2, 0);
+                ctx.closePath();
+                ctx.fill();
+            } else if (shape === 'star') {
+                ctx.beginPath();
+                for (let i = 0; i < 5; i++) {
+                    let angle = (i * 4 * Math.PI / 5) - Math.PI / 2;
+                    let r = size / 2;
+                    if (i === 0) ctx.moveTo(Math.cos(angle) * r, Math.sin(angle) * r);
+                    else ctx.lineTo(Math.cos(angle) * r, Math.sin(angle) * r);
+                }
+                ctx.closePath();
+                ctx.fill();
+            } else if (shape === 'hex') {
+                ctx.beginPath();
+                for (let i = 0; i < 6; i++) {
+                    let angle = (i * Math.PI / 3) - Math.PI / 6;
+                    let r = size / 2;
+                    if (i === 0) ctx.moveTo(Math.cos(angle) * r, Math.sin(angle) * r);
+                    else ctx.lineTo(Math.cos(angle) * r, Math.sin(angle) * r);
+                }
+                ctx.closePath();
                 ctx.fill();
             }
             ctx.restore();
