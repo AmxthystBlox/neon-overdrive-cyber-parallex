@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -785,7 +784,6 @@
                 { x: 2150, y: 380, w: 400, h: 20, type: 'platform' },
                 { x: 2100, y: 375, w: 500, h: 15, type: 'lava' },      
                 { x: 2250, y: 280, w: 100, h: 20, type: 'platform' },
-                { x: 2300, y: 340, w: 40, h: 40, type: 'enemy', range: 80, speed: 12, currentX: 2300, startX: 2300, dir: -1, isDead: false },
                 { x: 2500, y: 320, w: 120, h: 20, type: 'platform' },
                 { x: 2950, y: 250, w: 40, h: 40, type: 'goal' }
             ]},
@@ -814,12 +812,12 @@
             // LEVEL 7: "Lava Corridors"
             { width: 3500, startX: 50, startY: 300, objects: [
                 { x: 0, y: 380, w: 300, h: 20, type: 'platform' },
-                { x: 300, y: 380, w: 200, h: 20, type: 'lava' },
+                { x: 300, y: 390, w: 200, h: 20, type: 'lava' },
                 { x: 500, y: 380, w: 150, h: 20, type: 'platform' },
                 { x: 520, y: 340, w: 40, h: 40, type: 'enemy', range: 50, speed: 10, currentX: 520, startX: 520, dir: 1, isDead: false },
-                { x: 650, y: 380, w: 250, h: 20, type: 'lava' },
+                { x: 650, y: 390, w: 250, h: 20, type: 'lava' },
                 { x: 900, y: 380, w: 120, h: 20, type: 'platform' },
-                { x: 1020, y: 380, w: 1200, h: 20, type: 'lava' },
+                { x: 1020, y: 390, w: 1200, h: 20, type: 'lava' },
                 { x: 1050, y: 280, w: 100, h: 20, type: 'platform' },
                 { x: 1250, y: 220, w: 130, h: 20, type: 'platform' },
                 { x: 1270, y: 180, w: 40, h: 40, type: 'enemy', range: 50, speed: 7, currentX: 1270, startX: 1270, dir: -1, isDead: false },
@@ -829,7 +827,7 @@
                 { x: 2220, y: 380, w: 600, h: 20, type: 'platform' },
                 { x: 2300, y: 340, w: 40, h: 40, type: 'enemy', range: 80, speed: 9, currentX: 2300, startX: 2300, dir: 1, isDead: false },
                 { x: 2550, y: 340, w: 40, h: 40, type: 'enemy', range: 80, speed: 11, currentX: 2550, startX: 2550, dir: -1, isDead: false },
-                { x: 2820, y: 380, w: 300, h: 20, type: 'lava' },
+                { x: 2820, y: 390, w: 420, h: 20, type: 'lava' },
                 { x: 2880, y: 280, w: 80, h: 20, type: 'platform' },
                 { x: 3050, y: 220, w: 80, h: 20, type: 'platform' },
                 { x: 3200, y: 380, w: 300, h: 20, type: 'platform' },
@@ -939,25 +937,21 @@
             // LEVEL 10: "Aftershock" - Post-boss warmup, tricky lava gaps with moving enemies
             { width: 2800, startX: 50, startY: 300, objects: [
                 { x: 0, y: 380, w: 250, h: 20, type: 'platform' },
-                { x: 250, y: 390, w: 200, h: 10, type: 'lava' },
+                { x: 250, y: 390, w: 20000, h: 10, type: 'lava' },
                 { x: 450, y: 350, w: 120, h: 20, type: 'platform' },
                 { x: 470, y: 310, w: 40, h: 40, type: 'enemy', range: 40, speed: 6, currentX: 470, startX: 470, dir: 1, isDead: false },
-                { x: 570, y: 390, w: 180, h: 10, type: 'lava' },
                 { x: 750, y: 300, w: 100, h: 20, type: 'platform' },
-                { x: 850, y: 390, w: 250, h: 10, type: 'lava' },
                 { x: 950, y: 240, w: 80, h: 20, type: 'platform' },
                 { x: 1100, y: 180, w: 100, h: 20, type: 'platform' },
                 { x: 1120, y: 140, w: 40, h: 40, type: 'enemy', range: 35, speed: 8, currentX: 1120, startX: 1120, dir: -1, isDead: false },
                 { x: 1300, y: 250, w: 80, h: 20, type: 'platform' },
                 { x: 1450, y: 320, w: 120, h: 20, type: 'platform' },
                 { x: 1470, y: 280, w: 40, h: 40, type: 'enemy', range: 40, speed: 10, currentX: 1470, startX: 1470, dir: 1, isDead: false },
-                { x: 1570, y: 390, w: 300, h: 10, type: 'lava' },
                 { x: 1650, y: 250, w: 80, h: 20, type: 'platform' },
                 { x: 1820, y: 180, w: 80, h: 20, type: 'platform' },
                 { x: 1990, y: 250, w: 100, h: 20, type: 'platform' },
                 { x: 2010, y: 210, w: 40, h: 40, type: 'enemy', range: 35, speed: 9, currentX: 2010, startX: 2010, dir: -1, isDead: false },
                 { x: 2180, y: 320, w: 120, h: 20, type: 'platform' },
-                { x: 2300, y: 390, w: 200, h: 10, type: 'lava' },
                 { x: 2500, y: 380, w: 300, h: 20, type: 'platform' },
                 { x: 2750, y: 300, w: 40, h: 40, type: 'goal' }
             ]},
@@ -1002,7 +996,7 @@
             // LEVEL 12: "Vertical Limit" - Extreme vertical climbing and descending
             { width: 3200, startX: 50, startY: 300, objects: [
                 { x: 0, y: 380, w: 200, h: 20, type: 'platform' },
-                { x: 200, y: 390, w: 2580, h: 10, type: 'lava' },
+                { x: 200, y: 390, w: 2600, h: 10, type: 'lava' },
                 // Ascent
                 { x: 280, y: 320, w: 80, h: 20, type: 'platform' },
                 { x: 380, y: 250, w: 70, h: 20, type: 'platform' },
@@ -1043,7 +1037,7 @@
             // LEVEL 13: "Inferno" - Lava everywhere, tiny platforms, fast enemies
             { width: 3800, startX: 50, startY: 300, objects: [
                 { x: 0, y: 380, w: 150, h: 20, type: 'platform' },
-                { x: 150, y: 385, w: 3250, h: 15, type: 'lava' },
+                { x: 150, y: 390, w: 3250, h: 15, type: 'lava' },
                 { x: 220, y: 320, w: 55, h: 20, type: 'platform' },
                 { x: 340, y: 260, w: 55, h: 20, type: 'platform' },
                 { x: 360, y: 220, w: 40, h: 40, type: 'enemy', range: 10, speed: 10, currentX: 360, startX: 360, dir: 1, isDead: false },
@@ -1087,10 +1081,9 @@
             { width: 4200, startX: 50, startY: 300, objects: [
                 { x: 0, y: 380, w: 300, h: 20, type: 'platform' },
                 { x: 150, y: 340, w: 40, h: 40, type: 'enemy', range: 60, speed: 8, currentX: 150, startX: 150, dir: 1, isDead: false },
-                { x: 300, y: 385, w: 200, h: 15, type: 'lava' },
+                { x: 300, y: 385, w: 3300, h: 15, type: 'lava' },
                 { x: 500, y: 380, w: 200, h: 20, type: 'platform' },
                 { x: 550, y: 340, w: 40, h: 40, type: 'enemy', range: 50, speed: 12, currentX: 550, startX: 550, dir: -1, isDead: false },
-                { x: 700, y: 385, w: 150, h: 15, type: 'lava' },
                 { x: 850, y: 320, w: 80, h: 20, type: 'platform' },
                 { x: 870, y: 280, w: 40, h: 40, type: 'enemy', range: 20, speed: 10, currentX: 870, startX: 870, dir: 1, isDead: false },
                 { x: 1000, y: 260, w: 70, h: 20, type: 'platform' },
@@ -1099,14 +1092,12 @@
                 { x: 1260, y: 260, w: 80, h: 20, type: 'platform' },
                 { x: 1400, y: 380, w: 250, h: 20, type: 'platform' },
                 { x: 1500, y: 340, w: 40, h: 40, type: 'enemy', range: 50, speed: 14, currentX: 1500, startX: 1500, dir: 1, isDead: false },
-                { x: 1650, y: 385, w: 250, h: 15, type: 'lava' },
                 { x: 1700, y: 280, w: 60, h: 20, type: 'platform' },
                 { x: 1830, y: 220, w: 60, h: 20, type: 'platform' },
                 { x: 1850, y: 180, w: 40, h: 40, type: 'enemy', range: 15, speed: 13, currentX: 1850, startX: 1850, dir: -1, isDead: false },
                 { x: 1960, y: 300, w: 60, h: 20, type: 'platform' },
                 { x: 2090, y: 380, w: 200, h: 20, type: 'platform' },
                 { x: 2150, y: 340, w: 40, h: 40, type: 'enemy', range: 40, speed: 15, currentX: 2150, startX: 2150, dir: 1, isDead: false },
-                { x: 2290, y: 385, w: 200, h: 15, type: 'lava' },
                 { x: 2340, y: 300, w: 60, h: 20, type: 'platform' },
                 { x: 2460, y: 240, w: 60, h: 20, type: 'platform' },
                 { x: 2480, y: 200, w: 40, h: 40, type: 'enemy', range: 15, speed: 14, currentX: 2480, startX: 2480, dir: -1, isDead: false },
@@ -1116,7 +1107,6 @@
                 { x: 2850, y: 270, w: 40, h: 40, type: 'enemy', range: 20, speed: 15, currentX: 2850, startX: 2850, dir: 1, isDead: false },
                 { x: 2960, y: 380, w: 200, h: 20, type: 'platform' },
                 { x: 3000, y: 340, w: 40, h: 40, type: 'enemy', range: 60, speed: 16, currentX: 3000, startX: 3000, dir: -1, isDead: false },
-                { x: 3160, y: 385, w: 250, h: 15, type: 'lava' },
                 { x: 3220, y: 280, w: 60, h: 20, type: 'platform' },
                 { x: 3350, y: 220, w: 60, h: 20, type: 'platform' },
                 { x: 3370, y: 180, w: 40, h: 40, type: 'enemy', range: 15, speed: 16, currentX: 3370, startX: 3370, dir: 1, isDead: false },
@@ -1178,7 +1168,7 @@
             { width: 4400, startX: 50, startY: 300, objects: [
                 { x: 0, y: 380, w: 200, h: 20, type: 'platform' },
                 { x: 100, y: 340, w: 40, h: 40, type: 'enemy', range: 40, speed: 10, currentX: 100, startX: 100, dir: 1, isDead: false },
-                { x: 200, y: 385, w: 150, h: 15, type: 'lava' },
+                { x: 200, y: 385, w: 3550, h: 15, type: 'lava' },
                 // Zigzag up
                 { x: 350, y: 320, w: 60, h: 20, type: 'platform' },
                 { x: 370, y: 280, w: 40, h: 40, type: 'enemy', range: 10, speed: 12, currentX: 370, startX: 370, dir: -1, isDead: false },
@@ -1194,12 +1184,10 @@
                 { x: 1260, y: 260, w: 60, h: 20, type: 'platform' },
                 { x: 1280, y: 220, w: 40, h: 40, type: 'enemy', range: 10, speed: 15, currentX: 1280, startX: 1280, dir: 1, isDead: false },
                 { x: 1390, y: 330, w: 60, h: 20, type: 'platform' },
-                { x: 1450, y: 385, w: 70, h: 15, type: 'lava' },
                 // Flat gauntlet
                 { x: 1520, y: 380, w: 200, h: 20, type: 'platform' },
                 { x: 1550, y: 340, w: 40, h: 40, type: 'enemy', range: 50, speed: 16, currentX: 1550, startX: 1550, dir: 1, isDead: false },
                 { x: 1650, y: 340, w: 40, h: 40, type: 'enemy', range: 30, speed: 14, currentX: 1650, startX: 1650, dir: -1, isDead: false },
-                { x: 1720, y: 385, w: 150, h: 15, type: 'lava' },
                 // Second zigzag up
                 { x: 1870, y: 320, w: 55, h: 20, type: 'platform' },
                 { x: 1990, y: 250, w: 55, h: 20, type: 'platform' },
@@ -1215,12 +1203,10 @@
                 { x: 2730, y: 250, w: 55, h: 20, type: 'platform' },
                 { x: 2850, y: 320, w: 60, h: 20, type: 'platform' },
                 { x: 2870, y: 280, w: 40, h: 40, type: 'enemy', range: 10, speed: 15, currentX: 2870, startX: 2870, dir: -1, isDead: false },
-                { x: 2910, y: 385, w: 100, h: 15, type: 'lava' },
                 // Final flat gauntlet
                 { x: 3010, y: 380, w: 300, h: 20, type: 'platform' },
                 { x: 3050, y: 340, w: 40, h: 40, type: 'enemy', range: 80, speed: 16, currentX: 3050, startX: 3050, dir: 1, isDead: false },
                 { x: 3180, y: 340, w: 40, h: 40, type: 'enemy', range: 40, speed: 14, currentX: 3180, startX: 3180, dir: -1, isDead: false },
-                { x: 3330, y: 385, w: 180, h: 15, type: 'lava' },
                 { x: 3380, y: 300, w: 55, h: 20, type: 'platform' },
                 { x: 3500, y: 240, w: 55, h: 20, type: 'platform' },
                 { x: 3520, y: 200, w: 40, h: 40, type: 'enemy', range: 10, speed: 16, currentX: 3520, startX: 3520, dir: 1, isDead: false },
@@ -1292,7 +1278,7 @@
                 { x: 3850, y: 380, w: 200, h: 20, type: 'platform' },
                 { x: 3880, y: 340, w: 40, h: 40, type: 'enemy', range: 60, speed: 16, currentX: 3880, startX: 3880, dir: -1, isDead: false },
                 { x: 3980, y: 340, w: 40, h: 40, type: 'enemy', range: 40, speed: 14, currentX: 3980, startX: 3980, dir: 1, isDead: false },
-                { x: 4050, y: 385, w: 300, h: 15, type: 'lava' },
+                { x: 4050, y: 385, w: 450, h: 15, type: 'lava' },
                 { x: 4120, y: 300, w: 45, h: 20, type: 'platform' },
                 { x: 4230, y: 240, w: 45, h: 20, type: 'platform' },
                 { x: 4250, y: 200, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 4250, startX: 4250, dir: -1, isDead: false },
