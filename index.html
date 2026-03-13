@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -388,13 +387,11 @@
             gap: 14px;
         }
 
-        /* Responsive scaling for mobile */
+        /* Responsive scaling for mobile - controls shown only when touch is detected */
         @media (max-width: 820px) {
             .hud-container { width: 95vw; }
             .hud { font-size: 16px; }
             canvas { width: 95vw; height: auto; }
-            #mobileControls { display: flex; }
-            #mobileTopBar { display: flex; }
         }
         @media (max-width: 500px) {
             .hud { font-size: 13px; letter-spacing: 1px; }
@@ -601,6 +598,24 @@
             text-transform: uppercase; display: none;
         }
         #inventoryBtn:hover { background: rgba(180,0,255,0.3); box-shadow: 0 0 15px rgba(180,0,255,0.4); }
+        #statsBtn {
+            position: fixed; bottom: 55px; left: 145px; z-index: 500;
+            background: rgba(0,200,255,0.15); border: 2px solid #00c8ff; color: #00c8ff;
+            font-size: 12px; padding: 8px 16px; border-radius: 8px; cursor: pointer;
+            font-family: 'Segoe UI', sans-serif; letter-spacing: 2px; transition: 0.2s;
+            text-transform: uppercase; display: none;
+        }
+        #statsBtn:hover { background: rgba(0,200,255,0.3); box-shadow: 0 0 15px rgba(0,200,255,0.4); }
+        #statsPanel {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); z-index: 10000; justify-content: center; align-items: center;
+        }
+        .stats-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 0; border-bottom: 1px solid rgba(0,200,255,0.1);
+        }
+        .stats-label { color: #888; font-size: 12px; font-family: 'Segoe UI', sans-serif; letter-spacing: 1px; }
+        .stats-value { color: #00c8ff; font-size: 14px; font-weight: bold; font-family: 'Segoe UI', sans-serif; letter-spacing: 1px; }
         #inventoryPanel {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.7); z-index: 10000; justify-content: center; align-items: center;
@@ -747,7 +762,7 @@
         <canvas id="homeCanvas"></canvas>
         <div class="home-content">
             <div class="home-logo">NEON OVERDRIVE</div>
-            <div class="home-subtitle">NATURE'S REVENGE! (UPD 2.0)</div>
+            <div class="home-subtitle">PROTOCOL ZERO! (UPD 3.0)</div>
             <button class="home-play-btn" id="homePlayBtn">PLAY</button>
             <div class="home-divider"></div>
             <div class="home-controls">
@@ -830,10 +845,6 @@
                 <div class="settings-toggle active" id="shakeToggle"></div>
             </div>
             <div class="settings-row">
-                <span class="settings-label">Speedrun Timer</span>
-                <div class="settings-checkbox checked" id="timerCheckbox">&#10003;</div>
-            </div>
-            <div class="settings-row">
                 <span class="settings-label">Music Volume</span>
                 <div style="display:flex;align-items:center;gap:8px;">
                     <input type="range" id="musicSlider" class="settings-slider" min="0" max="100" value="50">
@@ -882,6 +893,29 @@
     <!-- Inventory Button (for all logged-in players) -->
     <button id="inventoryBtn">INVENTORY</button>
 
+    <!-- Stats Button (for all logged-in players) -->
+    <button id="statsBtn">STATS</button>
+
+    <!-- Stats Panel -->
+    <div id="statsPanel">
+        <div style="background:#1a1a2e;border:2px solid #00c8ff;border-radius:12px;padding:25px;width:380px;max-width:90%;box-shadow:0 0 40px rgba(0,200,255,0.3);max-height:80vh;overflow-y:auto;">
+            <h3 style="color:#00c8ff;margin:0 0 5px 0;font-family:'Segoe UI',sans-serif;letter-spacing:2px;font-size:16px;text-align:center;">PLAYER STATS</h3>
+            <p style="color:#555;font-size:11px;text-align:center;margin:0 0 15px 0;">Your lifetime statistics</p>
+            <div id="statsContent">
+                <div class="stats-row"><span class="stats-label">TIME PLAYED</span><span class="stats-value" id="statTimePlayed">0s</span></div>
+                <div class="stats-row"><span class="stats-label">TOTAL JUMPS</span><span class="stats-value" id="statTotalJumps">0</span></div>
+                <div class="stats-row"><span class="stats-label">ENEMIES KILLED</span><span class="stats-value" id="statEnemiesKilled">0</span></div>
+                <div class="stats-row"><span class="stats-label">TOTAL DEATHS</span><span class="stats-value" id="statTotalDeaths">0</span></div>
+                <div class="stats-row"><span class="stats-label">LEVELS COMPLETED</span><span class="stats-value" id="statLevelsCompleted">0</span></div>
+                <div class="stats-row"><span class="stats-label">BOSSES DEFEATED</span><span class="stats-value" id="statBossesDefeated">0</span></div>
+                <div class="stats-row"><span class="stats-label">HIGHEST SCORE</span><span class="stats-value" id="statHighestScore">0</span></div>
+                <div class="stats-row"><span class="stats-label">COLORS UNLOCKED</span><span class="stats-value" id="statColorsUnlocked">0</span></div>
+                <div class="stats-row"><span class="stats-label">CROWNS COLLECTED</span><span class="stats-value" id="statCrownsCollected">0</span></div>
+            </div>
+            <button id="statsCloseBtn" style="margin-top:15px;width:100%;background:transparent;border:1px solid #555;color:#888;padding:8px;border-radius:6px;cursor:pointer;font-family:'Segoe UI',sans-serif;letter-spacing:1px;">CLOSE</button>
+        </div>
+    </div>
+
     <!-- Inventory Panel -->
     <div id="inventoryPanel">
         <div style="background:#1a1a2e;border:2px solid #b400ff;border-radius:12px;padding:25px;width:380px;max-width:90%;box-shadow:0 0 40px rgba(180,0,255,0.3);max-height:80vh;overflow-y:auto;">
@@ -910,6 +944,8 @@
         <button id="teleportAllTrigger" style="background:rgba(0,200,255,0.15);border:2px solid #00c8ff;color:#00c8ff;font-size:12px;padding:8px 16px;border-radius:8px;cursor:pointer;font-family:'Segoe UI',sans-serif;letter-spacing:2px;transition:0.2s;text-transform:uppercase;">TELEPORT ALL</button>
         <button id="returnPlayersTrigger" style="display:none;background:rgba(255,136,0,0.15);border:2px solid #ff8800;color:#ff8800;font-size:12px;padding:8px 16px;border-radius:8px;cursor:pointer;font-family:'Segoe UI',sans-serif;letter-spacing:2px;transition:0.2s;text-transform:uppercase;">RETURN PLAYERS</button>
         <button id="regenMazeTrigger" style="display:none;background:rgba(255,0,255,0.15);border:2px solid #ff00ff;color:#ff00ff;font-size:12px;padding:8px 16px;border-radius:8px;cursor:pointer;font-family:'Segoe UI',sans-serif;letter-spacing:2px;transition:0.2s;text-transform:uppercase;">REGEN LEVEL</button>
+        <button id="viewPlayerInvTrigger" style="background:rgba(0,255,200,0.15);border:2px solid #00ffc8;color:#00ffc8;font-size:12px;padding:8px 16px;border-radius:8px;cursor:pointer;font-family:'Segoe UI',sans-serif;letter-spacing:2px;transition:0.2s;text-transform:uppercase;">VIEW INVENTORY</button>
+        <button id="toggleFlyTrigger" style="background:rgba(0,210,255,0.15);border:2px solid #00d2ff;color:#00d2ff;font-size:12px;padding:8px 16px;border-radius:8px;cursor:pointer;font-family:'Segoe UI',sans-serif;letter-spacing:2px;transition:0.2s;text-transform:uppercase;">FLY: ON</button>
         <button id="globalMsgTrigger" style="background:rgba(255,0,80,0.15);border:2px solid #ff0050;color:#ff0050;font-size:12px;padding:8px 16px;border-radius:8px;cursor:pointer;font-family:'Segoe UI',sans-serif;letter-spacing:2px;transition:0.2s;text-transform:uppercase;">GLOBAL MSG</button>
         <div id="onlinePlayerCount" style="display:none;background:rgba(0,255,136,0.1);border:2px solid #00ff88;border-radius:8px;padding:6px 14px;font-family:'Segoe UI',sans-serif;font-size:11px;letter-spacing:1px;color:#00ff88;text-align:center;cursor:default;">ONLINE: <span id="onlineCountNum" style="color:#fff;font-weight:bold;">0</span></div>
     </div>
@@ -994,6 +1030,29 @@
         </div>
     </div>
 
+    <!-- View Player Inventory Modal (Mod only) -->
+    <div id="viewPlayerInvModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:10000;justify-content:center;align-items:center;">
+        <div style="background:#1a1a2e;border:2px solid #00ffc8;border-radius:12px;padding:25px;width:460px;max-width:90%;box-shadow:0 0 40px rgba(0,255,200,0.3);max-height:80vh;overflow-y:auto;">
+            <h3 style="color:#00ffc8;margin:0 0 15px 0;font-family:'Segoe UI',sans-serif;letter-spacing:2px;font-size:14px;">VIEW PLAYER INVENTORY</h3>
+            <div style="margin-bottom:12px;">
+                <label style="color:#888;font-size:11px;font-family:'Segoe UI',sans-serif;letter-spacing:1px;display:block;margin-bottom:4px;">ONLINE PLAYER</label>
+                <select id="viewInvTargetSelect" style="width:100%;padding:10px;background:#0a0a1a;border:1px solid #333;color:#fff;border-radius:6px;font-size:14px;font-family:'Segoe UI',sans-serif;box-sizing:border-box;">
+                    <option value="">Loading online players...</option>
+                </select>
+            </div>
+            <button id="viewInvFetchBtn" style="width:100%;background:#00ffc8;border:none;color:#000;padding:10px;border-radius:6px;cursor:pointer;font-family:'Segoe UI',sans-serif;letter-spacing:1px;font-weight:bold;font-size:13px;margin-bottom:12px;">REQUEST INVENTORY</button>
+            <div id="viewInvStatus" style="color:#00ffc8;font-size:12px;font-family:'Segoe UI',sans-serif;min-height:18px;margin-bottom:8px;"></div>
+            <div id="viewInvResults" style="display:none;background:rgba(0,255,200,0.05);border:1px solid rgba(0,255,200,0.2);border-radius:8px;padding:15px;margin-bottom:12px;">
+                <div style="color:#00ffc8;font-size:11px;letter-spacing:2px;font-family:'Segoe UI',sans-serif;margin-bottom:10px;">PLAYER INVENTORY</div>
+                <div id="viewInvColorsList" style="margin-bottom:12px;"></div>
+                <div id="viewInvCrownsList"></div>
+            </div>
+            <div style="display:flex;gap:10px;justify-content:flex-end;">
+                <button id="viewInvCloseBtn" style="background:transparent;border:1px solid #555;color:#888;padding:8px 20px;border-radius:6px;cursor:pointer;font-family:'Segoe UI',sans-serif;">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Crown Revoke Received Notification -->
     <div id="crownRevokeReceivedBanner" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;pointer-events:none;">
         <div style="background:rgba(40,25,10,0.95);border:2px solid #ffaa00;border-radius:16px;padding:30px 40px;text-align:center;box-shadow:0 0 60px rgba(255,170,0,0.5);animation:msgSlideIn 0.4s ease-out;">
@@ -1026,7 +1085,7 @@
     <div id="teleportReceivedBanner" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;pointer-events:none;">
         <div style="background:rgba(10,20,40,0.95);border:2px solid #00c8ff;border-radius:16px;padding:30px 40px;text-align:center;box-shadow:0 0 60px rgba(0,200,255,0.5);animation:msgSlideIn 0.4s ease-out;">
             <div style="color:#00c8ff;font-size:12px;letter-spacing:3px;font-family:'Segoe UI',sans-serif;margin-bottom:8px;">TELEPORTED BY</div>
-            <div style="color:#ffcc00;font-size:18px;font-weight:bold;font-family:'Segoe UI',sans-serif;margin-bottom:12px;">AmxthystBloxMOD</div>
+            <div id="teleportModName" style="color:#ffcc00;font-size:18px;font-weight:bold;font-family:'Segoe UI',sans-serif;margin-bottom:12px;">MOD</div>
             <div id="teleportReceivedText" style="color:#fff;font-size:13px;font-family:'Segoe UI',sans-serif;margin-bottom:8px;">You have been teleported to a new level!</div>
             <div style="font-size:40px;margin:10px auto;">&#9889;</div>
         </div>
@@ -1046,6 +1105,26 @@
     <div id="juniorAdminKeyHud" style="display:none;position:fixed;bottom:170px;left:15px;z-index:500;background:rgba(0,0,0,0.8);border:2px solid #00ff88;border-radius:10px;padding:8px 14px;font-family:'Segoe UI',sans-serif;">
         <div style="color:#00ff88;font-weight:bold;font-size:12px;letter-spacing:1px;margin-bottom:4px;">JUNIOR ADMIN KEY</div>
         <button id="useJuniorAdminKey" style="background:#00ff88;border:none;color:#000;padding:5px 12px;border-radius:4px;cursor:pointer;font-family:'Segoe UI',sans-serif;font-size:11px;font-weight:bold;letter-spacing:1px;">USE KEY</button>
+    </div>
+
+    <!-- Junior Mod Waiting Overlay (shown to SuveenMOD while awaiting approval) -->
+    <div id="juniorModWaiting" style="display:none;position:fixed;top:60px;left:50%;transform:translateX(-50%);z-index:10001;background:rgba(10,20,40,0.95);border:2px solid #ffcc00;border-radius:12px;padding:15px 25px;text-align:center;font-family:'Segoe UI',sans-serif;box-shadow:0 0 30px rgba(255,204,0,0.3);">
+        <div style="color:#ffcc00;font-size:12px;letter-spacing:2px;margin-bottom:6px;">AWAITING APPROVAL</div>
+        <div id="juniorModWaitingText" style="color:#fff;font-size:13px;margin-bottom:6px;">Waiting for AmxthystBloxMOD...</div>
+        <div style="color:#888;font-size:11px;">Command will execute when approved</div>
+    </div>
+
+    <!-- Mod Approval Dialog (shown to AmxthystBloxMOD) -->
+    <div id="modApprovalModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:10002;justify-content:center;align-items:center;">
+        <div style="background:#0a0a2e;border:2px solid #ffcc00;border-radius:16px;padding:25px 30px;max-width:400px;width:90%;text-align:center;box-shadow:0 0 40px rgba(255,204,0,0.4);">
+            <div style="color:#ffcc00;font-size:14px;font-weight:bold;font-family:'Segoe UI',sans-serif;letter-spacing:2px;margin-bottom:12px;">MOD PERMISSION REQUEST</div>
+            <div style="color:#00c8ff;font-size:13px;font-family:'Segoe UI',sans-serif;margin-bottom:6px;">From: <span style="color:#ffcc00;font-weight:bold;">SuveenMOD</span></div>
+            <div id="modApprovalDesc" style="color:#fff;font-size:14px;font-family:'Segoe UI',sans-serif;margin:15px 0;padding:12px;background:rgba(255,204,0,0.1);border-radius:8px;border:1px solid rgba(255,204,0,0.3);"></div>
+            <div style="display:flex;gap:12px;justify-content:center;margin-top:15px;">
+                <button id="modApprovalDeny" style="background:transparent;border:2px solid #ff3333;color:#ff3333;padding:10px 25px;border-radius:8px;cursor:pointer;font-family:'Segoe UI',sans-serif;font-size:13px;letter-spacing:1px;font-weight:bold;">DENY</button>
+                <button id="modApprovalAllow" style="background:#00ff88;border:none;color:#000;padding:10px 25px;border-radius:8px;cursor:pointer;font-family:'Segoe UI',sans-serif;font-size:13px;letter-spacing:1px;font-weight:bold;">ALLOW</button>
+            </div>
+        </div>
     </div>
 
 
@@ -1281,10 +1360,15 @@
 
         let currentLevel = 0;
         let highestCompletedLevel = 0;
+        let adminTeleported = false; // true if player was teleported by admin to a level beyond their progress
+        let isJuniorMod = false; // SuveenMOD - mod with approval required
+        var pendingModApprovalQueue = []; // Queue of mod requests awaiting AmxthystBloxMOD's approval
+        var juniorModWaitingFor = null; // What command SuveenMOD is currently waiting approval for
         let score = 0;
         let playerUsername = '';
         let isMod = false;
         let isGuest = false;
+        let modFlyEnabled = true; // Toggle for mod flying ability
         let levelSelectorOpen = false;
         let gameStarted = false;
         let authMode = 'login'; // 'login' or 'register'
@@ -1537,29 +1621,39 @@
             'Level 19: Emerald Gateway', 'Level 20: Toxic Canals', 'Level 21: Acid Ascent',
             'Level 22: Venom Gauntlet', 'Level 23: Plague Spires', 'Level 24: Biohazard Blitz',
             'Level 25: Radioactive Core', 'Level 26: Meltdown',
-            'Level 27: BOSS - Overgrowth.exe'
+            'Level 27: BOSS - Overgrowth.exe',
+            'Level 28: Firewall Gate', 'Level 29: Packet Storm', 'Level 30: Binary Maze',
+            'Level 31: Trojan Gauntlet', 'Level 32: Phishing Depths', 'Level 33: Rootkit Ascent',
+            'Level 34: Ransomware Run', 'Level 35: Zero-Day',
+            'Level 36: BOSS - The Hacker'
         ];
 
-        function showTeleportReceived(levelIdx) {
+        function showTeleportReceived(levelIdx, modName) {
             var banner = document.getElementById('teleportReceivedBanner');
             var textDiv = document.getElementById('teleportReceivedText');
+            var modDiv = document.getElementById('teleportModName');
             var name = TELEPORT_LEVEL_NAMES[levelIdx] || ('Level ' + (levelIdx + 1));
             textDiv.textContent = 'You have been teleported to ' + name + '!';
+            modDiv.textContent = modName || 'MOD';
             banner.style.display = 'block';
             setTimeout(function() { banner.style.display = 'none'; }, 5000);
         }
 
-        function processTeleportCommand(levelIdx) {
+        function processTeleportCommand(levelIdx, modName) {
             var idx = parseInt(levelIdx);
             if (isNaN(idx) || idx < 0 || idx >= levels.length) return;
             // Save current level before any teleport so players can be returned
             preTeleportLevel = currentLevel;
+            // Mark as admin-teleported if this level is beyond the player's legitimate progress
+            if (!isMod && idx > highestCompletedLevel) {
+                adminTeleported = true;
+            }
             if (idx === SECRET_VAULT_INDEX) {
                 levels[SECRET_VAULT_INDEX] = buildSecretVaultLevel();
             }
             currentLevel = idx;
             loadLevel(currentLevel);
-            showTeleportReceived(idx);
+            showTeleportReceived(idx, modName);
         }
 
         const EVENT_NAMES = {
@@ -2282,7 +2376,12 @@
                 'Level 19: Emerald Gateway', 'Level 20: Toxic Canals', 'Level 21: Acid Ascent',
                 'Level 22: Venom Gauntlet', 'Level 23: Plague Spires', 'Level 24: Biohazard Blitz',
                 'Level 25: Radioactive Core', 'Level 26: Meltdown',
-                'Level 27: BOSS - Overgrowth.exe'
+                'Level 27: BOSS - Overgrowth.exe',
+                'Level 28: Firewall Gate', 'Level 29: Packet Storm', 'Level 30: Binary Maze',
+                'Level 31: Trojan Gauntlet', 'Level 32: Phishing Depths', 'Level 33: Rootkit Ascent',
+                'Level 34: Ransomware Run', 'Level 35: Zero-Day',
+                'Level 36: BOSS - The Hacker',
+                'Secret Vault'
             ];
             for (var i = 0; i < levels.length; i++) {
                 var opt = document.createElement('option');
@@ -2415,6 +2514,12 @@
             var duration = parseInt(document.getElementById('dur_crownorb').value) || 300;
             if (duration < 30) duration = 30;
             if (duration > 3600) duration = 3600;
+
+            if (isJuniorMod) {
+                requestModPermission('crownorb', [orbType, String(levelIndex), String(x), String(y), String(duration)]);
+                closeLevelProjection();
+                return;
+            }
 
             // Create a custom event type encoding orb data
             var eventType = 'crownorb_' + orbType + '_' + levelIndex + '_' + x + '_' + y;
@@ -2587,7 +2692,6 @@
         // Settings state
         let particleIntensity = 1.0;
         let screenShakeEnabled = true;
-        let showSpeedrunTimer = true;
         let screenShakeX = 0;
         let screenShakeY = 0;
         let musicVolume = 0.5;
@@ -2797,14 +2901,49 @@
             }
         }
 
-        // Speedrun stopwatch
-        let stopwatchStarted = false;
-        let stopwatchStartTime = 0;
-        let stopwatchElapsed = 0;
-        let stopwatchFinal = 0;
         let gameFinished = false;
-        let stopwatchPaused = false;
-        let stopwatchPauseTime = 0;
+
+        // Player stats tracking
+        let playerStats = {
+            timePlayed: 0,
+            totalJumps: 0,
+            enemiesKilled: 0,
+            totalDeaths: 0,
+            levelsCompleted: 0,
+            bossesDefeated: 0,
+            highestScore: 0,
+            colorsUnlocked: 0,
+            crownsCollected: 0
+        };
+        let statsSessionStart = 0;
+        let statsOpen = false;
+
+        function loadPlayerStats() {
+            if (!playerUsername || isGuest) return;
+            try {
+                var data = localStorage.getItem('playerStats_' + playerUsername);
+                if (data) {
+                    var saved = JSON.parse(data);
+                    for (var k in saved) { if (playerStats.hasOwnProperty(k)) playerStats[k] = saved[k]; }
+                }
+            } catch(e) {}
+        }
+
+        function savePlayerStats() {
+            if (!playerUsername || isGuest) return;
+            try {
+                localStorage.setItem('playerStats_' + playerUsername, JSON.stringify(playerStats));
+            } catch(e) {}
+        }
+
+        function formatTimePlayed(seconds) {
+            var h = Math.floor(seconds / 3600);
+            var m = Math.floor((seconds % 3600) / 60);
+            var s = Math.floor(seconds % 60);
+            if (h > 0) return h + 'h ' + m + 'm ' + s + 's';
+            if (m > 0) return m + 'm ' + s + 's';
+            return s + 's';
+        }
 
         // Boss state
         let boss = null;
@@ -2824,6 +2963,39 @@
         let overgrowthFreezeTimer = 0;
         let overgrowthFreezeActive = false;
         let overgrowthVineTimer = 0;
+
+        // Hacker boss state
+        let hackerHackedPhase = false;
+        let hackerHackedTimer = 0;
+        let hackerInvertControls = false;
+        let hackerLagActive = false;
+        let hackerLagTimer = 0;
+        let hackerShakeActive = false;
+        let hackerShakeTimer = 0;
+        let hackerFreezeActive = false;
+        let hackerFreezeTimer = 0;
+        let hackerFlipActive = false;
+        let hackerFlipTimer = 0;
+        let hackerPopupFiles = [];
+        let hackerPopupTimer = 0;
+        let hackerChaosTimer = 0;
+        let hackerChaosIndex = 0;
+        let hackerDevPowerup = false;
+        let hackerDevPowerupSpawned = false;
+        let hackerDevPowerupX = 0;
+        let hackerDevPowerupY = 0;
+        let hackerBanTimer = 0;
+        let hackerBanActive = false;
+        let hackerBossHitForPowerup = false;
+        let hackerPauseActive = false;
+        let hackerPauseTimer = 0;
+        let hackerPauseMessageIndex = 0;
+        let hackerPauseMessageTimer = 0;
+        let hackerPlayerTeleported = false;
+        let scribeMessages = [];
+        let scribeCurrentMsg = '';
+        let scribeTimer = 0;
+        let scribeFadeTimer = 0;
 
         const hexes = [];
         for(let i=0; i<15; i++) {
@@ -2850,33 +3022,6 @@
 
         const camera = { x: 0, y: 0 };
 
-        function formatTime(ms) {
-            let totalCentis = Math.floor(ms / 10);
-            let centis = totalCentis % 100;
-            let totalSec = Math.floor(totalCentis / 100);
-            let sec = totalSec % 60;
-            let min = Math.floor(totalSec / 60);
-            let secStr = min > 0 ? sec.toString().padStart(2, '0') : sec.toString();
-            return (min > 0 ? (min + ':') : '') + secStr + '.' + centis.toString().padStart(2, '0');
-        }
-
-        function drawStopwatch() {
-            if (!showSpeedrunTimer) return;
-            let ms = 0;
-            if (gameFinished) ms = stopwatchFinal;
-            else if (stopwatchStarted && stopwatchPaused) ms = stopwatchPauseTime - stopwatchStartTime;
-            else if (stopwatchStarted) ms = performance.now() - stopwatchStartTime;
-
-            ctx.save();
-            ctx.font = 'bold 14px Segoe UI';
-            ctx.textAlign = 'right';
-            ctx.fillStyle = gameFinished ? '#00ff88' : '#ffffff';
-            ctx.shadowBlur = 8;
-            ctx.shadowColor = gameFinished ? '#00ff88' : '#00d2ff';
-            ctx.fillText('TIME ' + formatTime(ms), canvas.width - 15, canvas.height - 15);
-            ctx.shadowBlur = 0;
-            ctx.restore();
-        }
 
         function triggerScreenShake(intensity) {
             if (!screenShakeEnabled) return;
@@ -4062,6 +4207,394 @@
                 { x: 5200, y: 350, w: 60, h: 20, type: 'platform' },
                 { x: 5400, y: 380, w: 200, h: 20, type: 'platform' },
                 { x: 5550, y: 300, w: 40, h: 40, type: 'boss_goal' }
+            ]},
+            // === ORANGE ZONE LEVELS (28-35) ===
+            // LEVEL 28: "Firewall Gate" - Introduction to orange zone
+            { width: 2600, startX: 50, startY: 300, orangeTheme: true, objects: [
+                { x: 0, y: 380, w: 300, h: 20, type: 'platform' },
+                { x: 300, y: 390, w: 2000, h: 10, type: 'lava' },
+                { x: 400, y: 310, w: 120, h: 20, type: 'platform' },
+                { x: 620, y: 250, w: 100, h: 20, type: 'platform' },
+                { x: 640, y: 210, w: 40, h: 40, type: 'enemy', range: 40, speed: 9, currentX: 640, startX: 640, dir: 1, isDead: false },
+                { x: 830, y: 190, w: 100, h: 20, type: 'platform' },
+                { x: 1050, y: 260, w: 120, h: 20, type: 'platform' },
+                { x: 1070, y: 220, w: 40, h: 40, type: 'enemy', range: 50, speed: 10, currentX: 1070, startX: 1070, dir: -1, isDead: false },
+                { x: 1250, y: 200, w: 100, h: 20, type: 'platform' },
+                { x: 1450, y: 280, w: 120, h: 20, type: 'platform' },
+                { x: 1650, y: 220, w: 100, h: 20, type: 'platform' },
+                { x: 1670, y: 180, w: 40, h: 40, type: 'enemy', range: 40, speed: 11, currentX: 1670, startX: 1670, dir: 1, isDead: false },
+                { x: 1850, y: 300, w: 120, h: 20, type: 'platform' },
+                { x: 2050, y: 240, w: 100, h: 20, type: 'platform' },
+                { x: 2300, y: 380, w: 300, h: 20, type: 'platform' },
+                { x: 2550, y: 300, w: 40, h: 40, type: 'goal' }
+            ]},
+            // LEVEL 29: "Packet Storm" - Fast enemies and tight jumps
+            { width: 3000, startX: 50, startY: 300, orangeTheme: true, objects: [
+                { x: 0, y: 380, w: 250, h: 20, type: 'platform' },
+                { x: 250, y: 390, w: 2500, h: 10, type: 'lava' },
+                { x: 350, y: 300, w: 80, h: 20, type: 'platform' },
+                { x: 500, y: 240, w: 70, h: 20, type: 'platform' },
+                { x: 520, y: 200, w: 40, h: 40, type: 'enemy', range: 20, speed: 12, currentX: 520, startX: 520, dir: 1, isDead: false },
+                { x: 660, y: 180, w: 80, h: 20, type: 'platform' },
+                { x: 820, y: 250, w: 70, h: 20, type: 'platform' },
+                { x: 840, y: 210, w: 40, h: 40, type: 'enemy', range: 20, speed: 13, currentX: 840, startX: 840, dir: -1, isDead: false },
+                { x: 980, y: 310, w: 80, h: 20, type: 'platform' },
+                { x: 1130, y: 240, w: 70, h: 20, type: 'platform' },
+                { x: 1280, y: 170, w: 80, h: 20, type: 'platform' },
+                { x: 1300, y: 130, w: 40, h: 40, type: 'enemy', range: 25, speed: 14, currentX: 1300, startX: 1300, dir: 1, isDead: false },
+                { x: 1440, y: 220, w: 70, h: 20, type: 'platform' },
+                { x: 1590, y: 290, w: 80, h: 20, type: 'platform' },
+                { x: 1750, y: 220, w: 70, h: 20, type: 'platform' },
+                { x: 1770, y: 180, w: 40, h: 40, type: 'enemy', range: 20, speed: 14, currentX: 1770, startX: 1770, dir: -1, isDead: false },
+                { x: 1910, y: 300, w: 80, h: 20, type: 'platform' },
+                { x: 2060, y: 240, w: 70, h: 20, type: 'platform' },
+                { x: 2210, y: 170, w: 80, h: 20, type: 'platform' },
+                { x: 2370, y: 250, w: 80, h: 20, type: 'platform' },
+                { x: 2530, y: 320, w: 100, h: 20, type: 'platform' },
+                { x: 2750, y: 380, w: 250, h: 20, type: 'platform' },
+                { x: 2950, y: 300, w: 40, h: 40, type: 'goal' }
+            ]},
+            // LEVEL 30: "Binary Maze" - Vertical platforming with many enemies
+            { width: 3200, startX: 50, startY: 300, orangeTheme: true, objects: [
+                { x: 0, y: 380, w: 200, h: 20, type: 'platform' },
+                { x: 200, y: 390, w: 2800, h: 10, type: 'lava' },
+                { x: 300, y: 320, w: 60, h: 20, type: 'platform' },
+                { x: 440, y: 250, w: 60, h: 20, type: 'platform' },
+                { x: 460, y: 210, w: 40, h: 40, type: 'enemy', range: 15, speed: 13, currentX: 460, startX: 460, dir: 1, isDead: false },
+                { x: 580, y: 180, w: 60, h: 20, type: 'platform' },
+                { x: 720, y: 120, w: 70, h: 20, type: 'platform' },
+                { x: 860, y: 180, w: 60, h: 20, type: 'platform' },
+                { x: 880, y: 140, w: 40, h: 40, type: 'enemy', range: 15, speed: 14, currentX: 880, startX: 880, dir: -1, isDead: false },
+                { x: 1000, y: 250, w: 60, h: 20, type: 'platform' },
+                { x: 1140, y: 320, w: 70, h: 20, type: 'platform' },
+                { x: 1160, y: 280, w: 40, h: 40, type: 'enemy', range: 20, speed: 14, currentX: 1160, startX: 1160, dir: 1, isDead: false },
+                { x: 1280, y: 250, w: 60, h: 20, type: 'platform' },
+                { x: 1420, y: 180, w: 60, h: 20, type: 'platform' },
+                { x: 1560, y: 120, w: 60, h: 20, type: 'platform' },
+                { x: 1580, y: 80, w: 40, h: 40, type: 'enemy', range: 12, speed: 15, currentX: 1580, startX: 1580, dir: -1, isDead: false },
+                { x: 1700, y: 180, w: 60, h: 20, type: 'platform' },
+                { x: 1840, y: 260, w: 60, h: 20, type: 'platform' },
+                { x: 1980, y: 200, w: 60, h: 20, type: 'platform' },
+                { x: 2000, y: 160, w: 40, h: 40, type: 'enemy', range: 12, speed: 15, currentX: 2000, startX: 2000, dir: 1, isDead: false },
+                { x: 2120, y: 280, w: 70, h: 20, type: 'platform' },
+                { x: 2260, y: 210, w: 60, h: 20, type: 'platform' },
+                { x: 2400, y: 140, w: 60, h: 20, type: 'platform' },
+                { x: 2540, y: 220, w: 70, h: 20, type: 'platform' },
+                { x: 2680, y: 300, w: 80, h: 20, type: 'platform' },
+                { x: 2700, y: 260, w: 40, h: 40, type: 'enemy', range: 25, speed: 14, currentX: 2700, startX: 2700, dir: -1, isDead: false },
+                { x: 3000, y: 380, w: 200, h: 20, type: 'platform' },
+                { x: 3150, y: 300, w: 40, h: 40, type: 'goal' }
+            ]},
+            // LEVEL 31: "Trojan Gauntlet" - Dense enemy field with lava
+            { width: 3400, startX: 50, startY: 300, orangeTheme: true, objects: [
+                { x: 0, y: 380, w: 3400, h: 20, type: 'platform' },
+                { x: 300, y: 375, w: 200, h: 10, type: 'lava' },
+                { x: 600, y: 340, w: 40, h: 40, type: 'enemy', range: 80, speed: 14, currentX: 600, startX: 600, dir: 1, isDead: false },
+                { x: 750, y: 375, w: 250, h: 10, type: 'lava' },
+                { x: 800, y: 280, w: 100, h: 20, type: 'platform' },
+                { x: 1050, y: 340, w: 40, h: 40, type: 'enemy', range: 60, speed: 15, currentX: 1050, startX: 1050, dir: -1, isDead: false },
+                { x: 1200, y: 280, w: 120, h: 20, type: 'platform' },
+                { x: 1220, y: 240, w: 40, h: 40, type: 'enemy', range: 40, speed: 13, currentX: 1220, startX: 1220, dir: 1, isDead: false },
+                { x: 1400, y: 375, w: 300, h: 10, type: 'lava' },
+                { x: 1450, y: 250, w: 80, h: 20, type: 'platform' },
+                { x: 1600, y: 200, w: 80, h: 20, type: 'platform' },
+                { x: 1750, y: 250, w: 80, h: 20, type: 'platform' },
+                { x: 1900, y: 340, w: 40, h: 40, type: 'enemy', range: 80, speed: 15, currentX: 1900, startX: 1900, dir: 1, isDead: false },
+                { x: 2050, y: 375, w: 200, h: 10, type: 'lava' },
+                { x: 2100, y: 280, w: 80, h: 20, type: 'platform' },
+                { x: 2300, y: 340, w: 40, h: 40, type: 'enemy', range: 60, speed: 16, currentX: 2300, startX: 2300, dir: -1, isDead: false },
+                { x: 2450, y: 280, w: 100, h: 20, type: 'platform' },
+                { x: 2470, y: 240, w: 40, h: 40, type: 'enemy', range: 30, speed: 14, currentX: 2470, startX: 2470, dir: 1, isDead: false },
+                { x: 2650, y: 375, w: 250, h: 10, type: 'lava' },
+                { x: 2700, y: 250, w: 80, h: 20, type: 'platform' },
+                { x: 2850, y: 180, w: 80, h: 20, type: 'platform' },
+                { x: 3000, y: 250, w: 80, h: 20, type: 'platform' },
+                { x: 3350, y: 300, w: 40, h: 40, type: 'goal' }
+            ]},
+            // LEVEL 32: "Phishing Depths" - Deep vertical drops and climbs
+            { width: 3600, startX: 50, startY: 300, orangeTheme: true, objects: [
+                { x: 0, y: 380, w: 200, h: 20, type: 'platform' },
+                { x: 200, y: 390, w: 3200, h: 10, type: 'lava' },
+                { x: 300, y: 310, w: 50, h: 20, type: 'platform' },
+                { x: 420, y: 240, w: 50, h: 20, type: 'platform' },
+                { x: 440, y: 200, w: 40, h: 40, type: 'enemy', range: 10, speed: 14, currentX: 440, startX: 440, dir: 1, isDead: false },
+                { x: 550, y: 160, w: 50, h: 20, type: 'platform' },
+                { x: 680, y: 100, w: 55, h: 20, type: 'platform' },
+                { x: 810, y: 170, w: 50, h: 20, type: 'platform' },
+                { x: 830, y: 130, w: 40, h: 40, type: 'enemy', range: 10, speed: 15, currentX: 830, startX: 830, dir: -1, isDead: false },
+                { x: 940, y: 250, w: 50, h: 20, type: 'platform' },
+                { x: 1070, y: 330, w: 55, h: 20, type: 'platform' },
+                { x: 1200, y: 260, w: 50, h: 20, type: 'platform' },
+                { x: 1220, y: 220, w: 40, h: 40, type: 'enemy', range: 10, speed: 15, currentX: 1220, startX: 1220, dir: 1, isDead: false },
+                { x: 1330, y: 190, w: 50, h: 20, type: 'platform' },
+                { x: 1460, y: 120, w: 55, h: 20, type: 'platform' },
+                { x: 1590, y: 60, w: 50, h: 20, type: 'platform' },
+                { x: 1610, y: 20, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 1610, startX: 1610, dir: -1, isDead: false },
+                { x: 1720, y: 130, w: 50, h: 20, type: 'platform' },
+                { x: 1850, y: 210, w: 50, h: 20, type: 'platform' },
+                { x: 1980, y: 290, w: 55, h: 20, type: 'platform' },
+                { x: 2110, y: 220, w: 50, h: 20, type: 'platform' },
+                { x: 2130, y: 180, w: 40, h: 40, type: 'enemy', range: 10, speed: 16, currentX: 2130, startX: 2130, dir: 1, isDead: false },
+                { x: 2240, y: 150, w: 50, h: 20, type: 'platform' },
+                { x: 2370, y: 80, w: 55, h: 20, type: 'platform' },
+                { x: 2500, y: 150, w: 50, h: 20, type: 'platform' },
+                { x: 2630, y: 230, w: 50, h: 20, type: 'platform' },
+                { x: 2650, y: 190, w: 40, h: 40, type: 'enemy', range: 10, speed: 16, currentX: 2650, startX: 2650, dir: -1, isDead: false },
+                { x: 2760, y: 310, w: 55, h: 20, type: 'platform' },
+                { x: 2890, y: 250, w: 50, h: 20, type: 'platform' },
+                { x: 3020, y: 180, w: 50, h: 20, type: 'platform' },
+                { x: 3150, y: 280, w: 60, h: 20, type: 'platform' },
+                { x: 3400, y: 380, w: 200, h: 20, type: 'platform' },
+                { x: 3550, y: 300, w: 40, h: 40, type: 'goal' }
+            ]},
+            // LEVEL 33: "Rootkit Ascent" - Extreme vertical climbing
+            { width: 3800, startX: 50, startY: 300, orangeTheme: true, objects: [
+                { x: 0, y: 380, w: 200, h: 20, type: 'platform' },
+                { x: 200, y: 390, w: 3400, h: 10, type: 'lava' },
+                { x: 300, y: 320, w: 45, h: 20, type: 'platform' },
+                { x: 420, y: 260, w: 45, h: 20, type: 'platform' },
+                { x: 440, y: 220, w: 40, h: 40, type: 'enemy', range: 8, speed: 15, currentX: 440, startX: 440, dir: 1, isDead: false },
+                { x: 540, y: 190, w: 45, h: 20, type: 'platform' },
+                { x: 660, y: 130, w: 50, h: 20, type: 'platform' },
+                { x: 780, y: 70, w: 45, h: 20, type: 'platform' },
+                { x: 800, y: 30, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 800, startX: 800, dir: -1, isDead: false },
+                { x: 900, y: 130, w: 45, h: 20, type: 'platform' },
+                { x: 1020, y: 200, w: 45, h: 20, type: 'platform' },
+                { x: 1040, y: 160, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 1040, startX: 1040, dir: 1, isDead: false },
+                { x: 1140, y: 280, w: 50, h: 20, type: 'platform' },
+                { x: 1260, y: 340, w: 45, h: 20, type: 'platform' },
+                { x: 1380, y: 270, w: 45, h: 20, type: 'platform' },
+                { x: 1400, y: 230, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 1400, startX: 1400, dir: -1, isDead: false },
+                { x: 1500, y: 200, w: 45, h: 20, type: 'platform' },
+                { x: 1620, y: 140, w: 45, h: 20, type: 'platform' },
+                { x: 1740, y: 80, w: 50, h: 20, type: 'platform' },
+                { x: 1860, y: 140, w: 45, h: 20, type: 'platform' },
+                { x: 1880, y: 100, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 1880, startX: 1880, dir: 1, isDead: false },
+                { x: 1980, y: 210, w: 45, h: 20, type: 'platform' },
+                { x: 2100, y: 280, w: 45, h: 20, type: 'platform' },
+                { x: 2220, y: 210, w: 45, h: 20, type: 'platform' },
+                { x: 2240, y: 170, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 2240, startX: 2240, dir: -1, isDead: false },
+                { x: 2340, y: 140, w: 45, h: 20, type: 'platform' },
+                { x: 2460, y: 80, w: 50, h: 20, type: 'platform' },
+                { x: 2580, y: 140, w: 45, h: 20, type: 'platform' },
+                { x: 2700, y: 220, w: 45, h: 20, type: 'platform' },
+                { x: 2820, y: 300, w: 50, h: 20, type: 'platform' },
+                { x: 2940, y: 230, w: 45, h: 20, type: 'platform' },
+                { x: 2960, y: 190, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 2960, startX: 2960, dir: 1, isDead: false },
+                { x: 3060, y: 310, w: 50, h: 20, type: 'platform' },
+                { x: 3250, y: 350, w: 55, h: 20, type: 'platform' },
+                { x: 3430, y: 370, w: 55, h: 20, type: 'platform' },
+                { x: 3600, y: 380, w: 200, h: 20, type: 'platform' },
+                { x: 3750, y: 300, w: 40, h: 40, type: 'goal' }
+            ]},
+            // LEVEL 34: "Ransomware Run" - Speed gauntlet with lava and enemies
+            { width: 4200, startX: 50, startY: 300, orangeTheme: true, objects: [
+                { x: 0, y: 380, w: 200, h: 20, type: 'platform' },
+                { x: 200, y: 390, w: 3800, h: 10, type: 'lava' },
+                { x: 300, y: 330, w: 50, h: 20, type: 'platform' },
+                { x: 430, y: 280, w: 45, h: 20, type: 'platform' },
+                { x: 560, y: 230, w: 45, h: 20, type: 'platform' },
+                { x: 580, y: 190, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 580, startX: 580, dir: 1, isDead: false },
+                { x: 690, y: 170, w: 45, h: 20, type: 'platform' },
+                { x: 820, y: 240, w: 45, h: 20, type: 'platform' },
+                { x: 950, y: 310, w: 50, h: 20, type: 'platform' },
+                { x: 970, y: 270, w: 40, h: 40, type: 'enemy', range: 10, speed: 16, currentX: 970, startX: 970, dir: -1, isDead: false },
+                { x: 1080, y: 250, w: 45, h: 20, type: 'platform' },
+                { x: 1210, y: 180, w: 45, h: 20, type: 'platform' },
+                { x: 1340, y: 120, w: 50, h: 20, type: 'platform' },
+                { x: 1360, y: 80, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 1360, startX: 1360, dir: 1, isDead: false },
+                { x: 1470, y: 170, w: 45, h: 20, type: 'platform' },
+                { x: 1600, y: 250, w: 45, h: 20, type: 'platform' },
+                { x: 1730, y: 320, w: 50, h: 20, type: 'platform' },
+                { x: 1860, y: 260, w: 45, h: 20, type: 'platform' },
+                { x: 1880, y: 220, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 1880, startX: 1880, dir: -1, isDead: false },
+                { x: 1990, y: 190, w: 45, h: 20, type: 'platform' },
+                { x: 2120, y: 130, w: 45, h: 20, type: 'platform' },
+                { x: 2250, y: 70, w: 50, h: 20, type: 'platform' },
+                { x: 2270, y: 30, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 2270, startX: 2270, dir: 1, isDead: false },
+                { x: 2380, y: 130, w: 45, h: 20, type: 'platform' },
+                { x: 2510, y: 210, w: 45, h: 20, type: 'platform' },
+                { x: 2640, y: 290, w: 50, h: 20, type: 'platform' },
+                { x: 2770, y: 220, w: 45, h: 20, type: 'platform' },
+                { x: 2790, y: 180, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 2790, startX: 2790, dir: -1, isDead: false },
+                { x: 2900, y: 300, w: 50, h: 20, type: 'platform' },
+                { x: 3030, y: 240, w: 45, h: 20, type: 'platform' },
+                { x: 3160, y: 170, w: 45, h: 20, type: 'platform' },
+                { x: 3290, y: 250, w: 50, h: 20, type: 'platform' },
+                { x: 3310, y: 210, w: 40, h: 40, type: 'enemy', range: 10, speed: 16, currentX: 3310, startX: 3310, dir: 1, isDead: false },
+                { x: 3420, y: 320, w: 50, h: 20, type: 'platform' },
+                { x: 3550, y: 260, w: 45, h: 20, type: 'platform' },
+                { x: 3680, y: 340, w: 55, h: 20, type: 'platform' },
+                { x: 4000, y: 380, w: 200, h: 20, type: 'platform' },
+                { x: 4150, y: 300, w: 40, h: 40, type: 'goal' }
+            ]},
+            // LEVEL 35: "Zero-Day" - Extreme difficulty pre-boss level
+            { width: 4600, startX: 50, startY: 300, orangeTheme: true, objects: [
+                { x: 0, y: 380, w: 200, h: 20, type: 'platform' },
+                { x: 200, y: 390, w: 4200, h: 10, type: 'lava' },
+                { x: 300, y: 320, w: 40, h: 20, type: 'platform' },
+                { x: 420, y: 260, w: 40, h: 20, type: 'platform' },
+                { x: 440, y: 220, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 440, startX: 440, dir: 1, isDead: false },
+                { x: 540, y: 190, w: 40, h: 20, type: 'platform' },
+                { x: 660, y: 130, w: 40, h: 20, type: 'platform' },
+                { x: 680, y: 90, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 680, startX: 680, dir: -1, isDead: false },
+                { x: 780, y: 200, w: 40, h: 20, type: 'platform' },
+                { x: 900, y: 280, w: 45, h: 20, type: 'platform' },
+                { x: 920, y: 240, w: 40, h: 40, type: 'enemy', range: 10, speed: 16, currentX: 920, startX: 920, dir: 1, isDead: false },
+                { x: 1020, y: 210, w: 40, h: 20, type: 'platform' },
+                { x: 1140, y: 150, w: 40, h: 20, type: 'platform' },
+                { x: 1260, y: 90, w: 40, h: 20, type: 'platform' },
+                { x: 1280, y: 50, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 1280, startX: 1280, dir: -1, isDead: false },
+                { x: 1380, y: 150, w: 40, h: 20, type: 'platform' },
+                { x: 1500, y: 230, w: 40, h: 20, type: 'platform' },
+                { x: 1620, y: 310, w: 45, h: 20, type: 'platform' },
+                { x: 1640, y: 270, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 1640, startX: 1640, dir: 1, isDead: false },
+                { x: 1740, y: 240, w: 40, h: 20, type: 'platform' },
+                { x: 1860, y: 170, w: 40, h: 20, type: 'platform' },
+                { x: 1980, y: 110, w: 45, h: 20, type: 'platform' },
+                { x: 2000, y: 70, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 2000, startX: 2000, dir: -1, isDead: false },
+                { x: 2100, y: 170, w: 40, h: 20, type: 'platform' },
+                { x: 2220, y: 250, w: 40, h: 20, type: 'platform' },
+                { x: 2340, y: 180, w: 40, h: 20, type: 'platform' },
+                { x: 2360, y: 140, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 2360, startX: 2360, dir: 1, isDead: false },
+                { x: 2460, y: 260, w: 40, h: 20, type: 'platform' },
+                { x: 2580, y: 330, w: 45, h: 20, type: 'platform' },
+                { x: 2700, y: 260, w: 40, h: 20, type: 'platform' },
+                { x: 2720, y: 220, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 2720, startX: 2720, dir: -1, isDead: false },
+                { x: 2820, y: 190, w: 40, h: 20, type: 'platform' },
+                { x: 2940, y: 130, w: 40, h: 20, type: 'platform' },
+                { x: 3060, y: 70, w: 40, h: 20, type: 'platform' },
+                { x: 3080, y: 30, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 3080, startX: 3080, dir: 1, isDead: false },
+                { x: 3180, y: 130, w: 40, h: 20, type: 'platform' },
+                { x: 3300, y: 210, w: 40, h: 20, type: 'platform' },
+                { x: 3420, y: 290, w: 45, h: 20, type: 'platform' },
+                { x: 3540, y: 220, w: 40, h: 20, type: 'platform' },
+                { x: 3560, y: 180, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 3560, startX: 3560, dir: -1, isDead: false },
+                { x: 3660, y: 300, w: 45, h: 20, type: 'platform' },
+                { x: 3780, y: 240, w: 40, h: 20, type: 'platform' },
+                { x: 3900, y: 320, w: 50, h: 20, type: 'platform' },
+                { x: 3920, y: 280, w: 40, h: 40, type: 'enemy', range: 12, speed: 16, currentX: 3920, startX: 3920, dir: 1, isDead: false },
+                { x: 4050, y: 350, w: 50, h: 20, type: 'platform' },
+                { x: 4400, y: 380, w: 200, h: 20, type: 'platform' },
+                { x: 4550, y: 300, w: 40, h: 40, type: 'goal' }
+            ]},
+            // LEVEL 36: BOSS FIGHT - "THE HACKER"
+            { width: 6000, startX: 50, startY: 300, isBoss: true, bossType: 'hacker', orangeTheme: true,
+              bossData: { x: 5600, y: 80, w: 150, h: 210, maxHp: 10, hp: 10 },
+              objects: [
+                // Starting safe zone
+                { x: 0, y: 380, w: 200, h: 20, type: 'platform' },
+                // Lava sea across entire level
+                { x: 200, y: 390, w: 5600, h: 10, type: 'lava' },
+
+                // === SECTION 1: Firewall Breach ===
+                { x: 280, y: 320, w: 50, h: 20, type: 'platform' },
+                { x: 400, y: 250, w: 45, h: 20, type: 'platform' },
+                { x: 420, y: 210, w: 40, h: 40, type: 'enemy', range: 10, speed: 15, currentX: 420, startX: 420, dir: 1, isDead: false },
+                { x: 530, y: 180, w: 50, h: 20, type: 'platform' },
+                { x: 660, y: 120, w: 55, h: 20, type: 'platform' },
+                // WEAKPOINT 1
+                { x: 670, y: 95, w: 35, h: 20, type: 'weakpoint', isUsed: false },
+
+                // === SECTION 2: Data Stream ===
+                { x: 790, y: 200, w: 45, h: 20, type: 'platform' },
+                { x: 810, y: 160, w: 40, h: 40, type: 'enemy', range: 10, speed: 16, currentX: 810, startX: 810, dir: -1, isDead: false },
+                { x: 930, y: 280, w: 45, h: 20, type: 'platform' },
+                { x: 1060, y: 210, w: 50, h: 20, type: 'platform' },
+                { x: 1080, y: 170, w: 40, h: 40, type: 'enemy', range: 12, speed: 15, currentX: 1080, startX: 1080, dir: 1, isDead: false },
+                { x: 1190, y: 140, w: 50, h: 20, type: 'platform' },
+                // WEAKPOINT 2
+                { x: 1200, y: 115, w: 35, h: 20, type: 'weakpoint', isUsed: false },
+
+                // === SECTION 3: Encryption Tunnel ===
+                { x: 1320, y: 220, w: 40, h: 20, type: 'platform' },
+                { x: 1340, y: 180, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 1340, startX: 1340, dir: -1, isDead: false },
+                { x: 1440, y: 150, w: 40, h: 20, type: 'platform' },
+                { x: 1560, y: 80, w: 45, h: 20, type: 'platform' },
+                { x: 1580, y: 40, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 1580, startX: 1580, dir: 1, isDead: false },
+                { x: 1690, y: 50, w: 45, h: 20, type: 'platform' },
+                // WEAKPOINT 3
+                { x: 1700, y: 25, w: 35, h: 20, type: 'weakpoint', isUsed: false },
+
+                // === SECTION 4: Backdoor Bypass ===
+                { x: 1810, y: 120, w: 40, h: 20, type: 'platform' },
+                { x: 1930, y: 200, w: 45, h: 20, type: 'platform' },
+                { x: 1950, y: 160, w: 40, h: 40, type: 'enemy', range: 10, speed: 16, currentX: 1950, startX: 1950, dir: -1, isDead: false },
+                { x: 2060, y: 280, w: 45, h: 20, type: 'platform' },
+                { x: 2180, y: 340, w: 50, h: 20, type: 'platform' },
+                { x: 2200, y: 300, w: 40, h: 40, type: 'enemy', range: 12, speed: 15, currentX: 2200, startX: 2200, dir: 1, isDead: false },
+                { x: 2310, y: 260, w: 45, h: 20, type: 'platform' },
+                // WEAKPOINT 4
+                { x: 2320, y: 235, w: 35, h: 20, type: 'weakpoint', isUsed: false },
+
+                // === SECTION 5: Packet Injection ===
+                { x: 2430, y: 190, w: 40, h: 20, type: 'platform' },
+                { x: 2450, y: 150, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 2450, startX: 2450, dir: -1, isDead: false },
+                { x: 2560, y: 130, w: 40, h: 20, type: 'platform' },
+                { x: 2680, y: 70, w: 45, h: 20, type: 'platform' },
+                { x: 2700, y: 30, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 2700, startX: 2700, dir: 1, isDead: false },
+                { x: 2810, y: 60, w: 40, h: 20, type: 'platform' },
+                // WEAKPOINT 5
+                { x: 2820, y: 35, w: 35, h: 20, type: 'weakpoint', isUsed: false },
+
+                // === DEV POWERUP PLATFORM (middle of level) ===
+                { x: 2975, y: 250, w: 90, h: 20, type: 'platform' },
+
+                // === SECTION 6: Exploit Chain ===
+                { x: 2930, y: 130, w: 40, h: 20, type: 'platform' },
+                { x: 3050, y: 200, w: 40, h: 20, type: 'platform' },
+                { x: 3070, y: 160, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 3070, startX: 3070, dir: -1, isDead: false },
+                { x: 3170, y: 280, w: 45, h: 20, type: 'platform' },
+                { x: 3290, y: 210, w: 40, h: 20, type: 'platform' },
+                { x: 3410, y: 140, w: 40, h: 20, type: 'platform' },
+                { x: 3430, y: 100, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 3430, startX: 3430, dir: 1, isDead: false },
+                // WEAKPOINT 6
+                { x: 3420, y: 115, w: 35, h: 20, type: 'weakpoint', isUsed: false },
+
+                // === SECTION 7: Privilege Escalation ===
+                { x: 3540, y: 200, w: 40, h: 20, type: 'platform' },
+                { x: 3560, y: 160, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 3560, startX: 3560, dir: -1, isDead: false },
+                { x: 3660, y: 130, w: 40, h: 20, type: 'platform' },
+                { x: 3780, y: 70, w: 45, h: 20, type: 'platform' },
+                { x: 3900, y: 120, w: 40, h: 20, type: 'platform' },
+                { x: 3920, y: 80, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 3920, startX: 3920, dir: 1, isDead: false },
+                // WEAKPOINT 7
+                { x: 3790, y: 45, w: 35, h: 20, type: 'weakpoint', isUsed: false },
+
+                // === SECTION 8: Rootkit Deploy ===
+                { x: 4020, y: 190, w: 40, h: 20, type: 'platform' },
+                { x: 4140, y: 260, w: 40, h: 20, type: 'platform' },
+                { x: 4160, y: 220, w: 40, h: 40, type: 'enemy', range: 10, speed: 16, currentX: 4160, startX: 4160, dir: -1, isDead: false },
+                { x: 4270, y: 190, w: 40, h: 20, type: 'platform' },
+                { x: 4390, y: 120, w: 45, h: 20, type: 'platform' },
+                { x: 4410, y: 80, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 4410, startX: 4410, dir: 1, isDead: false },
+                { x: 4520, y: 70, w: 45, h: 20, type: 'platform' },
+                // WEAKPOINT 8
+                { x: 4530, y: 45, w: 35, h: 20, type: 'weakpoint', isUsed: false },
+
+                // === SECTION 9: Kernel Access ===
+                { x: 4640, y: 140, w: 40, h: 20, type: 'platform' },
+                { x: 4760, y: 220, w: 40, h: 20, type: 'platform' },
+                { x: 4780, y: 180, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 4780, startX: 4780, dir: -1, isDead: false },
+                { x: 4880, y: 300, w: 45, h: 20, type: 'platform' },
+                { x: 5000, y: 230, w: 40, h: 20, type: 'platform' },
+                { x: 5020, y: 190, w: 40, h: 40, type: 'enemy', range: 8, speed: 16, currentX: 5020, startX: 5020, dir: 1, isDead: false },
+                // WEAKPOINT 9
+                { x: 5010, y: 205, w: 35, h: 20, type: 'weakpoint', isUsed: false },
+
+                // === SECTION 10: Final Approach ===
+                { x: 5110, y: 280, w: 50, h: 20, type: 'platform' },
+                { x: 5130, y: 240, w: 40, h: 40, type: 'enemy', range: 10, speed: 16, currentX: 5130, startX: 5130, dir: -1, isDead: false },
+                { x: 5240, y: 200, w: 45, h: 20, type: 'platform' },
+                { x: 5350, y: 140, w: 40, h: 20, type: 'platform' },
+                // WEAKPOINT 10 - right before the boss
+                { x: 5360, y: 115, w: 35, h: 20, type: 'weakpoint', isUsed: false },
+
+                // Boss platform and exit
+                { x: 5460, y: 250, w: 60, h: 20, type: 'platform' },
+                { x: 5560, y: 340, w: 60, h: 20, type: 'platform' },
+                { x: 5750, y: 380, w: 250, h: 20, type: 'platform' },
+                { x: 5950, y: 300, w: 40, h: 40, type: 'boss_goal' }
             ]}
         ];
 
@@ -4078,16 +4611,9 @@
             if (activeGlobalEvents.invincible && source === 'enemy') return;
             deathTimer = 60; player.visible = false;
 
-            // Reset speedrun timer only if you die on Level 1
-            if (currentLevel === 0) {
-                stopwatchStarted = false;
-                stopwatchStartTime = 0;
-                stopwatchElapsed = 0;
-                stopwatchFinal = 0;
-                gameFinished = false;
-                stopwatchPaused = false;
-                stopwatchPauseTime = 0;
-            }
+            // Track death stat
+            playerStats.totalDeaths++;
+            savePlayerStats();
 
             createExplosion(player.x + player.width/2, player.y + player.height/2, player.color, 25);
             triggerScreenShake(12);
@@ -4096,24 +4622,12 @@
 
         function loadLevel(index) {
             if (index >= levels.length) {
-                let timeText = '';
-                if (stopwatchStarted) {
-                    gameFinished = true;
-                    stopwatchFinal = performance.now() - stopwatchStartTime;
-                    timeText = " | TIME " + formatTime(stopwatchFinal);
-                }
                 // Show completion as in-game message instead of blocking alert
-                showGlobalMessage('SYSTEM', 'MISSION COMPLETE: FINAL SCORE ' + score + timeText);
+                showGlobalMessage('SYSTEM', 'MISSION COMPLETE: FINAL SCORE ' + score);
+                if (score > playerStats.highestScore) { playerStats.highestScore = score; }
+                savePlayerStats();
                 currentLevel = 0; highestCompletedLevel = 0; index = 0; score = 0;
-
-                // Reset for next run
-                stopwatchStarted = false;
-                stopwatchStartTime = 0;
-                stopwatchElapsed = 0;
-                stopwatchFinal = 0;
                 gameFinished = false;
-                stopwatchPaused = false;
-                stopwatchPauseTime = 0;
             }
             const lvl = levels[index];
             player.x = lvl.startX; player.y = lvl.startY;
@@ -4149,11 +4663,53 @@
                 overgrowthFreezeTimer = 0;
                 overgrowthFreezeActive = false;
                 overgrowthVineTimer = 0;
+                // Hacker boss reset
+                hackerHackedPhase = false;
+                hackerHackedTimer = 0;
+                hackerInvertControls = false;
+                hackerLagActive = false;
+                hackerLagTimer = 0;
+                hackerShakeActive = false;
+                hackerShakeTimer = 0;
+                hackerFreezeActive = false;
+                hackerFreezeTimer = 0;
+                hackerFlipActive = false;
+                hackerFlipTimer = 0;
+                hackerPopupFiles = [];
+                hackerPopupTimer = 0;
+                hackerChaosTimer = 0;
+                hackerChaosIndex = 0;
+                hackerDevPowerup = false;
+                hackerDevPowerupSpawned = false;
+                hackerDevPowerupX = 0;
+                hackerDevPowerupY = 0;
+                hackerBanTimer = 0;
+                hackerBanActive = false;
+                hackerBossHitForPowerup = false;
+                hackerPauseActive = false;
+                hackerPauseTimer = 0;
+                hackerPauseMessageIndex = 0;
+                hackerPauseMessageTimer = 0;
+                hackerPlayerTeleported = false;
+                scribeMessages = [];
+                scribeCurrentMsg = '';
+                scribeTimer = 0;
+                scribeFadeTimer = 0;
+                // Remove any leftover popup file elements
+                document.querySelectorAll('.hacker-popup-file').forEach(function(el) { el.remove(); });
+                if (bossType === 'hacker') {
+                    showScribeMessage('The Scribe: "Careful, hacker... this one controls the code itself."');
+                }
             } else {
                 boss = null;
                 bossProjectiles = [];
                 bossDefeated = false;
             }
+
+            // Always clear scribe messages when loading any level
+            scribeCurrentMsg = '';
+            scribeTimer = 0;
+            scribeFadeTimer = 0;
 
             let lvlDisplay = document.getElementById('levelDisplay');
             if (index === SECRET_VAULT_INDEX) {
@@ -4162,8 +4718,8 @@
                 lvlDisplay.style.textShadow = '0 0 10px rgba(255,0,255,0.5)';
             } else {
                 lvlDisplay.innerText = lvl.isBoss ? 'BOSS FIGHT' : `LEVEL ${(index + 1).toString().padStart(2, '0')}`;
-                lvlDisplay.style.color = lvl.greenTheme ? '#00ff88' : '#00d2ff';
-                lvlDisplay.style.textShadow = lvl.greenTheme ? '0 0 10px rgba(0,255,136,0.5)' : '0 0 10px rgba(0,210,255,0.5)';
+                lvlDisplay.style.color = lvl.orangeTheme ? '#ff8800' : (lvl.greenTheme ? '#00ff88' : '#00d2ff');
+                lvlDisplay.style.textShadow = lvl.orangeTheme ? '0 0 10px rgba(255,136,0,0.5)' : (lvl.greenTheme ? '0 0 10px rgba(0,255,136,0.5)' : '0 0 10px rgba(0,210,255,0.5)');
             }
             document.getElementById('scoreDisplay').innerText = `SCORE: ${score.toString().padStart(4, '0')}`;
             updateMusicForLevel();
@@ -4186,20 +4742,8 @@
         }
 
         function update() {
-            if (shopOpen || settingsOpen) {
-                // Pause the speedrun timer by tracking elapsed time
-                if (stopwatchStarted && !stopwatchPaused) {
-                    stopwatchPauseTime = performance.now();
-                    stopwatchPaused = true;
-                }
+            if (shopOpen || settingsOpen || statsOpen) {
                 return;
-            }
-
-            // Resume the speedrun timer if it was paused
-            if (stopwatchPaused && stopwatchStarted) {
-                let pausedDuration = performance.now() - stopwatchPauseTime;
-                stopwatchStartTime += pausedDuration;
-                stopwatchPaused = false;
             }
 
             // Decay screen shake
@@ -4246,14 +4790,17 @@
             if (equippedCrown === 'windwalker' || hasWindWalkerCrown) speedMult *= 1.3;
             // Disable speed abilities in SECRET_VAULT
             if (isInSecretVault()) speedMult = 1.0;
-            if (keys['ArrowRight'] || keys['d']) { if (player.velX < player.speed * speedMult) player.velX += 1.0 * speedMult; }
-            if (keys['ArrowLeft'] || keys['a']) { if (player.velX > -player.speed * speedMult) player.velX -= 1.0 * speedMult; }
-
-            // Start stopwatch on first movement
-            if (!stopwatchStarted && !gameFinished && (keys['ArrowRight'] || keys['d'] || keys['ArrowLeft'] || keys['a'] || keys['ArrowUp'] || keys['w'] || keys[' '])) {
-                stopwatchStarted = true;
-                stopwatchStartTime = performance.now();
+            // Hacker invert controls effect
+            let goRight = keys['ArrowRight'] || keys['d'];
+            let goLeft = keys['ArrowLeft'] || keys['a'];
+            if (hackerInvertControls && bossType === 'hacker' && !bossDefeated) {
+                let tmp = goRight;
+                goRight = goLeft;
+                goLeft = tmp;
             }
+            if (goRight) { if (player.velX < player.speed * speedMult) player.velX += 1.0 * speedMult; }
+            if (goLeft) { if (player.velX > -player.speed * speedMult) player.velX -= 1.0 * speedMult; }
+
 
             // === Crown of Corruption Flight Logic ===
             if (hasCrownOfCorruption && !isInSecretVault()) {
@@ -4290,8 +4837,8 @@
             var inVault = isInSecretVault();
             if (corruptionFlightActive && keys[' ']) {
                 // Crown of Corruption flight takes priority (handled above)
-            } else if (isMod && (keys['ArrowUp'] || keys['w'] || keys[' '])) {
-                // Mod fly mode: hold jump to fly upward
+            } else if (isMod && modFlyEnabled && (keys['ArrowUp'] || keys['w'] || keys[' '])) {
+                // Mod fly mode: hold jump to fly upward (can be toggled off)
                 player.velY = -6;
                 player.grounded = false;
                 hangTime = 10;
@@ -4303,6 +4850,7 @@
                 hangTime = 10;
                 doubleJumpUsed = false;
                 crownDoubleJumpUsed = false;
+                playerStats.totalJumps++;
                 createExplosion(player.x + player.width/2, player.y + player.height, player.color, 8);
                 playSfxJump();
             } else if (!inVault && activeGlobalEvents.doublejump && !doubleJumpUsed && !player.grounded && hangTime >= 6 && jumpKeyJustPressed) {
@@ -4310,6 +4858,7 @@
                 var jumpMult2 = (equippedCrown === 'ruby') ? 1.3 : 1.0;
                 player.velY = player.jumpPower * jumpMult2;
                 doubleJumpUsed = true;
+                playerStats.totalJumps++;
                 createExplosion(player.x + player.width/2, player.y + player.height, '#00ff88', 10);
                 playSfxJump();
             } else if (!inVault && equippedCrown === 'sapphire' && !crownDoubleJumpUsed && !player.grounded && hangTime >= 6 && jumpKeyJustPressed && !activeGlobalEvents.doublejump) {
@@ -4317,6 +4866,7 @@
                 var jumpMult3 = 1.0;
                 player.velY = player.jumpPower * jumpMult3;
                 crownDoubleJumpUsed = true;
+                playerStats.totalJumps++;
                 createExplosion(player.x + player.width/2, player.y + player.height, '#4488ff', 10);
                 playSfxJump();
             }
@@ -4434,6 +4984,254 @@
                             if (overgrowthRageTimer <= 0) {
                                 overgrowthFreezeActive = false;
                             }
+                        }
+                    }
+
+                } else if (bossType === 'hacker') {
+                    // === THE HACKER BOSS LOGIC ===
+                    boss.y = boss.baseY + Math.sin(boss.bobTimer * 1.2) * 18 + Math.sin(boss.bobTimer * 3) * 6;
+
+                    // Scribe narrator timer
+                    if (scribeTimer > 0) {
+                        scribeTimer--;
+                        if (scribeTimer <= 0) {
+                            scribeFadeTimer = 30;
+                        }
+                    }
+                    if (scribeFadeTimer > 0) scribeFadeTimer--;
+
+                    // === PAUSE PHASE: Scribe explains the hacker's plan ===
+                    if (hackerPauseActive) {
+                        hackerPauseTimer--;
+                        hackerPauseMessageTimer++;
+                        // Freeze the player during pause
+                        player.velX = 0;
+                        player.velY = 0;
+
+                        // Sequential scribe messages during the pause
+                        var pauseMessages = [
+                            'The Scribe: "The Hacker\'s firewall is down, but he\'s not finished..."',
+                            'The Scribe: "He\'s about to HACK THE SYSTEM! He\'ll take control of the code itself."',
+                            'The Scribe: "He can only use ONE ability at a time - Invert Controls, Lag Spikes, Screen Shake, Freeze, Popup Files, or Flip the Board."',
+                            'The Scribe: "You\'ll be teleported back to the start. But there\'s hope..."',
+                            'The Scribe: "A DEVELOPER POWER-UP will appear in the MIDDLE of the level. You MUST grab it!"',
+                            'The Scribe: "Once you have the Developer Power-Up, race to the Hacker and TOUCH HIM to execute the BAN COMMAND!"',
+                            'The Scribe: "That\'s the only way to stop him. Get the power-up, then ban the hacker. Good luck!"',
+                            'The Scribe: "Brace yourself... the hack is beginning NOW!"'
+                        ];
+                        // Show messages at intervals (~3.5 seconds each)
+                        var msgInterval = Math.floor(1800 / pauseMessages.length);
+                        var currentMsgIdx = Math.floor(hackerPauseMessageTimer / msgInterval);
+                        if (currentMsgIdx >= pauseMessages.length) currentMsgIdx = pauseMessages.length - 1;
+                        if (currentMsgIdx !== hackerPauseMessageIndex || hackerPauseMessageTimer <= 1) {
+                            hackerPauseMessageIndex = currentMsgIdx;
+                            showScribeMessage(pauseMessages[currentMsgIdx]);
+                        }
+
+                        // When pause ends, teleport player to start and begin hacked phase
+                        if (hackerPauseTimer <= 0) {
+                            hackerPauseActive = false;
+                            hackerHackedPhase = true;
+                            hackerPlayerTeleported = true;
+                            // Teleport player back to level start
+                            var lvlData = levels[currentLevel];
+                            player.x = lvlData.startX;
+                            player.y = lvlData.startY;
+                            player.oldY = lvlData.startY;
+                            player.velX = 0;
+                            player.velY = 0;
+                            camera.x = 0;
+                            // Spawn dev powerup in the middle of the level on a platform (~x=3000)
+                            hackerDevPowerupSpawned = true;
+                            hackerDevPowerupX = 3000;
+                            hackerDevPowerupY = 220;
+                            hackerBossHitForPowerup = true; // skip the old boss-touch spawn
+                            triggerScreenShake(20);
+                            showScribeMessage('The Scribe: "SYSTEM HACKED! Find the Developer Power-Up in the middle of the level!"');
+                        }
+                        // Skip all other hacker logic during pause
+                        bossProjectiles = [];
+                    }
+
+                    // Pre-hacked phase: fire orange projectiles
+                    if (!hackerPauseActive && !hackerHackedPhase && !hackerBanActive) {
+                        bossFireTimer++;
+                        let fireRate = 140 - ((boss.maxHp - boss.hp) * 8);
+                        if (fireRate < 60) fireRate = 60;
+                        if (bossFireTimer >= fireRate) {
+                            bossFireTimer = 0;
+                            bossProjectiles.push({
+                                x: boss.x,
+                                y: boss.y + boss.h / 2 - 8 + (Math.random() - 0.5) * 40,
+                                w: 16, h: 16,
+                                speed: -(4.5 + (boss.maxHp - boss.hp) * 0.4),
+                                isHacker: true,
+                                sineOffset: Math.random() * Math.PI * 2,
+                                sineAmp: 2,
+                                age: 0
+                            });
+                        }
+                    }
+
+                    // === HACKED PHASE - chaos effects (one at a time) ===
+                    if (hackerHackedPhase && !hackerBanActive && !hackerPauseActive) {
+                        hackerHackedTimer++;
+                        hackerChaosTimer++;
+
+                        // Cycle through chaos effects every 300 frames (~5s) - ONE at a time
+                        if (hackerChaosTimer % 300 === 0) {
+                            // Clear ALL previous effects before switching
+                            hackerInvertControls = false;
+                            hackerLagActive = false;
+                            hackerLagTimer = 0;
+                            hackerShakeActive = false;
+                            hackerShakeTimer = 0;
+                            hackerFreezeActive = false;
+                            hackerFreezeTimer = 0;
+                            hackerFlipActive = false;
+                            hackerFlipTimer = 0;
+                            hackerPopupFiles = [];
+                            document.querySelectorAll('.hacker-popup-file').forEach(function(el) { el.remove(); });
+                            hackerChaosIndex = (hackerChaosIndex + 1) % 7;
+                            let chaosNames = ['INVERT CONTROLS', 'LAG SPIKE', 'SCREEN SHAKE', 'SPLIT OBSTACLES', 'MID-AIR FREEZE', 'POPUP FILES', 'FLIP BOARD'];
+                            showScribeMessage('The Scribe: "He\'s using ' + chaosNames[hackerChaosIndex] + '! Watch out!"');
+                        }
+
+                        // Apply current chaos effect
+                        switch (hackerChaosIndex) {
+                            case 0: // Invert controls
+                                hackerInvertControls = true;
+                                hackerLagActive = false;
+                                hackerShakeActive = false;
+                                hackerFreezeActive = false;
+                                hackerFlipActive = false;
+                                break;
+                            case 1: // Lag
+                                hackerInvertControls = false;
+                                hackerLagActive = true;
+                                hackerLagTimer++;
+                                hackerShakeActive = false;
+                                hackerFreezeActive = false;
+                                hackerFlipActive = false;
+                                break;
+                            case 2: // Screen shake
+                                hackerInvertControls = false;
+                                hackerLagActive = false;
+                                hackerShakeActive = true;
+                                hackerShakeTimer++;
+                                if (hackerShakeTimer % 3 === 0) triggerScreenShake(15);
+                                hackerFreezeActive = false;
+                                hackerFlipActive = false;
+                                break;
+                            case 3: // Split obstacles (visual effect - doubles platforms visually)
+                                hackerInvertControls = false;
+                                hackerLagActive = false;
+                                hackerShakeActive = false;
+                                hackerFreezeActive = false;
+                                hackerFlipActive = false;
+                                break;
+                            case 4: // Mid-air freeze
+                                hackerInvertControls = false;
+                                hackerLagActive = false;
+                                hackerShakeActive = false;
+                                hackerFreezeActive = true;
+                                hackerFreezeTimer++;
+                                if (hackerFreezeTimer % 60 < 25) {
+                                    player.velY = 0;
+                                    player.velX *= 0.3;
+                                }
+                                hackerFlipActive = false;
+                                break;
+                            case 5: // Popup files
+                                hackerInvertControls = false;
+                                hackerLagActive = false;
+                                hackerShakeActive = false;
+                                hackerFreezeActive = false;
+                                hackerFlipActive = false;
+                                hackerPopupTimer++;
+                                if (hackerPopupTimer % 90 === 0) {
+                                    spawnHackerPopupFile();
+                                }
+                                break;
+                            case 6: // Flip board
+                                hackerInvertControls = false;
+                                hackerLagActive = false;
+                                hackerShakeActive = false;
+                                hackerFreezeActive = false;
+                                hackerFlipActive = true;
+                                break;
+                        }
+
+                        // Continue firing projectiles during hacked phase (faster)
+                        bossFireTimer++;
+                        if (bossFireTimer >= 80) {
+                            bossFireTimer = 0;
+                            bossProjectiles.push({
+                                x: boss.x,
+                                y: boss.y + boss.h / 2 + (Math.random() - 0.5) * 60,
+                                w: 18, h: 18,
+                                speed: -(5 + Math.random() * 2),
+                                isHacker: true,
+                                sineOffset: Math.random() * Math.PI * 2,
+                                sineAmp: 3,
+                                age: 0
+                            });
+                        }
+
+                        // Dev powerup is now spawned in the middle of the level at hacked phase start
+                        // (No longer requires touching the boss to spawn it)
+
+                        // Dev powerup collection
+                        if (hackerDevPowerupSpawned && !hackerDevPowerup) {
+                            if (player.x < hackerDevPowerupX + 30 && player.x + player.width > hackerDevPowerupX &&
+                                player.y < hackerDevPowerupY + 30 && player.y + player.height > hackerDevPowerupY) {
+                                hackerDevPowerup = true;
+                                createExplosion(hackerDevPowerupX + 15, hackerDevPowerupY + 15, '#ffaa00', 30);
+                                createExplosion(hackerDevPowerupX + 15, hackerDevPowerupY + 15, '#ffffff', 20);
+                                triggerScreenShake(12);
+                                showScribeMessage('The Scribe: "DEVELOPER POWER-UP OBTAINED! Now race to the Hacker at the end and TOUCH HIM to execute the BAN!"');
+                                // Clear all chaos effects
+                                hackerInvertControls = false;
+                                hackerLagActive = false;
+                                hackerShakeActive = false;
+                                hackerFreezeActive = false;
+                                hackerFlipActive = false;
+                                hackerPopupFiles = [];
+                                document.querySelectorAll('.hacker-popup-file').forEach(function(el) { el.remove(); });
+                            }
+                        }
+
+                        // Ban the hacker - player touches boss with dev powerup
+                        if (hackerDevPowerup && !hackerBanActive) {
+                            if (player.x < boss.x + boss.w && player.x + player.width > boss.x &&
+                                player.y < boss.y + boss.h && player.y + player.height > boss.y) {
+                                hackerBanActive = true;
+                                hackerBanTimer = 120;
+                                showScribeMessage('The Scribe: "BANNED! The Hacker has been terminated!"');
+                                triggerScreenShake(25);
+                                createExplosion(boss.x + boss.w/2, boss.y + boss.h/2, '#ff8800', 40);
+                                createExplosion(boss.x + boss.w/2, boss.y + boss.h/2, '#ffaa00', 30);
+                                createExplosion(boss.x + boss.w/2, boss.y + boss.h/2, '#ffffff', 20);
+                            }
+                        }
+                    }
+
+                    // Ban animation countdown
+                    if (hackerBanActive) {
+                        hackerBanTimer--;
+                        if (hackerBanTimer <= 0) {
+                            bossDefeated = true;
+                            bossDeathTimer = 120;
+                            score += 5000;
+                            document.getElementById('scoreDisplay').innerText = 'SCORE: ' + String(score).padStart(4, '0');
+                            // Clear all hacker effects
+                            hackerInvertControls = false;
+                            hackerLagActive = false;
+                            hackerShakeActive = false;
+                            hackerFreezeActive = false;
+                            hackerFlipActive = false;
+                            hackerPopupFiles = [];
+                            document.querySelectorAll('.hacker-popup-file').forEach(function(el) { el.remove(); });
                         }
                     }
 
@@ -4592,14 +5390,14 @@
 
                         if (preCollisionVelY > 0 && (player.oldY + player.height) <= obj.y + 10) {
                             // Normal stomp: player was clearly above enemy last frame
-                            obj.isDead = true; player.velY = -8; score += activeGlobalEvents.scorefrenzy ? 200 : 100;
+                            obj.isDead = true; player.velY = -8; score += activeGlobalEvents.scorefrenzy ? 200 : 100; playerStats.enemiesKilled++;
                             document.getElementById('scoreDisplay').innerText = `SCORE: ${score.toString().padStart(4, '0')}`;
                             createExplosion(obj.x + obj.w/2, obj.y + obj.h/2, '#8e44ad', 15);
                         } else if (justLandedOnPlatform && preCollisionVelY > 0 && !wasOverlappingBeforeLanding) {
                             // Player just landed on a platform which pushed them into this enemy
                             // They weren't overlapping before landing, so this is a platform-induced collision
                             // Treat as stomp since player was falling from above
-                            obj.isDead = true; player.velY = -8; score += activeGlobalEvents.scorefrenzy ? 200 : 100;
+                            obj.isDead = true; player.velY = -8; score += activeGlobalEvents.scorefrenzy ? 200 : 100; playerStats.enemiesKilled++;
                             document.getElementById('scoreDisplay').innerText = `SCORE: ${score.toString().padStart(4, '0')}`;
                             createExplosion(obj.x + obj.w/2, obj.y + obj.h/2, '#8e44ad', 15);
                         } else if (justLandedOnPlatform && preCollisionVelY > 0 && wasOverlappingBeforeLanding &&
@@ -4607,7 +5405,7 @@
                             // Player was falling through the enemy on the way to the platform
                             // Their pre-collision bottom was above the enemy's bottom (they came from above)
                             // Treat as stomp
-                            obj.isDead = true; player.velY = -8; score += activeGlobalEvents.scorefrenzy ? 200 : 100;
+                            obj.isDead = true; player.velY = -8; score += activeGlobalEvents.scorefrenzy ? 200 : 100; playerStats.enemiesKilled++;
                             document.getElementById('scoreDisplay').innerText = `SCORE: ${score.toString().padStart(4, '0')}`;
                             createExplosion(obj.x + obj.w/2, obj.y + obj.h/2, '#8e44ad', 15);
                         } else { triggerDeath('enemy'); return; }
@@ -4621,17 +5419,29 @@
                             score += activeGlobalEvents.scorefrenzy ? 400 : 200;
                             document.getElementById('scoreDisplay').innerText = `SCORE: ${score.toString().padStart(4, '0')}`;
                             createExplosion(obj.x + obj.w/2, obj.y + obj.h/2, '#ffcc00', 20);
-                            createExplosion(obj.x + obj.w/2, obj.y + obj.h/2, '#ff0055', 15);
+                            createExplosion(obj.x + obj.w/2, obj.y + obj.h/2, bossType === 'hacker' ? '#ff8800' : '#ff0055', 15);
                             if (boss && boss.hp > 0) {
                                 boss.hp--;
                                 bossFlashTimer = 15;
                                 triggerScreenShake(8);
                                 playSfxBossHit();
-                                createExplosion(boss.x + boss.w/2, boss.y + boss.h/2, '#ff0055', 20);
+                                createExplosion(boss.x + boss.w/2, boss.y + boss.h/2, bossType === 'hacker' ? '#ff8800' : '#ff0055', 20);
                                 if (boss.hp <= 0) {
-                                    bossDeathTimer = 90;
-                                    bossProjectiles = [];
-                                    triggerScreenShake(16);
+                                    if (bossType === 'hacker') {
+                                        // Hacker: pause the game for ~30 seconds so scribe can explain
+                                        hackerPauseActive = true;
+                                        hackerPauseTimer = 1800; // 30 seconds at 60fps
+                                        hackerPauseMessageIndex = 0;
+                                        hackerPauseMessageTimer = 0;
+                                        boss.hp = 1; // Keep alive for hacked phase
+                                        triggerScreenShake(25);
+                                        bossProjectiles = [];
+                                        showScribeMessage('The Scribe: "WAIT! The Hacker\'s firewall is down... but he\'s activating his failsafe!"');
+                                    } else {
+                                        bossDeathTimer = 90;
+                                        bossProjectiles = [];
+                                        triggerScreenShake(16);
+                                    }
                                 }
                             }
                         }
@@ -4684,17 +5494,27 @@
                             return;
                         }
                         playSfxLevelComplete(); currentLevel++;
+                        playerStats.levelsCompleted++; savePlayerStats();
                         // Skip SECRET_VAULT on normal progression - treat as game completion
                         if (currentLevel >= SECRET_VAULT_INDEX) { currentLevel = levels.length; }
-                        highestCompletedLevel = Math.max(highestCompletedLevel, currentLevel); saveGameToServer(); refreshPlayerLevelSelector(); loadLevel(currentLevel); return;
+                        // Don't save level progress if player was admin-teleported beyond their legitimate progress
+                        if (!adminTeleported) {
+                            highestCompletedLevel = Math.max(highestCompletedLevel, currentLevel); saveGameToServer();
+                        }
+                        refreshPlayerLevelSelector(); loadLevel(currentLevel); return;
                     }
 
                     else if (obj.type === 'boss_goal') {
                         if (bossDefeated) {
+                            playerStats.bossesDefeated++; playerStats.levelsCompleted++; savePlayerStats();
                             currentLevel++;
                             // Skip SECRET_VAULT on normal progression - treat as game completion
                             if (currentLevel >= SECRET_VAULT_INDEX) { currentLevel = levels.length; }
-                            highestCompletedLevel = Math.max(highestCompletedLevel, currentLevel); saveGameToServer(); refreshPlayerLevelSelector(); loadLevel(currentLevel); return;
+                            // Don't save level progress if player was admin-teleported beyond their legitimate progress
+                            if (!adminTeleported) {
+                                highestCompletedLevel = Math.max(highestCompletedLevel, currentLevel); saveGameToServer();
+                            }
+                            refreshPlayerLevelSelector(); loadLevel(currentLevel); return;
                         }
                     }
                 }
@@ -4794,10 +5614,154 @@
             ctx.restore();
         }
 
+        // === SCRIBE NARRATOR SYSTEM ===
+        function showScribeMessage(msg) {
+            scribeCurrentMsg = msg;
+            scribeTimer = 180; // ~2.4 seconds at 75fps
+            scribeFadeTimer = 0;
+        }
+
+        // === HACKER POPUP FILE SYSTEM ===
+        function spawnHackerPopupFile() {
+            let pw = 120 + Math.floor(Math.random() * 100);
+            let ph = 80 + Math.floor(Math.random() * 60);
+            let px = Math.floor(Math.random() * (canvas.width - pw));
+            let py = Math.floor(Math.random() * (canvas.height - ph));
+            let fileNames = ['virus.exe', 'trojan.dll', 'hack.bat', 'keylog.sys', 'rootkit.bin', 'worm.vbs', 'exploit.sh', 'ransom.cry'];
+            let fileName = fileNames[Math.floor(Math.random() * fileNames.length)];
+            let popup = document.createElement('div');
+            popup.className = 'hacker-popup-file';
+            popup.style.cssText = 'position:fixed;left:' + px + 'px;top:' + py + 'px;width:' + pw + 'px;height:' + ph + 'px;background:#1a0a00;border:2px solid #ff8800;color:#ffaa00;font-family:monospace;font-size:12px;padding:8px;z-index:9999;cursor:pointer;box-shadow:0 0 15px rgba(255,136,0,0.5);';
+            popup.innerHTML = '<div style="background:#ff8800;color:#000;padding:2px 6px;margin:-8px -8px 6px -8px;font-weight:bold;display:flex;justify-content:space-between;"><span>' + fileName + '</span><span style="cursor:pointer;">X</span></div><div style="color:#ff6600;font-size:10px;">ACCESS DENIED<br>CORRUPTED FILE<br>CLICK TO DISMISS</div>';
+            popup.addEventListener('click', function() { popup.remove(); });
+            document.body.appendChild(popup);
+            hackerPopupFiles.push(popup);
+        }
+
+        // === DRAW HACKER BOSS ===
+        function drawHacker() {
+            if (!boss || bossDefeated) return;
+            ctx.save();
+            let bx = boss.x;
+            let by = boss.y;
+
+            // Flash when hit
+            if (bossFlashTimer > 0 && bossFlashTimer % 4 < 2) {
+                ctx.globalAlpha = 0.9;
+            }
+
+            // Ban animation - boss fading out
+            if (hackerBanActive) {
+                ctx.globalAlpha = Math.max(0, hackerBanTimer / 120);
+            }
+
+            // Boss body - dark orange with pulsing glow
+            let pulse = Math.sin(bossPulse) * 0.3 + 0.7;
+            ctx.shadowBlur = 25 * pulse;
+            ctx.shadowColor = '#ff8800';
+            ctx.fillStyle = bossFlashTimer > 0 ? '#ffffff' : '#331a00';
+            ctx.fillRect(bx, by, boss.w, boss.h);
+
+            // Inner core - hacker terminal look
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = '#ffaa00';
+            ctx.fillStyle = bossFlashTimer > 0 ? '#ffddaa' : '#552200';
+            ctx.fillRect(bx + 15, by + 20, boss.w - 30, boss.h - 40);
+
+            // Terminal screen
+            ctx.fillStyle = '#0a0a0a';
+            ctx.fillRect(bx + 25, by + 30, boss.w - 50, boss.h - 70);
+
+            // Scrolling code lines on screen
+            ctx.fillStyle = '#ff8800';
+            ctx.font = '10px monospace';
+            let codeLines = ['> ACCESS GRANTED', '> rm -rf /*', '> HACKING...', '> OVERRIDE', '> CTRL+ALT+DEL', '> BREACH'];
+            for (let i = 0; i < 4; i++) {
+                let lineIdx = Math.floor((bossPulse * 2 + i) % codeLines.length);
+                ctx.fillText(codeLines[lineIdx], bx + 30, by + 45 + i * 14);
+            }
+
+            // Pulsing energy lines (orange)
+            ctx.strokeStyle = '#ff8800';
+            ctx.lineWidth = 2;
+            ctx.shadowBlur = 10;
+            for (let i = 0; i < 3; i++) {
+                let ly = by + 30 + i * 40;
+                ctx.beginPath();
+                ctx.moveTo(bx, ly);
+                for (let px = 0; px < boss.w; px += 8) {
+                    ctx.lineTo(bx + px, ly + Math.sin(bossPulse * 3 + px * 0.1 + i) * 5);
+                }
+                ctx.stroke();
+            }
+
+            // Eye/visor - menacing orange glow
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = '#ffaa00';
+            ctx.fillStyle = hackerHackedPhase ? '#ff0000' : '#ffaa00';
+            ctx.fillRect(bx + boss.w * 0.25, by + 10, boss.w * 0.5, 8);
+            // Eye pupils
+            let pupilX = bx + boss.w * 0.35 + Math.sin(bossPulse * 2) * 5;
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(pupilX, by + 11, 6, 6);
+            ctx.fillRect(pupilX + boss.w * 0.2, by + 11, 6, 6);
+
+            // "HACKED" overlay text when in hacked phase
+            if (hackerHackedPhase && !hackerBanActive) {
+                ctx.fillStyle = '#ff0000';
+                ctx.font = 'bold 14px monospace';
+                ctx.textAlign = 'center';
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = '#ff0000';
+                let shX = (Math.random() - 0.5) * 4;
+                let shY = (Math.random() - 0.5) * 4;
+                ctx.fillText('SYSTEM HACKED', bx + boss.w/2 + shX, by - 10 + shY);
+                ctx.textAlign = 'left';
+            }
+
+            // Ban active - "BANNED" text
+            if (hackerBanActive) {
+                ctx.fillStyle = '#ff0000';
+                ctx.font = 'bold 20px monospace';
+                ctx.textAlign = 'center';
+                ctx.shadowBlur = 25;
+                ctx.shadowColor = '#ff0000';
+                ctx.fillText('BANNED', bx + boss.w/2, by + boss.h/2);
+                ctx.textAlign = 'left';
+            }
+
+            // Dev powerup floating above boss
+            if (hackerDevPowerupSpawned && !hackerDevPowerup) {
+                let dpX = hackerDevPowerupX;
+                let dpY = hackerDevPowerupY + Math.sin(bossPulse * 3) * 5;
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = '#ffaa00';
+                ctx.fillStyle = '#ffaa00';
+                ctx.fillRect(dpX, dpY, 30, 30);
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 16px monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText('DEV', dpX + 15, dpY + 20);
+                ctx.textAlign = 'left';
+                // Sparkle effect
+                ctx.fillStyle = '#ffffff';
+                for (let s = 0; s < 4; s++) {
+                    let angle = bossPulse * 4 + s * (Math.PI / 2);
+                    let sx = dpX + 15 + Math.cos(angle) * 22;
+                    let sy = dpY + 15 + Math.sin(angle) * 22;
+                    ctx.fillRect(sx - 2, sy - 2, 4, 4);
+                }
+            }
+
+            ctx.shadowBlur = 0;
+            ctx.restore();
+        }
+
         function drawBoss() {
             if (!boss || bossDefeated) return;
             if (bossType === 'queen') { drawGlitchQueen(); return; }
             if (bossType === 'overgrowth') { drawOvergrowth(); return; }
+            if (bossType === 'hacker') { drawHacker(); return; }
             drawTerminator();
         }
 
@@ -5179,8 +6143,9 @@
 
             let isQueen = bossType === 'queen';
             let isOvergrowth = bossType === 'overgrowth';
-            let bossColor = isOvergrowth ? '#00ff88' : (isQueen ? '#bc13fe' : '#ff0055');
-            let bossName = isOvergrowth ? 'OVERGROWTH.EXE' : (isQueen ? 'THE GLITCH QUEEN' : 'THE TERMINATOR');
+            let isHacker = bossType === 'hacker';
+            let bossColor = isHacker ? '#ff8800' : (isOvergrowth ? '#00ff88' : (isQueen ? '#bc13fe' : '#ff0055'));
+            let bossName = isHacker ? 'THE HACKER' : (isOvergrowth ? 'OVERGROWTH.EXE' : (isQueen ? 'THE GLITCH QUEEN' : 'THE TERMINATOR'));
 
             // Label
             ctx.fillStyle = bossColor;
@@ -5191,13 +6156,15 @@
             ctx.fillText(bossName, canvas.width / 2, barY - 2);
 
             // Bar background
-            ctx.fillStyle = isOvergrowth ? '#002211' : (isQueen ? '#110022' : '#220011');
+            ctx.fillStyle = isHacker ? '#221100' : (isOvergrowth ? '#002211' : (isQueen ? '#110022' : '#220011'));
             ctx.fillRect(barX, barY, barW, barH);
 
             // Health fill
             let hpRatio = boss.hp / boss.maxHp;
             let fillColor;
-            if (isOvergrowth) {
+            if (isHacker) {
+                fillColor = hpRatio > 0.5 ? '#ff8800' : (hpRatio > 0.25 ? '#ffaa00' : '#ff4400');
+            } else if (isOvergrowth) {
                 fillColor = hpRatio > 0.5 ? '#00ff88' : (hpRatio > 0.33 ? '#88ff00' : '#ff4400');
             } else if (isQueen) {
                 fillColor = hpRatio > 0.5 ? '#bc13fe' : (hpRatio > 0.25 ? '#e040fb' : '#ff55ff');
@@ -5288,6 +6255,27 @@
                     }
                     ctx.globalAlpha = 1;
                 }
+            } else if (proj.isHacker) {
+                // Hacker projectile - orange data packet
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = '#ff8800';
+                ctx.fillStyle = '#ff8800';
+                ctx.beginPath();
+                ctx.arc(proj.x + proj.w/2, proj.y + proj.h/2, proj.w/2, 0, Math.PI * 2);
+                ctx.fill();
+                // Inner glow
+                ctx.fillStyle = '#ffaa00';
+                ctx.globalAlpha = 0.8;
+                ctx.beginPath();
+                ctx.arc(proj.x + proj.w/2, proj.y + proj.h/2, proj.w/3, 0, Math.PI * 2);
+                ctx.fill();
+                // Binary digits orbiting
+                ctx.fillStyle = '#ffffff';
+                ctx.globalAlpha = 0.6;
+                ctx.font = '8px monospace';
+                let digit = Math.floor(proj.age / 5) % 2 === 0 ? '0' : '1';
+                ctx.fillText(digit, proj.x + proj.w/2 - 2, proj.y + proj.h/2 + 3);
+                ctx.globalAlpha = 1;
             } else if (proj.isQueen) {
                 if (proj.isWave) {
                     // Wave projectile - elongated glitch bar
@@ -5338,9 +6326,13 @@
             return levels[currentLevel] && levels[currentLevel].greenTheme;
         }
 
+        function isOrangeLevel() {
+            return levels[currentLevel] && levels[currentLevel].orangeTheme;
+        }
+
         function drawBackground() {
-            let green = isGreenLevel();
-            ctx.strokeStyle = green ? '#152515' : '#151525';
+            let green = isGreenLevel();            let orange = isOrangeLevel();
+            ctx.strokeStyle = orange ? '#251a15' : (green ? '#152515' : '#151525');
             ctx.lineWidth = 1;
             let gridOffset = (camera.x * 0.1) % 100;
             ctx.beginPath();
@@ -5351,8 +6343,7 @@
                 ctx.moveTo(0, y); ctx.lineTo(canvas.width, y);
             }
             ctx.stroke();
-
-            ctx.strokeStyle = green ? '#1a2e1a' : '#1a1a2e';
+            ctx.strokeStyle = orange ? '#2e1a0a' : (green ? '#1a2e1a' : '#1a1a2e');
             hexes.forEach(h => {
                 let hX = (h.x - (camera.x * h.speed)) % (levels[currentLevel].width + 400);
                 if (hX < -100) hX += levels[currentLevel].width + 400;
@@ -5381,6 +6372,12 @@
             }
 
             ctx.save();
+            // Hacker flip board effect
+            if (hackerFlipActive && bossType === 'hacker' && !bossDefeated) {
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                ctx.scale(1, -1);
+                ctx.translate(-canvas.width / 2, -canvas.height / 2);
+            }
             ctx.translate(-camera.x + screenShakeX, -camera.y + screenShakeY);
 
             trails.forEach(t => {
@@ -5388,11 +6385,20 @@
             });
 
             let greenLvl = isGreenLevel();
+            let orangeLvl = isOrangeLevel();
             levels[currentLevel].objects.forEach(obj => {
                 if (obj.type === 'platform') {
-                    ctx.fillStyle = greenLvl ? '#1a251a' : '#1a1a25'; ctx.fillRect(obj.x, obj.y, obj.w, obj.h);
-                    ctx.strokeStyle = greenLvl ? '#00ff88' : '#00d2ff'; ctx.lineWidth = 2;
+                    ctx.fillStyle = orangeLvl ? '#251a0a' : (greenLvl ? '#1a251a' : '#1a1a25'); ctx.fillRect(obj.x, obj.y, obj.w, obj.h);
+                    ctx.strokeStyle = orangeLvl ? '#ff8800' : (greenLvl ? '#00ff88' : '#00d2ff'); ctx.lineWidth = 2;
                     ctx.strokeRect(obj.x, obj.y, obj.w, 1);
+                    // Hacker split obstacles effect - draw ghost duplicate offset
+                    if (hackerHackedPhase && hackerChaosIndex === 3 && bossType === 'hacker' && !bossDefeated) {
+                        ctx.globalAlpha = 0.4;
+                        ctx.fillStyle = '#ff880044';
+                        ctx.fillRect(obj.x + 8, obj.y - 12, obj.w / 2, obj.h);
+                        ctx.fillRect(obj.x + obj.w / 2 - 8, obj.y + 12, obj.w / 2, obj.h);
+                        ctx.globalAlpha = 1;
+                    }
                 }
                 else if (obj.type === 'lava') {
                     ctx.fillStyle = '#ff3333';
@@ -5401,7 +6407,7 @@
                     ctx.shadowBlur = 0;
                 }
                 else if (obj.type === 'goal') {
-                    let goalColor = greenLvl ? '#88ff00' : '#00ff88';
+                    let goalColor = orangeLvl ? '#ffaa00' : (greenLvl ? '#88ff00' : '#00ff88');
                     ctx.strokeStyle = goalColor; ctx.lineWidth = 3;
                     ctx.shadowBlur = 15; ctx.shadowColor = goalColor;
                     ctx.strokeRect(obj.x + 5, obj.y + 5, obj.w - 10, obj.h - 10);
@@ -5532,21 +6538,28 @@
 
             // Boss HUD overlay
             drawBossHealthBar();
-            drawStopwatch();
 
             // Boss death cinematic
             if (bossDeathTimer > 0) {
                 let isQueen = bossType === 'queen';
                 let isOG = bossType === 'overgrowth';
+                let isHkr = bossType === 'hacker';
                 let flashAlpha = (bossDeathTimer % 10 < 5) ? 0.15 : 0;
-                let deathColor = isOG ? 'rgba(0, 255, 136, ' : (isQueen ? 'rgba(188, 19, 254, ' : 'rgba(255, 0, 50, ');
+                let deathColor = isHkr ? 'rgba(255, 136, 0, ' : (isOG ? 'rgba(0, 255, 136, ' : (isQueen ? 'rgba(188, 19, 254, ' : 'rgba(255, 0, 50, '));
                 ctx.fillStyle = deathColor + flashAlpha + ')';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = isOG ? '#00ff88' : (isQueen ? '#bc13fe' : '#ff0055');
+                ctx.fillStyle = isHkr ? '#ff8800' : (isOG ? '#00ff88' : (isQueen ? '#bc13fe' : '#ff0055'));
                 ctx.font = 'bold 36px Segoe UI';
                 ctx.textAlign = 'center';
-                ctx.shadowBlur = 20; ctx.shadowColor = isOG ? '#00ff88' : (isQueen ? '#bc13fe' : '#ff0055');
-                ctx.fillText(isOG ? 'DECOMPILED' : (isQueen ? 'DETHRONED' : 'TERMINATED'), canvas.width / 2, canvas.height / 2);
+                ctx.shadowBlur = 20; ctx.shadowColor = isHkr ? '#ff8800' : (isOG ? '#00ff88' : (isQueen ? '#bc13fe' : '#ff0055'));
+                ctx.fillText(isHkr ? 'BANNED' : (isOG ? 'DECOMPILED' : (isQueen ? 'DETHRONED' : 'TERMINATED')), canvas.width / 2, canvas.height / 2);
+                if (isHkr) {
+                    ctx.fillStyle = '#ffaa00';
+                    ctx.font = 'bold 16px Segoe UI';
+                    ctx.shadowColor = '#ffaa00';
+                    ctx.shadowBlur = 15;
+                    ctx.fillText('THE HACKER HAS BEEN PERMANENTLY BANNED', canvas.width / 2, canvas.height / 2 + 40);
+                }
                 ctx.shadowBlur = 0;
             }
 
@@ -5595,6 +6608,87 @@
                 }
             }
 
+            // Hacker chaos visual indicators
+            if (bossType === 'hacker' && !bossDefeated && hackerHackedPhase) {
+                // Invert controls indicator
+                if (hackerInvertControls) {
+                    ctx.fillStyle = 'rgba(255, 136, 0, 0.08)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.fillStyle = '#ff8800';
+                    ctx.font = 'bold 14px monospace';
+                    ctx.textAlign = 'center';
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = '#ff8800';
+                    ctx.fillText('CONTROLS INVERTED', canvas.width / 2, 60);
+                    ctx.shadowBlur = 0;
+                }
+                // Flip board indicator
+                if (hackerFlipActive) {
+                    ctx.fillStyle = '#ff8800';
+                    ctx.font = 'bold 14px monospace';
+                    ctx.textAlign = 'center';
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = '#ff8800';
+                    ctx.fillText('BOARD FLIPPED', canvas.width / 2, 60);
+                    ctx.shadowBlur = 0;
+                }
+                // Mid-air freeze indicator
+                if (hackerFreezeActive) {
+                    ctx.fillStyle = 'rgba(255, 170, 0, 0.1)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.fillStyle = '#ffaa00';
+                    ctx.font = 'bold 14px monospace';
+                    ctx.textAlign = 'center';
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = '#ffaa00';
+                    ctx.fillText('FROZEN', canvas.width / 2, 60);
+                    ctx.shadowBlur = 0;
+                }
+                // Lag indicator
+                if (hackerLagActive) {
+                    ctx.fillStyle = '#ff4400';
+                    ctx.font = 'bold 14px monospace';
+                    ctx.textAlign = 'center';
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = '#ff4400';
+                    ctx.fillText('LAG SPIKE', canvas.width / 2, 60);
+                    ctx.shadowBlur = 0;
+                }
+                // Dev powerup indicator
+                if (hackerDevPowerup && !hackerBanActive) {
+                    ctx.fillStyle = '#ffaa00';
+                    ctx.font = 'bold 16px monospace';
+                    ctx.textAlign = 'center';
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = '#ffaa00';
+                    ctx.fillText('DEV POWER-UP ACTIVE - TOUCH THE HACKER TO BAN!', canvas.width / 2, canvas.height - 30);
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            // Scribe narrator message
+            if (scribeCurrentMsg && (scribeTimer > 0 || scribeFadeTimer > 0)) {
+                let alpha = scribeFadeTimer > 0 ? scribeFadeTimer / 30 : 1;
+                ctx.save();
+                ctx.globalAlpha = alpha;
+                ctx.font = 'bold 13px Segoe UI';
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                let msgW = ctx.measureText(scribeCurrentMsg).width + 40;
+                let msgX = (canvas.width - msgW) / 2;
+                let msgY = canvas.height - 80;
+                ctx.fillRect(msgX, msgY, msgW, 40);
+                ctx.strokeStyle = '#ff8800';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(msgX, msgY, msgW, 40);
+                ctx.fillStyle = '#ffaa00';
+                ctx.textAlign = 'center';
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = '#ff8800';
+                ctx.fillText(scribeCurrentMsg, canvas.width / 2, msgY + 25);
+                ctx.shadowBlur = 0;
+                ctx.restore();
+            }
+
             // Boss defeated prompt
             if (bossDefeated && boss) {
                 ctx.fillStyle = '#00ff88';
@@ -5635,6 +6729,14 @@ function gameLoop(time) {
         return;
       }
     }
+    // Hacker lag effect - skip frames to simulate game lag
+    if (hackerLagActive && bossType === 'hacker' && !bossDefeated) {
+      if (Math.random() > 0.25) {
+        lastTime = time;
+        requestAnimationFrame(gameLoop);
+        return;
+      }
+    }
     update();
     draw();
     lastTime = time;
@@ -5653,13 +6755,20 @@ requestAnimationFrame(gameLoop);
         });
         window.addEventListener('keyup', e => keys[e.key] = false);
 
-        // Mobile touch controls
+        // Mobile touch controls - only show when user actually touches the screen
         (function initMobileControls() {
-            const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-            if (isTouchDevice) {
+            var touchControlsShown = false;
+            function showTouchControls() {
+                if (touchControlsShown) return;
+                touchControlsShown = true;
                 document.getElementById('mobileControls').style.display = 'flex';
                 document.getElementById('mobileTopBar').style.display = 'flex';
             }
+            // Listen for actual touch events anywhere on the page
+            window.addEventListener('touchstart', function onFirstTouch() {
+                showTouchControls();
+                window.removeEventListener('touchstart', onFirstTouch);
+            }, { passive: true });
 
             function bindBtn(id, keyName, isToggle) {
                 const el = document.getElementById(id);
@@ -5768,7 +6877,8 @@ requestAnimationFrame(gameLoop);
                 try { initAudio(); } catch(e) { console.warn('Audio unavailable'); }
                 playerUsername = input;
                 playerPassword = password;
-                isMod = (playerUsername === 'AmxthystBloxMOD');
+                isMod = (playerUsername === 'AmxthystBloxMOD' || playerUsername === 'SuveenMOD');
+                isJuniorMod = (playerUsername === 'SuveenMOD');
 
                 if (data.data) {
                     applyLoadedData(data.data);
@@ -5785,9 +6895,12 @@ requestAnimationFrame(gameLoop);
                     buildPlayerLevelSelector();
                     document.getElementById('levelHint').style.display = 'block';
                 }
-                // Show inventory button for all logged-in (non-guest) players
+                // Show inventory and stats buttons for all logged-in (non-guest) players
                 if (!isGuest) {
                     document.getElementById('inventoryBtn').style.display = 'block';
+                    document.getElementById('statsBtn').style.display = 'block';
+                    loadPlayerStats();
+                    statsSessionStart = Date.now();
                 }
                 // Load equipped crown from localStorage
                 equippedCrown = getEquippedCrown();
@@ -5821,7 +6934,11 @@ requestAnimationFrame(gameLoop);
                 'Level 19: Emerald Gateway', 'Level 20: Toxic Canals', 'Level 21: Acid Ascent',
                 'Level 22: Venom Gauntlet', 'Level 23: Plague Spires', 'Level 24: Biohazard Blitz',
                 'Level 25: Radioactive Core', 'Level 26: Meltdown',
-                'Level 27: BOSS - Overgrowth.exe'
+                'Level 27: BOSS - Overgrowth.exe',
+                'Level 28: Firewall Gate', 'Level 29: Packet Storm', 'Level 30: Binary Maze',
+                'Level 31: Trojan Gauntlet', 'Level 32: Phishing Depths', 'Level 33: Rootkit Ascent',
+                'Level 34: Ransomware Run', 'Level 35: Zero-Day',
+                'Level 36: BOSS - The Hacker'
             ];
             for (let i = 0; i < levels.length; i++) {
                 // Hide SECRET_VAULT from Level Select menu
@@ -5863,7 +6980,11 @@ requestAnimationFrame(gameLoop);
                 'Level 19: Emerald Gateway', 'Level 20: Toxic Canals', 'Level 21: Acid Ascent',
                 'Level 22: Venom Gauntlet', 'Level 23: Plague Spires', 'Level 24: Biohazard Blitz',
                 'Level 25: Radioactive Core', 'Level 26: Meltdown',
-                'Level 27: BOSS - Overgrowth.exe'
+                'Level 27: BOSS - Overgrowth.exe',
+                'Level 28: Firewall Gate', 'Level 29: Packet Storm', 'Level 30: Binary Maze',
+                'Level 31: Trojan Gauntlet', 'Level 32: Phishing Depths', 'Level 33: Rootkit Ascent',
+                'Level 34: Ransomware Run', 'Level 35: Zero-Day',
+                'Level 36: BOSS - The Hacker'
             ];
             for (let i = 0; i < levels.length; i++) {
                 // Hide SECRET_VAULT from player Level Select menu
@@ -6042,11 +7163,6 @@ requestAnimationFrame(gameLoop);
             screenShakeEnabled = !screenShakeEnabled;
             this.classList.toggle('active', screenShakeEnabled);
         });
-        document.getElementById('timerCheckbox').addEventListener('click', function() {
-            showSpeedrunTimer = !showSpeedrunTimer;
-            this.classList.toggle('checked', showSpeedrunTimer);
-            this.innerHTML = showSpeedrunTimer ? '&#10003;' : '';
-        });
         document.getElementById('settingsResetBtn').addEventListener('click', function() {
             if (!confirm('Reset all progress? Score and shop unlocks will be lost.')) return;
             score = 0;
@@ -6058,9 +7174,7 @@ requestAnimationFrame(gameLoop);
             player.unlockedUnits = ['cube'];
             updateShopUI();
             document.getElementById('scoreDisplay').innerText = 'SCORE: 0000';
-            stopwatchStarted = false; stopwatchStartTime = 0; stopwatchElapsed = 0;
-            stopwatchFinal = 0; gameFinished = false;
-            stopwatchPaused = false; stopwatchPauseTime = 0;
+            gameFinished = false;
             loadLevel(currentLevel);
             toggleSettings();
         });
@@ -6077,6 +7191,179 @@ requestAnimationFrame(gameLoop);
             document.getElementById('sfxValue').innerText = this.value + '%';
             if (sfxGain) sfxGain.gain.value = sfxVolume;
         });
+
+        // ===== JUNIOR MOD PERMISSION SYSTEM =====
+        function getModCommandDescription(cmdType, params) {
+            switch(cmdType) {
+                case 'msg': return 'Send global message: "' + (params[0] || '') + '"';
+                case 'teleport': return 'Teleport all players to ' + (TELEPORT_LEVEL_NAMES[parseInt(params[0])] || 'Level ' + (parseInt(params[0]) + 1));
+                case 'return': return 'Return all players to their previous levels';
+                case 'event': return 'Activate ' + (EVENT_NAMES[params[0]] || params[0]) + ' for ' + (params[1] || 60) + 's';
+                case 'cancelevent': return 'Cancel an active event';
+                case 'gift': return 'Gift color ' + (params[1] || '') + ' to ' + (params[0] || '');
+                case 'revoke': return 'Revoke color ' + (params[1] || '') + ' from ' + (params[0] || '');
+                case 'revokecrown': return 'Revoke ' + (params[1] === 'all' ? 'ALL CROWNS' : (CROWN_ORB_TYPES[params[1]] ? CROWN_ORB_TYPES[params[1]].name : params[1])) + ' from ' + (params[0] || '');
+                case 'crownorb': return 'Spawn ' + (CROWN_ORB_TYPES[params[0]] ? CROWN_ORB_TYPES[params[0]].orbName : params[0]) + ' in Level ' + (parseInt(params[1]) + 1);
+                case 'cancelorb': return 'Delete a crown orb';
+                case 'regenmaze': return 'Regenerate SECRET VAULT maze';
+                default: return 'Unknown command: ' + cmdType;
+            }
+        }
+
+        function requestModPermission(cmdType, params) {
+            var paramStr = params.join('|');
+            var msgText = '__MODREQ__:' + cmdType + '|' + paramStr;
+            juniorModWaitingFor = cmdType;
+            document.getElementById('juniorModWaitingText').textContent = getModCommandDescription(cmdType, params);
+            document.getElementById('juniorModWaiting').style.display = 'block';
+            fetch(MSG_API_URL + '/msg', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sender: playerUsername, text: msgText, secret: 'AmxthystBloxMOD_broadcast_2026' })
+            }).catch(function() {
+                document.getElementById('juniorModWaiting').style.display = 'none';
+                juniorModWaitingFor = null;
+            });
+            // Auto-hide after 30 seconds if no response
+            setTimeout(function() {
+                if (juniorModWaitingFor === cmdType) {
+                    document.getElementById('juniorModWaiting').style.display = 'none';
+                    juniorModWaitingFor = null;
+                }
+            }, 30000);
+        }
+
+        function showModApprovalDialog(cmdType, params) {
+            var desc = getModCommandDescription(cmdType, params);
+            document.getElementById('modApprovalDesc').textContent = desc;
+            document.getElementById('modApprovalModal').style.display = 'flex';
+            // Store current request for approval/denial
+            document.getElementById('modApprovalAllow').onclick = function() {
+                document.getElementById('modApprovalModal').style.display = 'none';
+                executeApprovedModCommand(cmdType, params);
+                // Notify SuveenMOD of approval
+                fetch(MSG_API_URL + '/msg', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sender: playerUsername, text: '__MODRES__:approved|' + cmdType, secret: 'AmxthystBloxMOD_broadcast_2026' })
+                }).catch(function() {});
+            };
+            document.getElementById('modApprovalDeny').onclick = function() {
+                document.getElementById('modApprovalModal').style.display = 'none';
+                // Notify SuveenMOD of denial
+                fetch(MSG_API_URL + '/msg', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sender: playerUsername, text: '__MODRES__:denied|' + cmdType, secret: 'AmxthystBloxMOD_broadcast_2026' })
+                }).catch(function() {});
+            };
+        }
+
+        function executeApprovedModCommand(cmdType, params) {
+            switch(cmdType) {
+                case 'msg':
+                    fetch(MSG_API_URL + '/msg', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ sender: 'SuveenMOD', text: params[0], secret: 'AmxthystBloxMOD_broadcast_2026' })
+                    }).catch(function() {});
+                    break;
+                case 'teleport':
+                    var tpIdx = parseInt(params[0]);
+                    fetch(MSG_API_URL + '/msg', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ sender: 'SuveenMOD', text: '__TELEPORT__:' + tpIdx, secret: 'AmxthystBloxMOD_broadcast_2026' })
+                    }).then(function() {
+                        if (tpIdx === SECRET_VAULT_INDEX) {
+                            fetch(MSG_API_URL + '/msg', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ sender: 'SYSTEM', text: 'SuveenMOD has opened the SECRET VAULT! All players teleported!', secret: 'AmxthystBloxMOD_broadcast_2026' })
+                            }).catch(function() {});
+                        }
+                    }).catch(function() {});
+                    break;
+                case 'return':
+                    fetch(MSG_API_URL + '/msg', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ sender: 'SuveenMOD', text: '__TELEPORTRETURN__', secret: 'AmxthystBloxMOD_broadcast_2026' })
+                    }).catch(function() {});
+                    break;
+                case 'event':
+                    var evType = params[0];
+                    var evDur = parseInt(params[1]) || 60;
+                    fetch(EVENTS_API_URL + '/event', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ event_type: evType, duration: evDur, secret: EVENT_SECRET })
+                    }).then(function(r) { return r.json(); }).then(function() { pollGlobalEvents(); }).catch(function() {});
+                    break;
+                case 'cancelevent':
+                    fetch(EVENTS_API_URL + '/event/' + params[0] + '?secret=' + encodeURIComponent(EVENT_SECRET), { method: 'DELETE' })
+                    .then(function() { pollGlobalEvents(); }).catch(function() {});
+                    break;
+                case 'gift':
+                    fetch(MSG_API_URL + '/gift', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ target_username: params[0], hex_color: params[1], secret: 'AmxthystBloxMOD_broadcast_2026' })
+                    }).catch(function() {});
+                    break;
+                case 'revoke':
+                    fetch(MSG_API_URL + '/msg', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ sender: 'SuveenMOD', text: '__REVOKE__:' + params[0] + ':' + params[1], secret: 'AmxthystBloxMOD_broadcast_2026' })
+                    }).catch(function() {});
+                    break;
+                case 'revokecrown':
+                    fetch(MSG_API_URL + '/msg', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ sender: 'SuveenMOD', text: '__REVOKECROWN__:' + params[0] + ':' + params[1], secret: 'AmxthystBloxMOD_broadcast_2026' })
+                    }).catch(function() {});
+                    break;
+                case 'crownorb':
+                    var coOrbType = params[0];
+                    var coLevelIndex = parseInt(params[1]);
+                    var coX = parseInt(params[2]);
+                    var coY = parseInt(params[3]);
+                    var coDuration = parseInt(params[4]) || 300;
+                    var coEventType = 'crownorb_' + coOrbType + '_' + coLevelIndex + '_' + coX + '_' + coY;
+                    fetch(EVENTS_API_URL + '/event', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ event_type: coEventType, duration: coDuration, secret: EVENT_SECRET })
+                    }).then(function(r) { return r.json(); }).then(function(data) {
+                        if (data.ok) {
+                            fetch(MSG_API_URL + '/msg', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ sender: 'SuveenMOD', text: '__CROWNORB__:' + coOrbType + ':' + coLevelIndex, secret: 'AmxthystBloxMOD_broadcast_2026' })
+                            }).catch(function() {});
+                            pollGlobalEvents();
+                        }
+                    }).catch(function() {});
+                    break;
+                case 'cancelorb':
+                    Object.keys(crownOrbLocalCache).forEach(function(key) {
+                        if (crownOrbLocalCache[key].id === params[0]) {
+                            delete crownOrbLocalCache[key];
+                        }
+                    });
+                    fetch(EVENTS_API_URL + '/event/' + params[0] + '?secret=' + encodeURIComponent(EVENT_SECRET), { method: 'DELETE' })
+                    .then(function() { pollGlobalEvents(); }).catch(function() {});
+                    break;
+                case 'regenmaze':
+                    levels[SECRET_VAULT_INDEX] = buildSecretVaultLevel();
+                    secretVaultPedestalClaimed = false;
+                    loadLevel(SECRET_VAULT_INDEX);
+                    showGlobalMessage('SYSTEM', 'SECRET VAULT level has been regenerated!');
+                    break;
+            }
+        }
 
         // ===== GLOBAL MESSAGING SYSTEM =====
         const MSG_SECRET = 'AmxthystBloxMOD_broadcast_2026';
@@ -6103,6 +7390,34 @@ requestAnimationFrame(gameLoop);
                     if (data.messages && data.messages.length > 0) {
                         data.messages.forEach(function(m) {
                             if (m.ts > msgLastTs) msgLastTs = m.ts;
+                            // Intercept junior mod permission requests (shown only to AmxthystBloxMOD)
+                            if (m.text && m.text.indexOf('__MODREQ__:') === 0) {
+                                if (playerUsername === 'AmxthystBloxMOD') {
+                                    var reqData = m.text.substring('__MODREQ__:'.length);
+                                    var reqParts = reqData.split('|');
+                                    var reqCmdType = reqParts[0];
+                                    var reqParams = reqParts.slice(1);
+                                    showModApprovalDialog(reqCmdType, reqParams);
+                                }
+                                return;
+                            }
+                            // Intercept junior mod permission responses (shown only to SuveenMOD)
+                            if (m.text && m.text.indexOf('__MODRES__:') === 0) {
+                                if (isJuniorMod) {
+                                    var resData = m.text.substring('__MODRES__:'.length);
+                                    var resParts = resData.split('|');
+                                    var resStatus = resParts[0]; // 'approved' or 'denied'
+                                    var resCmdType = resParts[1] || '';
+                                    document.getElementById('juniorModWaiting').style.display = 'none';
+                                    juniorModWaitingFor = null;
+                                    if (resStatus === 'approved') {
+                                        showGlobalMessage('SYSTEM', 'Your ' + resCmdType + ' command was APPROVED by AmxthystBloxMOD!');
+                                    } else {
+                                        showGlobalMessage('SYSTEM', 'Your ' + resCmdType + ' command was DENIED by AmxthystBloxMOD.');
+                                    }
+                                }
+                                return;
+                            }
                             // Intercept position broadcasts - don't show as banner
                             if (m.text && m.text.indexOf('__POS__:') === 0) {
                                 return; // Don't show as banner
@@ -6122,7 +7437,7 @@ requestAnimationFrame(gameLoop);
                                 var tpParts = m.text.split(':');
                                 if (tpParts.length >= 2) {
                                     var tpLevel = tpParts[1];
-                                    processTeleportCommand(tpLevel);
+                                    processTeleportCommand(tpLevel, m.sender || 'MOD');
                                 }
                                 return; // Don't show as banner
                             }
@@ -6169,6 +7484,48 @@ requestAnimationFrame(gameLoop);
                                 }
                                 return;
                             }
+                            // Intercept inventory request - respond with our inventory data
+                            if (m.text && m.text.indexOf('__INVREQ__:') === 0) {
+                                var invReqTarget = m.text.substring('__INVREQ__:'.length);
+                                // If this request is for us, respond with our inventory
+                                if (invReqTarget === playerUsername && !isMod) {
+                                    var myInvData = {
+                                        unlocked_colors: player.unlocked || [],
+                                        player_color: player.color,
+                                        crowns: getPlayerCrowns(),
+                                        equipped_crown: equippedCrown
+                                    };
+                                    fetch(MSG_API_URL + '/msg', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ sender: playerUsername, text: '__INVRES__:' + m.sender + ':' + JSON.stringify(myInvData), secret: MSG_SECRET })
+                                    }).catch(function() {});
+                                }
+                                return; // Don't show as banner
+                            }
+                            // Intercept inventory response - display to requesting mod
+                            if (m.text && m.text.indexOf('__INVRES__:') === 0) {
+                                if (isMod) {
+                                    var invResData = m.text.substring('__INVRES__:'.length);
+                                    var colonIdx = invResData.indexOf(':');
+                                    if (colonIdx > -1) {
+                                        var invResTarget = invResData.substring(0, colonIdx);
+                                        // Only process if this response is for us
+                                        if (invResTarget === playerUsername && pendingInvRequest === m.sender) {
+                                            try {
+                                                var invJsonStr = invResData.substring(colonIdx + 1);
+                                                var invParsed = JSON.parse(invJsonStr);
+                                                pendingInvRequest = null;
+                                                if (invRequestTimeout) clearTimeout(invRequestTimeout);
+                                                displayPlayerInventory(m.sender, invParsed);
+                                            } catch(e) {
+                                                console.warn('Failed to parse inventory response', e);
+                                            }
+                                        }
+                                    }
+                                }
+                                return; // Don't show as banner
+                            }
                             // Intercept crown orb announcements - show special announcement
                             if (m.text && m.text.indexOf('__CROWNORB__:') === 0) {
                                 // Skip if we are the sender (mod already saw it from direct call)
@@ -6206,6 +7563,7 @@ requestAnimationFrame(gameLoop);
 
         function sendGlobalMessage(text) {
             if (!text || !text.trim()) return;
+            // SuveenMOD can send global messages without needing permission from AmxthystBloxMOD
             fetch(MSG_API_URL + '/msg', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -6351,6 +7709,11 @@ requestAnimationFrame(gameLoop);
             var statusEl = document.getElementById('giftStatus');
             if (!target) { statusEl.innerText = 'Select a player first'; return; }
             if (!hex.match(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/)) { statusEl.innerText = 'Enter a valid hex code (e.g. #ff00ff)'; return; }
+            if (isJuniorMod) {
+                requestModPermission('gift', [target, hex]);
+                document.getElementById('giftColorModal').style.display = 'none';
+                return;
+            }
             statusEl.innerText = 'Sending gift...';
             fetch(MSG_API_URL + '/gift', {
                 method: 'POST',
@@ -6425,6 +7788,199 @@ requestAnimationFrame(gameLoop);
             }
         });
 
+        // ===== STATS SYSTEM =====
+        function toggleStats() {
+            statsOpen = !statsOpen;
+            if (statsOpen) {
+                // Update time played with current session time
+                var sessionSeconds = Math.floor((Date.now() - statsSessionStart) / 1000);
+                var totalTime = playerStats.timePlayed + sessionSeconds;
+                // Update dynamic stats
+                playerStats.colorsUnlocked = player.unlocked ? player.unlocked.length : 0;
+                playerStats.crownsCollected = getPlayerCrowns().length;
+                if (score > playerStats.highestScore) playerStats.highestScore = score;
+                // Display
+                document.getElementById('statTimePlayed').textContent = formatTimePlayed(totalTime);
+                document.getElementById('statTotalJumps').textContent = playerStats.totalJumps.toLocaleString();
+                document.getElementById('statEnemiesKilled').textContent = playerStats.enemiesKilled.toLocaleString();
+                document.getElementById('statTotalDeaths').textContent = playerStats.totalDeaths.toLocaleString();
+                document.getElementById('statLevelsCompleted').textContent = playerStats.levelsCompleted.toLocaleString();
+                document.getElementById('statBossesDefeated').textContent = playerStats.bossesDefeated.toLocaleString();
+                document.getElementById('statHighestScore').textContent = playerStats.highestScore.toLocaleString();
+                document.getElementById('statColorsUnlocked').textContent = playerStats.colorsUnlocked.toLocaleString();
+                document.getElementById('statCrownsCollected').textContent = playerStats.crownsCollected.toLocaleString();
+                document.getElementById('statsPanel').style.display = 'flex';
+            } else {
+                document.getElementById('statsPanel').style.display = 'none';
+            }
+        }
+        document.getElementById('statsBtn').addEventListener('click', function() {
+            toggleStats();
+        });
+        document.getElementById('statsCloseBtn').addEventListener('click', function() {
+            statsOpen = false;
+            document.getElementById('statsPanel').style.display = 'none';
+        });
+        document.getElementById('statsPanel').addEventListener('click', function(e) {
+            if (e.target === this) {
+                statsOpen = false;
+                this.style.display = 'none';
+            }
+        });
+        // Save time played periodically (every 30 seconds)
+        setInterval(function() {
+            if (statsSessionStart > 0 && playerUsername && !isGuest) {
+                var sessionSeconds = Math.floor((Date.now() - statsSessionStart) / 1000);
+                playerStats.timePlayed += sessionSeconds;
+                statsSessionStart = Date.now();
+                savePlayerStats();
+            }
+        }, 30000);
+
+        // ===== TOGGLE FLY SYSTEM (MOD ONLY) =====
+        document.getElementById('toggleFlyTrigger').addEventListener('click', function() {
+            modFlyEnabled = !modFlyEnabled;
+            this.textContent = 'FLY: ' + (modFlyEnabled ? 'ON' : 'OFF');
+            if (modFlyEnabled) {
+                this.style.borderColor = '#00d2ff';
+                this.style.color = '#00d2ff';
+                this.style.background = 'rgba(0,210,255,0.15)';
+            } else {
+                this.style.borderColor = '#ff3333';
+                this.style.color = '#ff3333';
+                this.style.background = 'rgba(255,51,51,0.15)';
+            }
+        });
+
+        // ===== VIEW PLAYER INVENTORY SYSTEM (MOD ONLY) =====
+        var pendingInvRequest = null; // username we're waiting inventory from
+        var invRequestTimeout = null;
+
+        function loadOnlinePlayersForViewInv() {
+            fetch(MSG_API_URL + '/online')
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    var sel = document.getElementById('viewInvTargetSelect');
+                    sel.innerHTML = '';
+                    if (!data.players || data.players.length === 0) {
+                        sel.innerHTML = '<option value="">No players online</option>';
+                        return;
+                    }
+                    sel.innerHTML = '<option value="">Select a player...</option>';
+                    data.players.forEach(function(p) {
+                        if (p !== playerUsername) {
+                            var opt = document.createElement('option');
+                            opt.value = p;
+                            opt.textContent = p;
+                            sel.appendChild(opt);
+                        }
+                    });
+                })
+                .catch(function() {
+                    document.getElementById('viewInvTargetSelect').innerHTML = '<option value="">Error loading players</option>';
+                });
+        }
+
+        function requestPlayerInventory() {
+            var target = document.getElementById('viewInvTargetSelect').value;
+            var statusEl = document.getElementById('viewInvStatus');
+            if (!target) { statusEl.innerText = 'Select a player first'; return; }
+            statusEl.innerText = 'Requesting inventory from ' + target + '...';
+            document.getElementById('viewInvResults').style.display = 'none';
+            pendingInvRequest = target;
+            // Send inventory request via messaging system
+            fetch(MSG_API_URL + '/msg', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sender: playerUsername, text: '__INVREQ__:' + target, secret: MSG_SECRET })
+            }).catch(function() {
+                statusEl.innerText = 'Failed to send request';
+                pendingInvRequest = null;
+            });
+            // Auto-timeout after 15 seconds
+            if (invRequestTimeout) clearTimeout(invRequestTimeout);
+            invRequestTimeout = setTimeout(function() {
+                if (pendingInvRequest === target) {
+                    statusEl.innerText = 'No response from ' + target + ' (they may be offline or idle)';
+                    pendingInvRequest = null;
+                }
+            }, 15000);
+        }
+
+        function displayPlayerInventory(targetName, invData) {
+            var statusEl = document.getElementById('viewInvStatus');
+            var resultsEl = document.getElementById('viewInvResults');
+            var colorsListEl = document.getElementById('viewInvColorsList');
+            var crownsListEl = document.getElementById('viewInvCrownsList');
+            statusEl.innerText = 'Inventory for ' + targetName + ':';
+            colorsListEl.innerHTML = '';
+            crownsListEl.innerHTML = '';
+
+            // Exclusive colors
+            var exclusiveColors = [];
+            if (invData.unlocked_colors && invData.unlocked_colors.length > 0) {
+                exclusiveColors = invData.unlocked_colors.filter(function(c) { return SHOP_COLORS.indexOf(c) === -1; });
+            }
+            if (exclusiveColors.length > 0) {
+                var colorHeader = document.createElement('div');
+                colorHeader.style.cssText = 'color:#ffcc00;font-weight:bold;font-size:12px;margin-bottom:6px;letter-spacing:1px;';
+                colorHeader.textContent = 'EXCLUSIVE COLORS (' + exclusiveColors.length + ')';
+                colorsListEl.appendChild(colorHeader);
+                exclusiveColors.forEach(function(hex) {
+                    var row = document.createElement('div');
+                    row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:4px 0;';
+                    row.innerHTML = '<div style="width:20px;height:20px;border-radius:4px;background:' + hex + ';box-shadow:0 0 8px ' + hex + ';border:1px solid rgba(255,255,255,0.2);"></div>' +
+                        '<span style="color:#fff;font-size:12px;font-family:monospace;">' + hex.toUpperCase() + '</span>' +
+                        (invData.player_color === hex ? '<span style="color:#00ff88;font-size:10px;letter-spacing:1px;">EQUIPPED</span>' : '');
+                    colorsListEl.appendChild(row);
+                });
+            } else {
+                colorsListEl.innerHTML = '<div style="color:#555;font-size:11px;">No exclusive colors</div>';
+            }
+
+            // Crowns
+            var crownNames = { gold: 'Crown of Velocity', sapphire: 'Crown of Ascension', ruby: 'Crown of Fortitude', windwalker: 'Wind-Walker Crown', corruption: 'Crown of Corruption' };
+            var crownColors = { gold: '#ffaa00', sapphire: '#4488ff', ruby: '#ff4444', windwalker: '#00ccff', corruption: '#8b00ff' };
+            if (invData.crowns && invData.crowns.length > 0) {
+                var crownHeader = document.createElement('div');
+                crownHeader.style.cssText = 'color:#ffaa00;font-weight:bold;font-size:12px;margin-bottom:6px;margin-top:10px;letter-spacing:1px;';
+                crownHeader.textContent = 'CROWNS (' + invData.crowns.length + ')';
+                crownsListEl.appendChild(crownHeader);
+                invData.crowns.forEach(function(ct) {
+                    var row = document.createElement('div');
+                    var cColor = crownColors[ct] || '#ffaa00';
+                    var cName = crownNames[ct] || ct;
+                    row.style.cssText = 'padding:4px 0;';
+                    row.innerHTML = '<span style="color:' + cColor + ';font-size:12px;font-weight:bold;">&#128081; ' + cName + '</span>' +
+                        (invData.equipped_crown === ct ? ' <span style="color:#00ff88;font-size:10px;letter-spacing:1px;">EQUIPPED</span>' : '');
+                    crownsListEl.appendChild(row);
+                });
+            } else {
+                crownsListEl.innerHTML = '<div style="color:#555;font-size:11px;margin-top:8px;">No crowns</div>';
+            }
+
+            resultsEl.style.display = 'block';
+        }
+
+        // View Inventory button events
+        document.getElementById('viewPlayerInvTrigger').addEventListener('click', function() {
+            document.getElementById('viewPlayerInvModal').style.display = 'flex';
+            document.getElementById('viewInvStatus').innerText = '';
+            document.getElementById('viewInvResults').style.display = 'none';
+            loadOnlinePlayersForViewInv();
+        });
+        document.getElementById('viewInvFetchBtn').addEventListener('click', requestPlayerInventory);
+        document.getElementById('viewInvCloseBtn').addEventListener('click', function() {
+            document.getElementById('viewPlayerInvModal').style.display = 'none';
+            pendingInvRequest = null;
+        });
+        document.getElementById('viewPlayerInvModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+                pendingInvRequest = null;
+            }
+        });
+
         // ===== REVOKE COLOR SYSTEM (MOD ONLY) =====
         function loadOnlinePlayersForRevoke() {
             fetch(MSG_API_URL + '/online')
@@ -6457,6 +8013,11 @@ requestAnimationFrame(gameLoop);
             var statusEl = document.getElementById('revokeStatus');
             if (!target) { statusEl.innerText = 'Select a player first'; return; }
             if (!hex.match(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/)) { statusEl.innerText = 'Enter a valid hex code (e.g. #ff00ff)'; return; }
+            if (isJuniorMod) {
+                requestModPermission('revoke', [target, hex]);
+                document.getElementById('revokeColorModal').style.display = 'none';
+                return;
+            }
             statusEl.innerText = 'Sending revoke...';
             // Send revoke as a special message via the messaging system
             fetch(MSG_API_URL + '/msg', {
@@ -6548,6 +8109,11 @@ requestAnimationFrame(gameLoop);
             var statusEl = document.getElementById('revokeCrownStatus');
             if (!target) { statusEl.innerText = 'Select a player first'; return; }
             if (!crownType) { statusEl.innerText = 'Select a crown to revoke'; return; }
+            if (isJuniorMod) {
+                requestModPermission('revokecrown', [target, crownType]);
+                document.getElementById('revokeCrownModal').style.display = 'none';
+                return;
+            }
             var crownLabel = crownType === 'all' ? 'ALL CROWNS' : (CROWN_ORB_TYPES[crownType] ? CROWN_ORB_TYPES[crownType].name : crownType);
             statusEl.innerText = 'Sending crown revoke...';
             fetch(MSG_API_URL + '/msg', {
@@ -6610,6 +8176,11 @@ requestAnimationFrame(gameLoop);
             var idx = parseInt(levelIdx);
             if (isNaN(idx) || idx < 0 || idx >= levels.length) { statusEl.innerText = 'Invalid level'; return; }
             var levelLabel = TELEPORT_LEVEL_NAMES[idx] || ('Level ' + (idx + 1));
+            if (isJuniorMod) {
+                requestModPermission('teleport', [String(idx)]);
+                document.getElementById('teleportAllModal').style.display = 'none';
+                return;
+            }
             statusEl.innerText = 'Teleporting all players...';
             fetch(MSG_API_URL + '/msg', {
                 method: 'POST',
@@ -6668,6 +8239,10 @@ requestAnimationFrame(gameLoop);
 
         // ===== RETURN PLAYERS SYSTEM (MOD ONLY) =====
         function sendReturnPlayers() {
+            if (isJuniorMod) {
+                requestModPermission('return', []);
+                return;
+            }
             fetch(MSG_API_URL + '/msg', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -6698,6 +8273,10 @@ requestAnimationFrame(gameLoop);
         // Regenerate Maze button
         document.getElementById('regenMazeTrigger').addEventListener('click', function() {
             if (!isMod || currentLevel !== SECRET_VAULT_INDEX) return;
+            if (isJuniorMod) {
+                requestModPermission('regenmaze', []);
+                return;
+            }
             levels[SECRET_VAULT_INDEX] = buildSecretVaultLevel();
             secretVaultPedestalClaimed = false;
             loadLevel(SECRET_VAULT_INDEX);
@@ -6957,6 +8536,10 @@ requestAnimationFrame(gameLoop);
 
         // Cancel/delete a crown orb event (mod only)
         function cancelCrownOrb(eventId) {
+            if (isJuniorMod) {
+                requestModPermission('cancelorb', [eventId]);
+                return;
+            }
             // Clear from local cache immediately so orb disappears without waiting for poll
             Object.keys(crownOrbLocalCache).forEach(function(key) {
                 if (crownOrbLocalCache[key].id === eventId) {
@@ -6976,6 +8559,11 @@ requestAnimationFrame(gameLoop);
             var duration = parseInt(durInput.value) || 60;
             if (duration < 5) duration = 5;
             if (duration > 600) duration = 600;
+
+            if (isJuniorMod) {
+                requestModPermission('event', [eventType, String(duration)]);
+                return;
+            }
 
             var btn = document.getElementById('btn_' + eventType);
             btn.disabled = true;
@@ -7005,6 +8593,10 @@ requestAnimationFrame(gameLoop);
 
         // Cancel an event (mod only)
         function cancelEvent(eventId) {
+            if (isJuniorMod) {
+                requestModPermission('cancelevent', [eventId]);
+                return;
+            }
             fetch(EVENTS_API_URL + '/event/' + eventId + '?secret=' + encodeURIComponent(EVENT_SECRET), {
                 method: 'DELETE'
             })
